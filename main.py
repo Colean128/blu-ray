@@ -31,10 +31,10 @@ async def dumpbank(ctx):
     if ctx.message.author.id == 482236588655378433:
         await ctx.send('Dumping to file.')
         async with open('dumpbank_buffer.json', 'w') as f:
-            await json.dump(bankb, f)
+            json.dump(bankb, f)
             await ctx.send('Dumped bank dictionary to file')
         async with open('dumpbank_dictionary.json', 'w') as f:
-            await json.dump(bank, f)
+            json.dump(bank, f)
             await ctx.send('Dumped bank dictionary to file')
 
 
