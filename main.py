@@ -150,5 +150,5 @@ else:
     bank = {}
     bankb = {}
 
-bot.add_cog(bankjsonsave(Bot))
+bot.add_cog(bankjsonsave(bot))
 bot.run(config.token)
