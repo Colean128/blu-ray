@@ -60,7 +60,6 @@ async def shutdown(ctx):
             json.dump(bank, f)
             await msg.edit(content='Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
             f.close()
-        await ctx.send('')
         print('Logged out')
         await bot.logout()
 
