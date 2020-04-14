@@ -13,9 +13,9 @@ bot = commands.Bot(command_prefix=pogfix)
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
-    bank[ctx.message.author.id] = {'active': 1, 'balance': 100}
-    await ctx.send('Account ID' + str(ctx.message.author.id) + 'has been activated.')
-    await ctx.send('Initial Balance: ' + str(bank[ctx.message.author.id][balance]))
+    bank[ctx.message.author.id] = 100
+    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' has been activated.')
+    await ctx.send('Initial Balance: ' + str(bank[ctx.message.author.id]))
     await ctx.send('Don\'t run this command again, you\'ll lose **all** your money.')
 
 @bot.command(pass_context=True)
