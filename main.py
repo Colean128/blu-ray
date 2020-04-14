@@ -3,6 +3,7 @@ import aiohttp
 import config
 import random
 import json
+import os
 from discord.ext import tasks, commands
 
 pogfix = config.prefix
@@ -133,8 +134,12 @@ async def invite(ctx):
     """[Info] Add the Blu-Ray bot to your server!"""
     await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
 
-f = open('bank.json')
-bankb = json.load(f)
-bank = bankb.copy()
+if os.path.exists('bank.json') == true:
+    f = open('bank.json')
+    bankb = json.load(f)
+    bank = bankb.copy()
+else:
+    bank = {}
+    bankb = {}
 
 bot.run(config.token)
