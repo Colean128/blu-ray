@@ -24,7 +24,7 @@ async def bank_register(ctx):
 @bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
     """[Debug] Dumps bank dictionary to a file."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         await ctx.send('Dumping to file.')
         # with open('dumpbank_buffer.json', 'w') as f:
         #   json.dump(bankb, f)
@@ -38,13 +38,13 @@ async def dumpbank(ctx):
 @bot.command(pass_context=True, hidden=True)
 async def saybank(ctx):
     """[Debug] Replies with bank dictionary."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         await ctx.send(str(bank))
 
 @bot.command(pass_context=True, hidden=True)
 async def savebank(ctx):
     """[Bank] Save the bank dictionary to a file."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
@@ -54,7 +54,7 @@ async def savebank(ctx):
 @bot.command(pass_context=True, hidden=True)
 async def shutdown(ctx):
     """[Owner] Save the bank and shutdown."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         msg = await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
@@ -66,7 +66,7 @@ async def shutdown(ctx):
 @bot.command(pass_context=True, hidden=True)
 async def set_balance(ctx, arg1, arg2):
     """[Owner] Save the bank and shutdown."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         bank[str(arg1)] = int(arg2)
         await ctx.send('Set Account ID '+str(arg1)+ '\'s balance to ' + str(arg2) + ' Dosh.')
 
