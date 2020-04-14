@@ -13,11 +13,9 @@ bot = commands.Bot(command_prefix=pogfix)
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
-    if bank[str(ctx.message.author.id)]['active'] == 1:
-        await ctx.send('You already have a bank account')
-    else:
-        bank[str(ctx.message.author.id)] = {'active': 1, 'balance': 100}
-        await ctx.send(bank[str(ctx.message.author.id)] + 'test')
+    bank[ctx.message.author.id] = {'active': 1, 'balance': 100}
+    await ctx.send(bank[ctx.message.author.id] + 'test')
+    await ctx.send('Don\'t run this command again, you\'ll lose **all** your money.'
 
 @bot.command(pass_context=True)
 async def ping(ctx):
