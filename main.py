@@ -25,6 +25,21 @@ async def bank_register(ctx):
     bank[ctx.message.author.id] = 100
     await ctx.send('Account ID ' + str(ctx.message.author.id) + ' has been activated.\nInitial Balance: ' + str(bank[ctx.message.author.id]) + '\nDon\'t run this command again, you\'ll lose **all** your money.')
 
+@bot.command(pass_context=True, hidden=True)
+async def bank_register(ctx):
+    """[Debug] Dumps bank dictionairy, the buffer and bank.json if it exists."""
+    if ctx.message.author.is_owner() == True:
+        await ctx.send('bank dict: '+bank)
+        await ctx.send('bank buffer: '+bankb)
+        if os.path.exists('bank.json') == True:
+            f = open('bank.json')
+            bankjson = json.load(f)
+            await ctx.send('bank.json: ')+bankjson
+            bankjson = 0
+        else:
+            await ctx.send('No bank.json')
+
+
 @bot.command(pass_context=True)
 async def balance(ctx):
     """[Bank] Check your bank account."""
