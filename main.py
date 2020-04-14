@@ -67,9 +67,18 @@ async def balance(ctx):
     await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
 
 @bot.command(pass_context=True)
-async def (ctx, *, arg):
-    """[Bank] Check your bank account."""
-    await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
+async def slot(ctx, *, arg):
+    """[Casino] Play the slots!"""
+    if arg >= 9:
+        await ctx.send('You have to bet at least 10 Dosh!')
+    else:
+        await ctx.send('The machine takes your Dosh. You pull the lever.')
+        bet = arg
+        money = bank[str(ctx.message.author.id)]
+        number1 = random.randint(0,9)
+        number2 = random.randint(0,9)
+        number3 = random.randint(0,9)
+        await ctx.send('The display says '+number1+' '+number2+' '+number3+'.')
 
 @bot.command(pass_context=True)
 async def ping(ctx):
