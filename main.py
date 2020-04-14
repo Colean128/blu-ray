@@ -22,6 +22,20 @@ async def bank_register(ctx):
         await ctx.send('Thank you for registering with the Bank of Sony!\nYour Account ID number is ' + str(ctx.message.author.id) + ' and your account has been activated.\nYour initial balance is ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
 
 @bot.command(pass_context=True, hidden=True)
+async def bank_reset(ctx):
+    """[Owner] Reset all bank accounts!"""
+    if ctx.message.author.id == config.owner:
+        bank.clear()
+        await ctx.send('All accounts have been wiped!')
+
+@bot.command(pass_context=True, hidden=True)
+async def ibank_reset(ctx, arg):
+    """[Owner] Reset a bank account!"""
+    if ctx.message.author.id == config.owner:
+        my_dict.pop(arg, None)
+        await ctx.send('Account ID '+str(arg)+' has been wiped.')
+
+@bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
     """[Debug] Dumps bank dictionary to a file."""
     if ctx.message.author.id == config.owner:
