@@ -6,8 +6,16 @@ import json
 from discord.ext import commands
 
 pogfix = config.prefix
+bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
+
+@bot.command(pass_context=True)
+async def bank_register(ctx):
+    """[Bank] Register a bank account!"""
+    if bank[ctx.message.author.id]['active'] = 0:
+        bank[ctx.message.author.id] = {'active': 1, 'balance': 100}
+        await ctx.send(bank[ctx.message.author.id] + 'test')
 
 @bot.command(pass_context=True)
 async def ping(ctx):
