@@ -4,23 +4,30 @@ import config
 import random
 import json
 import os
+import asyncio
 from discord.ext import tasks, commands
 
 pogfix = config.prefix
 bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
+class bankjsonsave(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.bank = bank
+        self.bankb = bankb
+        self.bankjsonsave.start()
 
-@tasks.loop(seconds=5.0)
-async def bankjsonsave():
-    if bankb != bank:
-         with open('bank.json', 'w') as f:
-            bankb = bank.copy()
-            json.dump(bankb, f)
-            print('Saved bank dictionary')
-            f.close()
-    else:
-        print('bank dictionary not saved, they\'re identical.')
+    @tasks.loop(seconds=5.0)
+    async def bankjsonsave():
+        if bankb != bank:
+             with open('bank.json', 'w') as f:
+                bankb = bank.copy()
+                json.dump(bankb, f)
+                print('Saved bank dictionary')
+                f.close()
+        else:
+            print('bank dictionary not saved, they\'re identical.')
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
@@ -160,6 +167,6 @@ else:
     bank = {}
     bankb = {}
 
-bot.bankjsonsave.start()
+bot.add_cog(bankjsonsave)
 bot.run(config.token)
 print('Bot running')
