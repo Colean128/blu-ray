@@ -88,7 +88,7 @@ async def slot(ctx, *, arg):
             await ctx.send('The machine lights up and flashes! You\'ve won the jackpot!\nThe machine spits out '+str(bet*4)+' Dosh')
             bank[str(ctx.message.author.id)] = money + bet*3
         else:
-            await ctx.send('The machine plays a sad sound. You\'re in the hole'+str(bet)+' Dosh.')
+            await ctx.send('The machine plays a sad sound. You\'re in the hole'+str(bet)+'  Dosh.')
             bank[str(ctx.message.author.id)] = money - bet
 
 @bot.command(pass_context=True)
