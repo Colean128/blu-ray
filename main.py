@@ -14,14 +14,12 @@ bot = commands.Bot(command_prefix=pogfix)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
     bank[ctx.message.author.id] = 100
-    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' has been activated.\nInitial Balance: ' + str(bank[ctx.message.author.id]))
-    await ctx.send('Don\'t run this command again, you\'ll lose **all** your money.')
+    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' has been activated.\nInitial Balance: ' + str(bank[ctx.message.author.id]) + '\nDon\'t run this command again, you\'ll lose **all** your money.')
 
 @bot.command(pass_context=True)
 async def balance(ctx):
     """[Bank] Check your bank account."""
-    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' bank balance.')
-    await ctx.send('Balance: ' + str(bank[ctx.message.author.id]))
+    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[ctx.message.author.id]))
 
 @bot.command(pass_context=True)
 async def ping(ctx):
