@@ -10,14 +10,9 @@ pogfix = config.prefix
 bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
-def __init__(self, bot):
-    self.bot = bot
-    self._batch = []
-    self.lock = asyncio.Lock()
-    self.bulker.start()
 
 @tasks.loop(seconds=5.0)
-async def bankjsonsave(self):
+async def bankjsonsave():
     if bankb != bank:
          with open('bank.json', 'w') as f:
             bankb = bank.copy()
@@ -165,6 +160,6 @@ else:
     bank = {}
     bankb = {}
 
+bot.bankjsonsave.start()
 bot.run(config.token)
 print('Bot running')
-bot.bankjsonsave.start()
