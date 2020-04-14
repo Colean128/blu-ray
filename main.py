@@ -10,9 +10,14 @@ pogfix = config.prefix
 bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
+def __init__(self, bot):
+    self.bot = bot
+    self._batch = []
+    self.lock = asyncio.Lock()
+    self.bulker.start()
 
 @tasks.loop(seconds=5.0)
-async def bankjsonsave(bot):
+async def bankjsonsave(self):
     if bankb != bank:
          with open('bank.json', 'w') as f:
             bankb = bank.copy()
@@ -20,7 +25,7 @@ async def bankjsonsave(bot):
             print('Saved bank dictionary')
             f.close()
     else:
-        await print('bank dictionary not saved, they\'re identical.')
+        print('bank dictionary not saved, they\'re identical.')
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
