@@ -16,7 +16,7 @@ bot = commands.Bot(command_prefix=pogfix)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
     bank[str(ctx.message.author.id)] = 100
-    await ctx.send('Thank you for registering with the Bank of Sony!\n Your Account ID number is ' + str(ctx.message.author.id) + ' and your account has been activated.\nYour initial balance is ' + str(bank[str(ctx.message.author.id)]) + ' Dosh\nDon\'t run this command again, you\'ll lose **all** your dosh.')
+    await ctx.send('Thank you for registering with the Bank of Sony!\nYour Account ID number is ' + str(ctx.message.author.id) + ' and your account has been activated.\nYour initial balance is ' + str(bank[str(ctx.message.author.id)]) + ' Dosh\nDon\'t run this command again, you\'ll lose **all** your dosh.')
 
 @bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
@@ -63,7 +63,7 @@ async def shutdown(ctx):
 @bot.command(pass_context=True)
 async def balance(ctx):
     """[Bank] Check your bank account."""
-    await ctx.send('Bank of Sony ATM\n Account ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]))
+    await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)] + ' Dosh'))
 
 @bot.command(pass_context=True)
 async def ping(ctx):
