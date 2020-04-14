@@ -73,7 +73,7 @@ async def slot(ctx, *, arg):
         await ctx.send('You have to bet at least 10 Dosh!')
     else:
         await ctx.send('The machine takes your Dosh. You pull the lever.')
-        bet = arg
+        bet = int(arg)
         money = bank[str(ctx.message.author.id)]
         number1 = random.randint(0,9)
         number2 = random.randint(0,9)
