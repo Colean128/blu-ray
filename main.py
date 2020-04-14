@@ -9,14 +9,17 @@ from discord.ext import tasks, commands
 
 pogfix = config.prefix
 bank = {}
+banka = {}
 
 bot = commands.Bot(command_prefix=pogfix)
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
-    bank[str(ctx.message.author.id)] = 100
-    await ctx.send('Thank you for registering with the Bank of Sony!\nYour Account ID number is ' + str(ctx.message.author.id) + ' and your account has been activated.\nYour initial balance is ' + str(bank[str(ctx.message.author.id)]) + ' Dosh\nDon\'t run this command again, you\'ll lose **all** your dosh.')
+    if banka[str(ctx.message.author.id)] == 0:
+        bank[str(ctx.message.author.id)] = 100
+        banka[str(ctx.message.author.id)] = 1
+        await ctx.send('Thank you for registering with the Bank of Sony!\nYour Account ID number is ' + str(ctx.message.author.id) + ' and your account has been activated.\nYour initial balance is ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
 
 @bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
