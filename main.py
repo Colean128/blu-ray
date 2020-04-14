@@ -10,12 +10,14 @@ pogfix = config.prefix
 bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
+
 @tasks.loop(seconds=5.0)
-async def bankjsonsave():
+async def bankjsonsave(bot):
     if bankb != bank:
          with open('bank.json', 'w') as f:
+            bankb = bank.copy()
             json.dump(bankb, f)
-            await print('Saved bank dictionary')
+            print('Saved bank dictionary')
             f.close()
     else:
         await print('bank dictionary not saved, they\'re identical.')
