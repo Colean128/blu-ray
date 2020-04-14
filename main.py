@@ -59,7 +59,7 @@ async def shutdown(ctx):
             f.close()
         await ctx.send('Good night!')
         await ctx.send('*Cave Story Theme starts to loop*')
-        bot.logout()
+        await bot.logout()
 
 @bot.command(pass_context=True)
 async def balance(ctx):
