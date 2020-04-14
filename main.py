@@ -13,7 +13,7 @@ bot = commands.Bot(command_prefix=pogfix)
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
-    bank[ctx.message.author.id] = 'balance': 100
+    bank[ctx.message.author.id] = 100
     await ctx.send(bank[str(ctx.message.author.id)] + 'test')
     await ctx.send('Don\'t run this command again, you\'ll lose **all** your money.')
 
