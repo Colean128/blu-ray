@@ -27,17 +27,15 @@ async def bank_register(ctx):
 
 @bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
-    """[Debug] Dumps bank dictionairy, the buffer and bank.json if it exists."""
+    """[Debug] Dumps bank dictionary and the buffer to a file."""
     if ctx.message.author.id == 482236588655378433:
-        await ctx.send('bank dict: '+bank)
-        await ctx.send('bank buffer: '+bankb)
-        if os.path.exists('bank.json') == True:
-            f = open('bank.json')
-            bankjson = json.load(f)
-            await ctx.send('bank.json: ')+bankjson
-            bankjson = 0
-        else:
-            await ctx.send('No bank.json')
+        await ctx.send('Dumping to file.')
+        async with open('dumpbank_buffer.json', 'w') as f:
+            await json.dump(bankb, f)
+            await ctx.send('Dumped bank dictionary to file')
+        async with open('dumpbank_dictionary.json', 'w') as f:
+            await json.dump(bank, f)
+            await ctx.send('Dumped bank dictionary to file')
 
 
 @bot.command(pass_context=True)
