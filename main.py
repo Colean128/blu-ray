@@ -2,11 +2,96 @@ import discord
 import aiohttp
 import config
 import random
-from discord.ext import commands
+import json
+import os
+import asyncio
+from discord.ext import tasks, commands
 
 pogfix = config.prefix
+bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
+
+@bot.command(pass_context=True)
+async def bank_register(ctx):
+    """[Bank] Register a bank account!"""
+    if str(ctx.message.author.id) in bank:
+        await ctx.send('Sorry, but you already have an account with the Bank of Sony.')
+    else:
+        bank[str(ctx.message.author.id)] = 100
+        await ctx.send('Thank you for registering with the Bank of Sony!\nYour Account ID number is ' + str(ctx.message.author.id) + ' and your account has been activated.\nYour initial balance is ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
+
+@bot.command(pass_context=True, hidden=True)
+async def dumpbank(ctx):
+    """[Debug] Dumps bank dictionary to a file."""
+    if ctx.message.author.id == 482236588655378433:
+        await ctx.send('Dumping to file.')
+        # with open('dumpbank_buffer.json', 'w') as f:
+        #   json.dump(bankb, f)
+        #   await ctx.send('Dumped bank bank to file')
+        #   f.close()
+        with open('dumpbank_dictionary.json', 'w') as f:
+            json.dump(bank, f)
+            await ctx.send('Dumped bank dictionary to file')
+            f.close()
+
+@bot.command(pass_context=True, hidden=True)
+async def saybank(ctx):
+    """[Debug] Replies with bank dictionary."""
+    if ctx.message.author.id == 482236588655378433:
+        await ctx.send(str(bank))
+
+@bot.command(pass_context=True, hidden=True)
+async def savebank(ctx):
+    """[Bank] Save the bank dictionary to a file."""
+    if ctx.message.author.id == 482236588655378433:
+        await ctx.send('Saving bank balances.')
+        with open('save_bank.json', 'w') as f:
+            json.dump(bank, f)
+            await ctx.send('Saved bank balances to file')
+            f.close()
+
+@bot.command(pass_context=True, hidden=True)
+async def shutdown(ctx):
+    """[Owner] Save the bank and shutdown."""
+    if ctx.message.author.id == 482236588655378433:
+        msg = await ctx.send('Saving bank balances.')
+        with open('save_bank.json', 'w') as f:
+            json.dump(bank, f)
+            await msg.edit(content='Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
+            f.close()
+        print('Logged out')
+        await bot.logout()
+
+@bot.command(pass_context=True)
+async def balance(ctx):
+    """[Bank] Check your bank account."""
+    await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
+
+@bot.command(pass_context=True)
+async def slot(ctx, *, arg):
+    """[Casino] Play the slots!"""
+    if int(arg) <= 9:
+        await ctx.send('You have to bet at least 10 Dosh!')
+    else:
+        await ctx.send('The machine takes your Dosh. You pull the lever.')
+        bet = int(arg)
+        money = bank[str(ctx.message.author.id)]
+        number1 = random.randint(0,9)
+        number2 = random.randint(0,9)
+        number3 = random.randint(0,9)
+        await ctx.send('The display says '+str(number1)+' '+str(number2)+' '+str(number3)+'.')
+        if number1 == number3:
+            await ctx.send('The machine lights up! You\'ve won!\nThe machine spits out '+str(bet)+' Dosh')
+        elif number1 == number2 or number2 == number3:
+            await ctx.send('The machine lights up! You\'ve won!\nThe machine spits out '+str(bet*2)+' Dosh')
+            bank[str(ctx.message.author.id)] = money + bet
+        elif number1 == number2 and number2 == number3:
+            await ctx.send('The machine lights up and flashes! You\'ve won the jackpot!\nThe machine spits out '+str(bet*4)+' Dosh')
+            bank[str(ctx.message.author.id)] = money + bet*3
+        else:
+            await ctx.send('The machine plays a sad sound. You\'re in the hole'+str(bet)+'  Dosh.')
+            bank[str(ctx.message.author.id)] = money - bet
 
 @bot.command(pass_context=True)
 async def ping(ctx):
@@ -73,6 +158,14 @@ async def feed(ctx, *, arg):
         await ctx.send('Feed me your eggplant.')
     elif '🦇' in arg or 'bat' in arg:
         await ctx.send('🤢 Corona! Corona!')
+    elif '😳' in arg or 'flushed' in arg:
+        await ctx.send('Huh?')
+    elif '🥩' in arg or 'meat' in arg:
+        await ctx.send('_gets meat hammer_ Time to beat that meat.')
+    elif '🐈' in arg or 'cat' in arg or '🐱' in arg:
+        await ctx.send('No! You take the pussy!')
+    elif '🍄' in arg or 'mushroom' in arg:
+        await ctx.send('It\'s a-me, a Drug addict!')
     else:
         await ctx.send('_munch_ I like the taste!')
 
@@ -88,7 +181,10 @@ async def why(ctx):
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
-    await ctx.send(arg)
+    if 'cock and ball torture' in arg or 'cbt' in arg:
+        await ctx.send('https://www.youtube.com/watch?v=fR9ClX0egTc All hail the CBT country national anthem.')
+    else:
+        await ctx.send(arg)
 
 @bot.command(pass_context=True)
 async def discord(ctx):
@@ -100,4 +196,15 @@ async def invite(ctx):
     """[Info] Add the Blu-Ray bot to your server!"""
     await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
 
+print('Loading bank.')
+if os.path.exists('save_bank.json') == True:
+    f = open('save_bank.json')
+    bank = json.load(f)
+    # print(bank)
+    f.close()
+else:
+    bank = {}
+
+print('Bot running.')
 bot.run(config.token)
+
