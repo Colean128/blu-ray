@@ -88,7 +88,10 @@ async def why(ctx):
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
-    await ctx.send(arg)
+    if 'cock and ball torture' in arg or 'cbt' in arg:
+        await ctx.send('https://www.youtube.com/watch?v=fR9ClX0egTc All hail the CBT country national anthem.'
+    else:
+        await ctx.send(arg)
 
 @bot.command(pass_context=True)
 async def discord(ctx):
