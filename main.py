@@ -55,12 +55,12 @@ async def savebank(ctx):
 async def shutdown(ctx):
     """[Owner] Save the bank and shutdown."""
     if ctx.message.author.id == 482236588655378433:
-        await ctx.send('Saving bank balances.')
+        msg = await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
-            await ctx.send('Saved bank balances to file.')
+            await ctx.edit_message(msg, 'Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
             f.close()
-        await ctx.send('Good night!\n*Cave Story Theme starts to loop*')
+        await ctx.send('')
         print('Logged out')
         await bot.logout()
 
