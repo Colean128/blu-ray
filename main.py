@@ -58,10 +58,16 @@ async def shutdown(ctx):
             await ctx.send('Saved bank balances to file.')
             f.close()
         await ctx.send('Good night!\n*Cave Story Theme starts to loop*')
+        print('Logged out')
         await bot.logout()
 
 @bot.command(pass_context=True)
 async def balance(ctx):
+    """[Bank] Check your bank account."""
+    await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
+
+@bot.command(pass_context=True)
+async def (ctx, *, arg):
     """[Bank] Check your bank account."""
     await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
 
