@@ -15,8 +15,8 @@ bot = commands.Bot(command_prefix=pogfix)
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
-    bank[ctx.message.author.id] = 100
-    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' has been activated.\nInitial Balance: ' + str(bank[ctx.message.author.id]) + '\nDon\'t run this command again, you\'ll lose **all** your money.')
+    bank[str(ctx.message.author.id)] = 100
+    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' has been activated.\nInitial Balance: ' + str(bank[str(ctx.message.author.id)]) + '\nDon\'t run this command again, you\'ll lose **all** your money.')
 
 @bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
@@ -45,7 +45,7 @@ async def savebank(ctx):
 @bot.command(pass_context=True)
 async def balance(ctx):
     """[Bank] Check your bank account."""
-    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[ctx.message.author.id]))
+    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]))
 
 @bot.command(pass_context=True)
 async def ping(ctx):
@@ -153,6 +153,7 @@ async def invite(ctx):
 if os.path.exists('save_bank.json') == True:
     f = open('save_bank.json')
     bank = json.load(f)
+    print(bank)
     f.close()
 else:
     bank = {}
