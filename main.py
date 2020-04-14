@@ -12,11 +12,11 @@ bank = {}
 bot = commands.Bot(command_prefix=pogfix)
 
 class bankjsonsave(commands.Cog):
-    def __init__(self):
+    def __init__(self, bot):
         self.index = 0
         self.bankjsonsave.start()
 
-    def cog_unload(self):
+    def cog_unload(self, bot):
         self.printer.cancel()
 
     @tasks.loop(seconds=5.0)
