@@ -28,7 +28,7 @@ async def bank_register(ctx):
 @bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
     """[Debug] Dumps bank dictionairy, the buffer and bank.json if it exists."""
-    if ctx.message.author.is_owner() == True:
+    if ctx.message.author.id == 482236588655378433:
         await ctx.send('bank dict: '+bank)
         await ctx.send('bank buffer: '+bankb)
         if os.path.exists('bank.json') == True:
