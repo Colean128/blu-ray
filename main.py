@@ -78,7 +78,7 @@ async def slot(ctx, *, arg):
         number1 = random.randint(0,9)
         number2 = random.randint(0,9)
         number3 = random.randint(0,9)
-        await ctx.send('The display says '+number1+' '+number2+' '+number3+'.')
+        await ctx.send('The display says '+str(number1)+' '+str(number2)+' '+str(number3)+'.')
 
 @bot.command(pass_context=True)
 async def ping(ctx):
