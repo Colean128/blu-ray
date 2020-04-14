@@ -68,7 +68,7 @@ async def set_balance(ctx, arg1, arg2):
     """[Owner] Save the bank and shutdown."""
     if ctx.message.author.id == 482236588655378433:
         bank[str(arg1)] = int(arg2)
-        await ctx.send('Set Account ID '+str(arg1)+ '\'s balance to ' + str(arg2) + ' Dosh.'
+        await ctx.send('Set Account ID '+str(arg1)+ '\'s balance to ' + str(arg2) + ' Dosh.')
 
 @bot.command(pass_context=True)
 async def balance(ctx):
