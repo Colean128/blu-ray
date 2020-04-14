@@ -79,6 +79,8 @@ async def feed(ctx, *, arg):
         await ctx.send('_gets meat hammer_ Time to beat that meat.')
     elif '🐈' in arg or 'cat' in arg or '🐱' in arg:
         await ctx.send('No! You take the pussy!')
+    elif '🍄' in arg or 'mushroom' in arg:
+        await ctx.send('It\'s a-me, a Drug addict!')
     else:
         await ctx.send('_munch_ I like the taste!')
 
