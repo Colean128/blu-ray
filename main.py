@@ -81,7 +81,7 @@ async def slot(ctx, *, arg):
     if int(arg) <= 9:
         await ctx.send('You have to bet at least 10 Dosh!')
     else:
-        if bank[str(ctx.message.author.id)] >= bet:
+        if bank[str(ctx.message.author.id)] >= int(arg):
             await ctx.send('The machine takes your Dosh. You pull the lever.')
             bet = int(arg)
             money = bank[str(ctx.message.author.id)]
