@@ -19,6 +19,12 @@ async def bank_register(ctx):
     await ctx.send('Don\'t run this command again, you\'ll lose **all** your money.')
 
 @bot.command(pass_context=True)
+async def balance(ctx):
+    """[Bank] Check your bank account."""
+    await ctx.send('Account ID ' + str(ctx.message.author.id) + ' bank balance.')
+    await ctx.send('Balance: ' + str(bank[ctx.message.author.id]))
+
+@bot.command(pass_context=True)
 async def ping(ctx):
     """[Info] Play table tennis with the bot."""
     await ctx.send('Pong!')
