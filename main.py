@@ -16,8 +16,8 @@ async def bankjsonsave(self):
         async with open('bank.json', 'w') as f:
             json.dump(bankb, f)
             print('Saved bank dictionairy')
-        else:
-            print('bank dictionairy not saved, they\'re identical.')
+    else:
+        print('bank dictionairy not saved, they\'re identical.')
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
