@@ -55,10 +55,9 @@ async def shutdown(ctx):
         await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
-            await ctx.send('Saved bank balances to file')
+            await ctx.send('Saved bank balances to file.')
             f.close()
-        await ctx.send('Good night!')
-        await ctx.send('*Cave Story Theme starts to loop*')
+        await ctx.send('Good night!\n*Cave Story Theme starts to loop*')
         await bot.logout()
 
 @bot.command(pass_context=True)
