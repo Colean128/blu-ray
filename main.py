@@ -69,7 +69,7 @@ async def balance(ctx):
 @bot.command(pass_context=True)
 async def slot(ctx, *, arg):
     """[Casino] Play the slots!"""
-    if int(arg) >= 9:
+    if int(arg) <= 9:
         await ctx.send('You have to bet at least 10 Dosh!')
     else:
         await ctx.send('The machine takes your Dosh. You pull the lever.')
