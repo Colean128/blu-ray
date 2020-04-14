@@ -58,7 +58,7 @@ async def shutdown(ctx):
         msg = await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
-            await ctx.edit_message(msg, 'Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
+            await ctx.edit(msg, 'Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
             f.close()
         await ctx.send('')
         print('Logged out')
