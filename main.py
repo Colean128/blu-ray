@@ -2,6 +2,7 @@ import discord
 import aiohttp
 import config
 import random
+import json
 from discord.ext import commands
 
 pogfix = config.prefix
