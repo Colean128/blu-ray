@@ -3,12 +3,21 @@ import aiohttp
 import config
 import random
 import json
-from discord.ext import commands
+from discord.ext import tasks, commands
 
 pogfix = config.prefix
 bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
+
+@tasks.loop(seconds=5.0)
+    async def printer(self):
+        if bankb != bank:
+            async with open('bank.json', 'w') as f:
+                json.dump(bankb, f)
+                print('Saved bank dictionairy')
+        else:
+            print('bank dictionairy not saved, they\'re identical.')
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
@@ -123,5 +132,9 @@ async def discord(ctx):
 async def invite(ctx):
     """[Info] Add the Blu-Ray bot to your server!"""
     await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
+
+f = open('bank.json')
+bankb = json.load(f)
+bank = bankb.copy()
 
 bot.run(config.token)
