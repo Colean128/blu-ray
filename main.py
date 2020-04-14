@@ -169,13 +169,15 @@ async def invite(ctx):
     """[Info] Add the Blu-Ray bot to your server!"""
     await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
 
+print('Loading bank.')
 if os.path.exists('save_bank.json') == True:
     f = open('save_bank.json')
     bank = json.load(f)
-    print(bank)
+    # print(bank)
     f.close()
 else:
     bank = {}
 
+print('Bot running.')
 bot.run(config.token)
-print('Bot running')
+
