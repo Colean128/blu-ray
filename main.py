@@ -12,13 +12,13 @@ bank = {}
 bot = commands.Bot(command_prefix=pogfix)
 
 @tasks.loop(seconds=5.0)
-async def bankjsonsave(self):
+async def bankjsonsave():
     if bankb != bank:
         async with open('bank.json', 'w') as f:
-            json.dump(bankb, f)
-            print('Saved bank dictionairy')
+            await json.dump(bankb, f)
+            await print('Saved bank dictionairy')
     else:
-        print('bank dictionairy not saved, they\'re identical.')
+        await print('bank dictionairy not saved, they\'re identical.')
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
