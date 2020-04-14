@@ -13,9 +13,10 @@ bot = commands.Bot(command_prefix=pogfix)
 @tasks.loop(seconds=5.0)
 async def bankjsonsave():
     if bankb != bank:
-        async with open('bank.json', 'w') as f:
-            await json.dump(bankb, f)
+         with open('bank.json', 'w') as f:
+            json.dump(bankb, f)
             await print('Saved bank dictionary')
+            f.close()
     else:
         await print('bank dictionary not saved, they\'re identical.')
 
@@ -30,12 +31,14 @@ async def dumpbank(ctx):
     """[Debug] Dumps bank dictionary and the buffer to a file."""
     if ctx.message.author.id == 482236588655378433:
         await ctx.send('Dumping to file.')
-        async with open('dumpbank_buffer.json', 'w') as f:
+        with open('dumpbank_buffer.json', 'w') as f:
             json.dump(bankb, f)
             await ctx.send('Dumped bank dictionary to file')
-        async with open('dumpbank_dictionary.json', 'w') as f:
+            f.close()
+        with open('dumpbank_dictionary.json', 'w') as f:
             json.dump(bank, f)
             await ctx.send('Dumped bank dictionary to file')
+            f.close()
 
 
 @bot.command(pass_context=True)
@@ -150,6 +153,7 @@ if os.path.exists('bank.json') == True:
     f = open('bank.json')
     bankb = json.load(f)
     bank = bankb.copy()
+    f.close()
 else:
     bank = {}
     bankb = {}
