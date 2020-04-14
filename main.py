@@ -10,23 +10,14 @@ pogfix = config.prefix
 bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
-
-class bankjsonsave(commands.Cog):
-    def __init__(self, bot):
-        self.index = 0
-        self.bankjsonsave.start()
-
-    def cog_unload(self, bot):
-        self.printer.cancel()
-
-    @tasks.loop(seconds=5.0)
-    async def bankjsonsave():
-        if bankb != bank:
-            async with open('bank.json', 'w') as f:
-                await json.dump(bankb, f)
-                await print('Saved bank dictionairy')
-        else:
-            await print('bank dictionairy not saved, they\'re identical.')
+@tasks.loop(seconds=5.0)
+async def bankjsonsave():
+    if bankb != bank:
+        async with open('bank.json', 'w') as f:
+            await json.dump(bankb, f)
+            await print('Saved bank dictionairy')
+    else:
+        await print('bank dictionairy not saved, they\'re identical.')
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
@@ -150,5 +141,6 @@ else:
     bank = {}
     bankb = {}
 
-bot.add_cog(bankjsonsave(bot))
 bot.run(config.token)
+print('Bot running')
+bot.bankjsonsave.start()
