@@ -36,11 +36,6 @@ async def dumpbank(ctx):
 async def saybank(ctx):
     """[Debug] Replies with bank dictionary."""
     if ctx.message.author.id == 482236588655378433:
-        await ctx.send('Dumping to file.')
-        # with open('dumpbank_buffer.json', 'w') as f:
-        #   json.dump(bankb, f)
-        #   await ctx.send('Dumped bank bank to file')
-        #   f.close()
         await ctx.send(str(bank))
 
 @bot.command(pass_context=True, hidden=True)
