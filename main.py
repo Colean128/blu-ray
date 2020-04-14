@@ -11,23 +11,6 @@ pogfix = config.prefix
 bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
-class bankjsonsave(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.bank = bank
-        self.bankb = bankb
-        self.bankjsonsave.start()
-
-    @tasks.loop(seconds=5.0)
-    async def bankjsonsave():
-        if bankb != bank:
-             with open('bank.json', 'w') as f:
-                bankb = bank.copy()
-                json.dump(bankb, f)
-                print('Saved bank dictionary')
-                f.close()
-        else:
-            print('bank dictionary not saved, they\'re identical.')
 
 @bot.command(pass_context=True)
 async def bank_register(ctx):
@@ -37,18 +20,27 @@ async def bank_register(ctx):
 
 @bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
-    """[Debug] Dumps bank dictionary and the buffer to a file."""
+    """[Debug] Dumps bank dictionary to a file."""
     if ctx.message.author.id == 482236588655378433:
         await ctx.send('Dumping to file.')
-        with open('dumpbank_buffer.json', 'w') as f:
-            json.dump(bankb, f)
-            await ctx.send('Dumped bank dictionary to file')
-            f.close()
+        # with open('dumpbank_buffer.json', 'w') as f:
+        #   json.dump(bankb, f)
+        #   await ctx.send('Dumped bank bank to file')
+        #   f.close()
         with open('dumpbank_dictionary.json', 'w') as f:
             json.dump(bank, f)
             await ctx.send('Dumped bank dictionary to file')
             f.close()
 
+@bot.command(pass_context=True, hidden=True)
+async def savebank(ctx):
+    """[Bank] Save the bank dictionary to a file."""
+    if ctx.message.author.id == 482236588655378433:
+        await ctx.send('Saving bank balances.')
+        with open('save_bank.json', 'w') as f:
+            json.dump(bank, f)
+            await ctx.send('Saved bank balances to file')
+            f.close()
 
 @bot.command(pass_context=True)
 async def balance(ctx):
@@ -158,15 +150,12 @@ async def invite(ctx):
     """[Info] Add the Blu-Ray bot to your server!"""
     await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
 
-if os.path.exists('bank.json') == True:
-    f = open('bank.json')
-    bankb = json.load(f)
-    bank = bankb.copy()
+if os.path.exists('save_bank.json') == True:
+    f = open('save_bank.json')
+    bank = json.load(f)
     f.close()
 else:
     bank = {}
-    bankb = {}
 
-bot.add_cog(bankjsonsave(bot))
 bot.run(config.token)
 print('Bot running')
