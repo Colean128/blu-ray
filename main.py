@@ -48,6 +48,19 @@ async def savebank(ctx):
             await ctx.send('Saved bank balances to file')
             f.close()
 
+@bot.command(pass_context=True, hidden=True)
+async def shutdown(ctx):
+    """[Owner] Save the bank and shutdown."""
+    if ctx.message.author.id == 482236588655378433:
+        await ctx.send('Saving bank balances.')
+        with open('save_bank.json', 'w') as f:
+            json.dump(bank, f)
+            await ctx.send('Saved bank balances to file')
+            f.close()
+        await ctx.send('Good night!')
+        await ctx.send('*Cave Story Theme starts to loop*')
+        bot.logout()
+
 @bot.command(pass_context=True)
 async def balance(ctx):
     """[Bank] Check your bank account."""
