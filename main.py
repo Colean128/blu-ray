@@ -12,6 +12,15 @@ bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
 
+@bot.command(pass_context=True, hidden=True)
+async def eval(ctx, *, command):
+    res = eval(command)
+    if inspect.isawaitable(res):
+        if config.testing == 1 and ctx.message.author.id == config.owner:
+            await bot.say(await res)
+    else:
+        await bot.say('You do not have the permissions to run Eval.')
+
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
