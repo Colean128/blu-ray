@@ -230,6 +230,8 @@ async def spotify(ctx, *, arg):
                 js = await r1.json()
                 print('Printing JSON.')
                 await ctx.send(js['artists'])
+            else:
+                print(r1.status)
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
