@@ -228,7 +228,7 @@ async def spotify(ctx, *, arg):
         async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
             if r1.status == 200:
                 js = await r1.json()
-                await ctx.send(js['artists']['items'][0]['external_urls'][0]['spotify'])
+                await ctx.send(js['artists']['items']['external_urls']['spotify'])
             else:
                 print(r1.status)
 
