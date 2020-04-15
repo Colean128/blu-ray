@@ -212,14 +212,14 @@ async def cat(ctx):
                 js = await r.json()
                 await ctx.send(js['url'])
 
-@bot.command(pass_context=True)
-async def dog(ctx):
-    """[Fun] Have a dog picture!"""
+@bot.command(pass_context=True,hidden=True)
+async def spotify(ctx):
+    """[Info] Search for albums and tracks on Spotify."""
     async with aiohttp.ClientSession() as session:
-        async with session.get('https://nekos.life/api/v2/img/woof') as r:
+        async with session.post('https://accounts.spotify.com/api/token', headers='Authorization: Basic {config.spotifyapikey}', data='grant_type=client_credentials') as r:
             if r.status == 200:
                 js = await r.json()
-                await ctx.send(js['url'])
+                await ctx.send(js['access_token'])
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
