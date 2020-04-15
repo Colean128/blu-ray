@@ -3,7 +3,6 @@ My crappy discord.py discord bot.
 
 # Required libraries
 - discord.py
-- funcy
 
 # Credits
 - @Zayne64 - Developer of the bot
