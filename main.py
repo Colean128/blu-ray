@@ -230,7 +230,7 @@ async def spotify(ctx, *, arg):
             if r1.status == 200:
                 js = await r1.json()
                 spotpluck = pluck("spotify", js)
-                await ctx.send(spotpluck[0])
+                await ctx.send(spotpluck)
             else:
                 print(r1.status)
 
