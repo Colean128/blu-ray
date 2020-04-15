@@ -40,7 +40,6 @@ async def ibank_reset(ctx, arg):
 async def dumpbank(ctx):
     """[Debug] Dumps bank dictionary to a file."""
     if ctx.message.author.id == config.owner:
-        await ctx.send('Dumping to file.')
         # with open('dumpbank_buffer.json', 'w') as f:
         #   json.dump(bankb, f)
         #   await ctx.send('Dumped bank bank to file')
