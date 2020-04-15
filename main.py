@@ -213,13 +213,17 @@ async def cat(ctx):
                 await ctx.send(js['url'])
 
 @bot.command(pass_context=True,hidden=True)
-async def spotify(ctx):
+async def spotify(ctx, *, arg):
     """[Info] Search for albums and tracks on Spotify."""
     async with aiohttp.ClientSession() as session:
         async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
             if r.status == 200:
                 js = await r.json()
-                print(js['access_token'])
+                spottoke = (js['access_token'])
+                async with session.post('https://api.spotify.com/v1/search?q={arg}&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r:
+                    if r.status == 200:
+                        js = await r.json()
+                        await ctx.send(js['artists.items.external_urls.spotify'])
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
