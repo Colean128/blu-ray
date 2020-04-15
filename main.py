@@ -219,10 +219,13 @@ async def spotify(ctx, *, arg):
         async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
             if r.status == 200:
                 js = await r.json()
+                print('Obtained Spotify Token.')
                 spottoke = (js['access_token'])
+                print('Spottoke variable defined.')
                 async with session.post('https://api.spotify.com/v1/search?q={arg}&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r:
                     if r.status == 200:
                         js = await r.json()
+                        print('Printing JSON.')
                         await ctx.send(js['artists']['items']['external_urls']['spotify'])
 
 @bot.command(pass_context=True)
