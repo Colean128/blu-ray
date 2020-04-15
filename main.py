@@ -13,8 +13,8 @@ bank = {}
 bot = commands.Bot(command_prefix=pogfix)
 
 @bot.command(pass_context=True, hidden=True)
-async def eval(ctx, *, command):
-    res = eval(command)
+async def eval(ctx, *, arg):
+    res = eval(arg)
     if config.testing == 1 and ctx.message.author.id == config.owner:
         await ctx.send(await res)
     else:
