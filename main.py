@@ -6,7 +6,7 @@ import json
 import os
 import asyncio
 import brfilter
-from funcy import pluck
+from funcy import pluck, pluck_attr
 from discord.ext import tasks, commands
 
 pogfix = config.prefix
