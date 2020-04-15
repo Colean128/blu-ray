@@ -15,9 +15,10 @@ bot = commands.Bot(command_prefix=pogfix)
 @bot.command()
 async def exec(ctx, *, arg):
     if config.testing == 1 and ctx.message.author.id == config.owner:
-        await ctx.send(await exec(str(arg)))
+        await exec(arg)
+        await ctx.send('Check console for output.')
     else:
-        await ctx.send('No.')
+        await ctx.send('No. Exec is disabled.')
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
