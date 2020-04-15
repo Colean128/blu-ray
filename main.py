@@ -212,19 +212,23 @@ async def cat(ctx):
                 js = await r.json()
                 await ctx.send(js['url'])
 
+async def spottoken():
+    async with aiohttp.ClientSession() as session:
+            async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    spottoke = (js['access_token'])
+
 @bot.command(pass_context=True,hidden=True)
 async def spotify(ctx, *, arg):
     """[Info] Search for albums and tracks on Spotify."""
+    await spottoken()
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
-            if r.status == 200:
-                js = await r.json()
-                spottoke = (js['access_token'])
-                async with session.post('https://api.spotify.com/v1/search?q='+arg+'&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
-                    if r1.status == 200:
-                        js = await r1.json()
-                        print('Printing JSON.')
-                        await ctx.send(js['artists'])
+        async with session.post('https://api.spotify.com/v1/search?q='+arg+'&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
+            if r1.status == 200:
+            js = await r1.json()
+            print('Printing JSON.')
+            await ctx.send(js['artists'])
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
