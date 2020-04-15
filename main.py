@@ -5,6 +5,7 @@ import random
 import json
 import os
 import asyncio
+import brfilter
 from discord.ext import tasks, commands
 
 pogfix = config.prefix
@@ -208,7 +209,10 @@ async def say(ctx, *, arg):
     if 'cock and ball torture' in arg or 'cbt' in arg:
         await ctx.send('https://www.youtube.com/watch?v=fR9ClX0egTc All hail the CBT country national anthem.')
     else:
-        await ctx.send(arg)
+        if any(s in arg for s in brfilter.badwords):
+            await ctx.send('Your message contains filtered words!')
+        else:
+            await ctx.send(arg)
 
 @bot.command(pass_context=True)
 async def discord(ctx):
