@@ -216,7 +216,7 @@ async def cat(ctx):
 async def spotify(ctx):
     """[Info] Search for albums and tracks on Spotify."""
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://accounts.spotify.com/api/token', headers='Authorization: Basic {config.spotifyapikey}', data="grant_type": "client_credentials") as r:
+        async with session.post('https://accounts.spotify.com/api/token', headers='Authorization: Basic {config.spotifyapikey}', data="grant_type":"client_credentials") as r:
             if r.status == 200:
                 js = await r.json()
                 await ctx.send(js['access_token'])
