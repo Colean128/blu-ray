@@ -14,7 +14,7 @@ bot = commands.Bot(command_prefix=pogfix)
 
 @bot.command()
 async def exec(ctx, *, arg):
-    if config.testing == 1 and ctx.message.author.id == config.owner
+    if config.testing == 1 and ctx.message.author.id == config.owner:
         await ctx.send(exec(arg))
     else:
         await ctx.send('No.')
