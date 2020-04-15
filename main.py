@@ -60,10 +60,10 @@ async def saybank(ctx):
 async def savebank(ctx):
     """[Bank] Save the bank dictionary to a file."""
     if ctx.message.author.id == config.owner:
-        await ctx.send('Saving bank balances.')
+        msg = await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
-            await ctx.send('Saved bank balances to file')
+            await msg.edit(content='Saved bank balances to file')
             f.close()
 
 @bot.command(pass_context=True, hidden=True)
