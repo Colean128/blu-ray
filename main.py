@@ -222,7 +222,6 @@ async def spotify(ctx, *, arg):
                 print('Obtained Spotify Token.')
                 spottoke = (js['access_token'])
                 print('Spottoke variable defined.')
-    async with aiohttp.ClientSession() as session:
         async with session.post('https://api.spotify.com/v1/search?q={arg}&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r:
             if r.status == 200:
                 js = await r.json()
