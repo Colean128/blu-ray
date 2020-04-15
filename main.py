@@ -6,6 +6,7 @@ import json
 import os
 import asyncio
 import brfilter
+from funcy import pluck
 from discord.ext import tasks, commands
 
 pogfix = config.prefix
@@ -228,7 +229,7 @@ async def spotify(ctx, *, arg):
         async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
             if r1.status == 200:
                 js = await r1.json()
-                spotpluck = [x["spotify"] for x in js]
+                spotpluck = pluck("spotify", js)
                 await ctx.send(spotpluck[0])
             else:
                 print(r1.status)
