@@ -207,7 +207,7 @@ async def why(ctx):
 async def cat(ctx):
     """[Fun] Have a cat picture!"""
     async with aiohttp.ClientSession() as session:
-        async with session.get('https://nekos.life/api/v2/meow') as r:
+        async with session.get('https://nekos.life/api/v2/img/meow') as r:
             if r.status == 200:
                 js = await r.json()
                 await ctx.send(js['url'])
