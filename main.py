@@ -226,9 +226,9 @@ async def spotify(ctx, *, arg):
     async with aiohttp.ClientSession() as session:
         async with session.post('https://api.spotify.com/v1/search?q='+arg+'&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
             if r1.status == 200:
-            js = await r1.json()
-            print('Printing JSON.')
-            await ctx.send(js['artists'])
+                js = await r1.json()
+                print('Printing JSON.')
+                await ctx.send(js['artists'])
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
