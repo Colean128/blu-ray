@@ -12,37 +12,6 @@ bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
 
-@bot.command(pass_context=True, hidden=True)
-async def eval(self, ctx, *, code : str):
-    """Evaluates code."""
-    if testing == 1 and ctx.message.author.id == config.owner:
-        code = code.strip('` ')
-        python = '```py\n{}\n```'
-        result = None
-
-        env = {
-            'bot': self.bot,
-            'ctx': ctx,
-            'message': ctx.message,
-            'server': ctx.message.server,
-            'channel': ctx.message.channel,
-            'author': ctx.message.author
-        }
-
-        env.update(globals())
-
-        try:
-            result = eval(code, env)
-            if inspect.isawaitable(result):
-                result = await result
-        except Exception as e:
-            await self.bot.say(python.format(type(e).__name__ + ': ' + str(e)))
-            return
-
-        await self.bot.say(python.format(result))
-    else:
-        await ctx.send('I refuse to run eval.')
-
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
@@ -63,7 +32,7 @@ async def bank_reset(ctx):
 async def ibank_reset(ctx, arg):
     """[Owner] Reset a bank account!"""
     if ctx.message.author.id == config.owner:
-        my_dict.pop(arg, None)
+        bank.pop(arg, None)
         await ctx.send('Account ID '+str(arg)+' has been wiped.')
 
 @bot.command(pass_context=True, hidden=True)
