@@ -218,6 +218,7 @@ async def spottoken():
                 if r.status == 200:
                     js = await r.json()
                     spottoke = (js['access_token'])
+                    return spottoke
 
 @bot.command(pass_context=True,hidden=True)
 async def spotify(ctx, *, arg):
