@@ -14,9 +14,8 @@ bot = commands.Bot(command_prefix=pogfix)
 
 @bot.command(pass_context=True, hidden=True)
 async def eval(ctx, *, arg):
-    res = eval(arg)
     if config.testing == 1 and ctx.message.author.id == config.owner:
-        await ctx.send(await res)
+        await ctx.send(eval(arg))
     else:
         await ctx.send('You do not have the permissions to run Eval.')
 
