@@ -213,6 +213,15 @@ async def cat(ctx):
                 await ctx.send(js['url'])
 
 @bot.command(pass_context=True)
+async def dog(ctx):
+    """[Fun] Have a dog picture!"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://nekos.life/api/v2/img/woof') as r:
+            if r.status == 200:
+                js = await r.json()
+                await ctx.send(js['url'])
+
+@bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
     if 'cock and ball torture' in arg or 'cbt' in arg:
