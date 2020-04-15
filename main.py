@@ -223,7 +223,7 @@ async def spotify(ctx, *, arg):
                 async with session.post('https://api.spotify.com/v1/search?q={arg}&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r:
                     if r.status == 200:
                         js = await r.json()
-                        await ctx.send(js['artists.items.external_urls.spotify'])
+                        await ctx.send(js['artists']['items']['external_urls']['spotify'])
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
