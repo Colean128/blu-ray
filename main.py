@@ -12,13 +12,12 @@ bank = {}
 
 bot = commands.Bot(command_prefix=pogfix)
 
-@bot.command(pass_context=True, hidden=True)
-async def eval(ctx, *, arg):
-    if config.testing == 1 and ctx.message.author.id == config.owner:
-        await ctx.send(eval(arg))
+@bot.command()
+async def exec(ctx, *, arg):
+    if config.testing == 1 and ctx.message.author.id == config.owner
+        await ctx.send(exec(arg))
     else:
-        await ctx.send('You do not have the permissions to run Eval.')
-
+        await ctx.send('No.')
 @bot.command(pass_context=True)
 async def bank_register(ctx):
     """[Bank] Register a bank account!"""
