@@ -217,7 +217,8 @@ async def spottoken():
             async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
                 if r.status == 200:
                     js = await r.json()
-                    global spottoke = (js['access_token'])
+                    global spottoke
+                    spottoke = (js['access_token'])
 
 @bot.command(pass_context=True,hidden=True)
 async def spotify(ctx, *, arg):
