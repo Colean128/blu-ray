@@ -225,7 +225,7 @@ async def spotify(ctx, *, arg):
     """[Info] Search for albums and tracks on Spotify."""
     await spottoken()
     async with aiohttp.ClientSession() as session:
-        async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
+        async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artists&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
             if r1.status == 200:
                 # Note to self: don't fuck with this code, you'll probably spend two days fixing it.
                 js = await r1.json()

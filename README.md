@@ -4,7 +4,6 @@ My crappy discord.py discord bot.
 # Required libraries
 On my crusade to making this bot as easily usable and installable as possible, I've used as little libraries as I possibly can.
 - discord.py
-- pandas
 
 # Credits
 - Colean - Developer of the bot
