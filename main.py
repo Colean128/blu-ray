@@ -231,7 +231,7 @@ async def spotify(ctx, *, arg):
                 js = await r1.json()
                 # print(js)
                 jsfuckmeintheassplease = js['artists']['items'][0]['external_urls']['spotify']
-                await ctx.send(jsfuckmeintheassplease)
+                await ctx.send('Is this the artist you were looking for? '+jsfuckmeintheassplease)
             else:
                 print(r1.status)
 
