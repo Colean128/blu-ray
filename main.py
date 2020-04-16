@@ -212,6 +212,15 @@ async def cat(ctx):
                 js = await r.json()
                 await ctx.send(js['url'])
 
+@bot.command(pass_context=True)
+async def dog(ctx):
+    """[Fun] Have a cat picture!"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://nekos.life/api/v2/img/woof') as r:
+            if r.status == 200:
+                js = await r.json()
+                await ctx.send(js['url'])
+
 async def spottoken():
     async with aiohttp.ClientSession() as session:
             async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
