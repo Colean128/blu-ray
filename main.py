@@ -229,7 +229,7 @@ async def spotify(ctx, *, arg):
             if r1.status == 200:
                 # Note to self: don't fuck with this code, you'll probably spend two days fixing it.
                 js = await r1.json()
-                jsparse = json.loads(js)
+                jsparse = json.loadd(js)
                 jsfuckmeintheassplease = jsparse['artists']['items']['external_urls']['spotify']
                 await ctx.send(jsfuckmeintheassplease)
             else:
