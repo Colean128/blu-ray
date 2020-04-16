@@ -228,7 +228,7 @@ async def spotify(ctx, *, arg):
         async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
             if r1.status == 200:
                 js = await r1.json()
-                jsparse = json.load(js)
+                jsparse = json.loads(js)
                 await ctx.send(await pd.DataFrame(jsparse['artists']['items']['external_urls']['spotify']))
             else:
                 print(r1.status)
