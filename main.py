@@ -136,9 +136,6 @@ async def slap(ctx, *, member: discord.Member):
             if r.status == 200:
                 js = await r.json()
                 await ctx.send(js['url'])
-            else:
-                devdm = config.owner
-                await ctx.send_message(devdm, 'API Error: \nFunction/command: slap\nTriggered by: '+str(ctx.message.author.id)+' In server ID '+str(ctx.message.guild)+'\nError code: '+str(r.status))
 
 @bot.command(pass_context=True)
 async def hug(ctx, *, member: discord.Member):
@@ -149,9 +146,6 @@ async def hug(ctx, *, member: discord.Member):
             if r.status == 200:
                 js = await r.json()
                 await ctx.send(js['url'])
-            else:
-                devdm = config.owner
-                await ctx.send_message(devdm, 'API Error: \nFunction/command: hug\nTriggered by: '+str(ctx.message.author.id)+' In server ID '+str(ctx.message.guild)+'\nError code: '+str(r.status))
 
 @bot.command(pass_context=True)
 async def dice(ctx):
@@ -207,9 +201,6 @@ async def why(ctx):
             if r.status == 200:
                 js = await r.json()
                 await ctx.send(js['why'])
-            else:
-                devdm = config.owner
-                await ctx.send_message(devdm, 'API Error: \nFunction/command: why\nTriggered by: '+str(ctx.message.author.id)+' In server ID '+str(ctx.message.guild)+'\nError code: '+str(r.status))
 
 @bot.command(pass_context=True)
 async def cat(ctx):
@@ -219,9 +210,6 @@ async def cat(ctx):
             if r.status == 200:
                 js = await r.json()
                 await ctx.send(js['url'])
-            else:
-                devdm = config.owner
-                await ctx.send_message(devdm, 'API Error: \nFunction/command: cat\nTriggered by: '+str(ctx.message.author.id)+' In server ID '+str(ctx.message.guild)+'\nError code: '+str(r.status))
 
 async def spottoken():
     async with aiohttp.ClientSession() as session:
@@ -230,9 +218,6 @@ async def spottoken():
                     js = await r.json()
                     global spottoke
                     spottoke = (js['access_token'])
-                else:
-                    devdm = config.owner
-                    await ctx.send_message(devdm, 'API Error: \nFunction/command: spottoken()\nTriggered by: '+str(ctx.message.author.id)+' In server ID '+str(ctx.message.guild)+'\nError code: '+str(r.status))
 
 @bot.command(pass_context=True,hidden=True)
 async def spotify(ctx, *, arg):
@@ -245,8 +230,7 @@ async def spotify(ctx, *, arg):
                 js = await r1.json()
                 await ctx.send('Is this the artist you are looking for? '+js['artists']['items'][0]['external_urls']['spotify'])
             else:
-                devdm = config.owner
-                await ctx.send_message(devdm, 'API Error: \nFunction/command: spotify\nTriggered by: '+str(ctx.message.author.id)+' In server ID '+str(ctx.message.guild)+'\nError code: '+str(r.status))
+                print(r1.status)
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
