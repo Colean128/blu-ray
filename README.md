@@ -2,11 +2,13 @@
 My crappy discord.py discord bot.
 
 # Required libraries
+On my crusade to making this bot as easily usable and installable as possible, I've used as little libraries as I possibly can.
 - discord.py
+- pandas
 
 # Credits
-- @Zayne64 - Developer of the bot
-- @Apfel - The bot's host
+- Colean - Developer of the bot
+- Apfel/Marko - The bot's host
 - Creators of all libraries and APIs used in this project
 
 # Invite
