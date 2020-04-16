@@ -3,7 +3,6 @@ import aiohttp
 import config
 import random
 import json
-import pandas as pd
 import os
 import asyncio
 import brfilter
