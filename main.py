@@ -3,8 +3,10 @@ import aiohttp
 import config
 import random
 import json
+import pandas as pd
 import os
 import asyncio
+import brfilter
 from discord.ext import tasks, commands
 
 pogfix = config.prefix
@@ -22,10 +24,23 @@ async def bank_register(ctx):
         await ctx.send('Thank you for registering with the Bank of Sony!\nYour Account ID number is ' + str(ctx.message.author.id) + ' and your account has been activated.\nYour initial balance is ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
 
 @bot.command(pass_context=True, hidden=True)
+async def bank_reset(ctx):
+    """[Owner] Reset all bank accounts!"""
+    if ctx.message.author.id == config.owner:
+        bank.clear()
+        await ctx.send('All accounts have been wiped!')
+
+@bot.command(pass_context=True, hidden=True)
+async def ibank_reset(ctx, arg):
+    """[Owner] Reset a bank account!"""
+    if ctx.message.author.id == config.owner:
+        bank.pop(arg, None)
+        await ctx.send('Account ID '+str(arg)+' has been wiped.')
+
+@bot.command(pass_context=True, hidden=True)
 async def dumpbank(ctx):
     """[Debug] Dumps bank dictionary to a file."""
-    if ctx.message.author.id == 482236588655378433:
-        await ctx.send('Dumping to file.')
+    if ctx.message.author.id == config.owner:
         # with open('dumpbank_buffer.json', 'w') as f:
         #   json.dump(bankb, f)
         #   await ctx.send('Dumped bank bank to file')
@@ -38,23 +53,23 @@ async def dumpbank(ctx):
 @bot.command(pass_context=True, hidden=True)
 async def saybank(ctx):
     """[Debug] Replies with bank dictionary."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         await ctx.send(str(bank))
 
 @bot.command(pass_context=True, hidden=True)
 async def savebank(ctx):
     """[Bank] Save the bank dictionary to a file."""
-    if ctx.message.author.id == 482236588655378433:
-        await ctx.send('Saving bank balances.')
+    if ctx.message.author.id == config.owner:
+        msg = await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
-            await ctx.send('Saved bank balances to file')
+            await msg.edit(content='Saved bank balances to file')
             f.close()
 
 @bot.command(pass_context=True, hidden=True)
 async def shutdown(ctx):
     """[Owner] Save the bank and shutdown."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         msg = await ctx.send('Saving bank balances.')
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
@@ -66,7 +81,7 @@ async def shutdown(ctx):
 @bot.command(pass_context=True, hidden=True)
 async def set_balance(ctx, arg1, arg2):
     """[Owner] Save the bank and shutdown."""
-    if ctx.message.author.id == 482236588655378433:
+    if ctx.message.author.id == config.owner:
         bank[str(arg1)] = int(arg2)
         await ctx.send('Set Account ID '+str(arg1)+ '\'s balance to ' + str(arg2) + ' Dosh.')
 
@@ -89,14 +104,14 @@ async def slot(ctx, *, arg):
             number2 = random.randint(0,9)
             number3 = random.randint(0,9)
             await ctx.send('The display says '+str(number1)+' '+str(number2)+' '+str(number3)+'.')
-            if number1 == number3:
-                await ctx.send('The machine lights up! You\'ve won!\nThe machine spits out '+str(bet)+' Dosh')
+            if number1 == number2 and number2 == number3:
+                await ctx.send('The machine lights up and flashes! You\'ve won the jackpot!\nThe machine spits out '+str(bet*4)+' Dosh')
+                bank[str(ctx.message.author.id)] = money + bet*3
             elif number1 == number2 or number2 == number3:
                 await ctx.send('The machine lights up! You\'ve won!\nThe machine spits out '+str(bet*2)+' Dosh')
                 bank[str(ctx.message.author.id)] = money + bet
-            elif number1 == number2 and number2 == number3:
-                await ctx.send('The machine lights up and flashes! You\'ve won the jackpot!\nThe machine spits out '+str(bet*4)+' Dosh')
-                bank[str(ctx.message.author.id)] = money + bet*3
+            elif number1 == number3:
+                await ctx.send('The machine lights up! You\'ve won!\nThe machine spits out '+str(bet)+' Dosh')
             else:
                 await ctx.send('The machine plays a sad sound. You\'re in the hole '+str(bet)+' Dosh.')
                 bank[str(ctx.message.author.id)] = money - bet
@@ -189,12 +204,56 @@ async def why(ctx):
                 await ctx.send(js['why'])
 
 @bot.command(pass_context=True)
+async def cat(ctx):
+    """[Fun] Have a cat picture!"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://nekos.life/api/v2/img/meow') as r:
+            if r.status == 200:
+                js = await r.json()
+                await ctx.send(js['url'])
+
+@bot.command(pass_context=True)
+async def dog(ctx):
+    """[Fun] Have a cat picture!"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://nekos.life/api/v2/img/woof') as r:
+            if r.status == 200:
+                js = await r.json()
+                await ctx.send(js['url'])
+
+async def spottoken():
+    async with aiohttp.ClientSession() as session:
+            async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    global spottoke
+                    spottoke = (js['access_token'])
+
+@bot.command(pass_context=True,hidden=True)
+async def spotify(ctx, *, arg):
+    """[Info] Search for albums and tracks on Spotify."""
+    await spottoken()
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
+            if r1.status == 200:
+                # Note to self: don't fuck with this code, you'll probably spend two days fixing it.
+                js = await r1.json()
+                # print(js)
+                jsfuckmeintheassplease = js['artists']['items'][0]['external_urls']['spotify']
+                await ctx.send('Is this the artist you were looking for? '+jsfuckmeintheassplease)
+            else:
+                print(r1.status)
+
+@bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
     if 'cock and ball torture' in arg or 'cbt' in arg:
         await ctx.send('https://www.youtube.com/watch?v=fR9ClX0egTc All hail the CBT country national anthem.')
     else:
-        await ctx.send(arg)
+        if any(s in arg for s in brfilter.badwords):
+            await ctx.send('Your message contains filtered words!')
+        else:
+            await ctx.send(arg)
 
 @bot.command(pass_context=True)
 async def discord(ctx):

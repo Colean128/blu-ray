@@ -6,3 +6,5 @@ else:
     token = 'EXAMPLE'
 
 prefix = 'br/'
+owner = INSERT_ID_HERE
+spotifyapikey = INSERT_KEY_HERE
