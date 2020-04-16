@@ -230,7 +230,7 @@ async def spotify(ctx, *, arg):
                 # Note to self: don't fuck with this code, you'll probably spend two days fixing it.
                 js = await r1.json()
                 print(js)
-                jsfuckmeintheassplease = js['artists']['items']['external_urls']['spotify']
+                jsfuckmeintheassplease = js['artists']['items'][0]['external_urls']['spotify']
                 await ctx.send(jsfuckmeintheassplease)
             else:
                 print(r1.status)
