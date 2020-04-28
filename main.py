@@ -245,13 +245,10 @@ async def artist(ctx, *, arg):
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
-    if 'cock and ball torture' in arg or 'cbt' in arg:
-        await ctx.send('https://www.youtube.com/watch?v=fR9ClX0egTc All hail the CBT country national anthem.')
+    if any(s in arg for s in brfilter.badwords):
+        await ctx.send('Your message contains filtered words!')
     else:
-        if any(s in arg for s in brfilter.badwords):
-            await ctx.send('Your message contains filtered words!')
-        else:
-            await ctx.send(arg)
+        await ctx.send(arg)
 
 @bot.command(pass_context=True)
 async def discord(ctx):
