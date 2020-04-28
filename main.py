@@ -3,6 +3,7 @@ import aiohttp
 import config
 import random
 import json
+import time
 import os
 import asyncio
 import brfilter
@@ -229,6 +230,14 @@ async def spottoken():
                     spottoke = (js['access_token'])
 
 @bot.command(pass_context=True)
+async def uptime(ctx):
+    """[Info] Bot uptime since last reboot"""
+    time_diff = 70
+    minute = round(time_diff / 60)
+    seconds = time_diff % 60
+    await ctx.send(time_diff)
+
+@bot.command(pass_context=True)
 async def artist(ctx, *, arg):
     """[Info] Search for artists on Spotify."""
     await spottoken()
@@ -309,4 +318,5 @@ else:
     bank = {}
 
 print('Bot running.')
+bootsec = time.time()
 bot.run(config.token)
