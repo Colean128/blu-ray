@@ -235,7 +235,7 @@ async def uptime(ctx):
     time_diff = 70
     minute = round(time_diff / 60)
     seconds = time_diff % 60
-    await ctx.send(time_diff)
+    await ctx.send(minute+':'+seconds)
 
 @bot.command(pass_context=True)
 async def artist(ctx, *, arg):
