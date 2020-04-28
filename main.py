@@ -229,8 +229,8 @@ async def spottoken():
                     spottoke = (js['access_token'])
 
 @bot.command(pass_context=True,hidden=True)
-async def spotify(ctx, *, arg):
-    """[Info] Search for albums and tracks on Spotify."""
+async def artist(ctx, *, arg):
+    """[Info] Search for artists on Spotify."""
     await spottoken()
     async with aiohttp.ClientSession() as session:
         async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
@@ -238,8 +238,8 @@ async def spotify(ctx, *, arg):
                 # Note to self: don't fuck with this code, you'll probably spend two days fixing it.
                 js = await r1.json()
                 # print(js)
-                jsfuckmeintheassplease = js['artists']['items'][0]['external_urls']['spotify']
-                await ctx.send('Is this the artist you were looking for? '+jsfuckmeintheassplease)
+                jsparse = js['artists']['items'][0]['external_urls']['spotify']
+                await ctx.send('Is this the artist you were looking for? '+jsparse)
             else:
                 print(r1.status)
 
