@@ -242,6 +242,19 @@ async def artist(ctx, *, arg):
             else:
                 print(r1.status)
 
+@bot.command(pass_context=True,hidden=True)
+async def album(ctx, *, arg):
+    """[Info] Search for albums on Spotify."""
+    await spottoken()
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=album&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
+            if r1.status == 200:
+                js = await r1.json()
+                jsparse = js['albums']['items'][0]['external_urls']['spotify']
+                await ctx.send('Is this the album you were looking for? '+jsparse)
+            else:
+                print(r1.status)
+
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
