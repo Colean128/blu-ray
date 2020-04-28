@@ -228,7 +228,7 @@ async def spottoken():
                     global spottoke
                     spottoke = (js['access_token'])
 
-@bot.command(pass_context=True,hidden=True)
+@bot.command(pass_context=True)
 async def artist(ctx, *, arg):
     """[Info] Search for artists on Spotify."""
     await spottoken()
@@ -242,7 +242,7 @@ async def artist(ctx, *, arg):
             else:
                 print(r1.status)
 
-@bot.command(pass_context=True,hidden=True)
+@bot.command(pass_context=True)
 async def album(ctx, *, arg):
     """[Info] Search for albums on Spotify."""
     await spottoken()
@@ -255,7 +255,7 @@ async def album(ctx, *, arg):
             else:
                 print(r1.status)
 
-@bot.command(pass_context=True,hidden=True)
+@bot.command(pass_context=True)
 async def track(ctx, *, arg):
     """[Info] Search for tracks on Spotify."""
     await spottoken()
@@ -268,7 +268,7 @@ async def track(ctx, *, arg):
             else:
                 print(r1.status)
 
-@bot.command(pass_context=True,hidden=True)
+@bot.command(pass_context=True)
 async def playlist(ctx, *, arg):
     """[Info] Search for playlists on Spotify."""
     await spottoken()
@@ -310,4 +310,3 @@ else:
 
 print('Bot running.')
 bot.run(config.token)
-
