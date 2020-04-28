@@ -238,8 +238,12 @@ async def artist(ctx, *, arg):
                 # Note to self: don't fuck with this code, you'll probably spend two days fixing it.
                 js = await r1.json()
                 # print(js)
+                jsparse = 0
                 jsparse = js['artists']['items'][0]['external_urls']['spotify']
-                await ctx.send('Is this the artist you were looking for? '+jsparse)
+                if jsparse != 0:
+                    await ctx.send('Is this the artist you were looking for? '+jsparse)
+                else:
+                    await ctx.send('I couldn\'t find an artist under that name.')
             else:
                 print(r1.status)
 
