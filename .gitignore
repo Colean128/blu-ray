@@ -4,4 +4,5 @@ bank.json
 dumpbank_buffer.json
 dumpbank_dictionary.json
 save_bank.json
+settings_filter.json
 push.bat

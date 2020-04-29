@@ -302,6 +302,11 @@ async def say(ctx, *, arg):
     else:
         await ctx.send(arg)
 
+@bot.command(pass_context=True,hidden=True)
+async def ownersend(ctx):
+    """ [Debug] Sends the server's owner."""
+    await ctx.send(ctx.message.guild.owner)
+
 @bot.command(pass_context=True)
 async def discord(ctx):
     """[Info] Join the Blu-Ray Facility discord!"""
@@ -320,6 +325,16 @@ if os.path.exists('save_bank.json') == True:
     f.close()
 else:
     bank = {}
+
+print('Loading settings.')
+if os.path.exists('settings_filter.json') == True:
+    f = open('settings_filter.json')
+    settings_filter = json.load(f)
+    print(settings_filter)
+    f.close()
+else:
+    settings_filter = {}
+
 
 print('Bot running.')
 bootsec = time.time()
