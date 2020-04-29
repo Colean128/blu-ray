@@ -318,13 +318,13 @@ async def sayfilter(ctx):
     """[Settings] Toggle the filter for the say command."""
     if ctx.message.author.id == ctx.message.guild.owner_id:
         if settings_filter.get(str(ctx.message.guild.id)) == None:
-            settings_filter[str(ctx.message.guild.id)] == 1
+            settings_filter[str(ctx.message.guild.id)] = 1
             await ctx.send('Filtering disabled!')
         elif settings_filter[str(ctx.message.guild.id)] == 0:
-            settings_filter[str(ctx.message.guild.id)] == 1
+            settings_filter[str(ctx.message.guild.id)] = 1
             await ctx.send('Filtering disabled!')
         elif settings_filter[str(ctx.message.guild.id)] == 1:
-            settings_filter[str(ctx.message.guild.id)] == 0
+            settings_filter[str(ctx.message.guild.id)] = 0
             await ctx.send('Filtering enabled!')
     else:
         await ctx.send('Only server owners can set this!')
