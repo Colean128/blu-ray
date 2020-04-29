@@ -301,10 +301,10 @@ async def playlist(ctx, *, arg):
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
     if any(s in arg for s in brfilter.badwords):
-        if settings_filter.get(ctx.message.guild.id) == None:
+        if settings_filter.get(str(ctx.message.guild.id)) == None:
             print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
             await ctx.send('Your message contains filtered words!')
-        elif settings_filter[ctx.message.guild.id] == 0:
+        elif settings_filter[str(ctx.message.guild.id)] == 0:
             print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
             await ctx.send('Your message contains filtered words!')
         else:
@@ -317,14 +317,14 @@ async def say(ctx, *, arg):
 async def sayfilter(ctx):
     """[Settings] Toggle the filter for the say command."""
     if ctx.message.author.id == ctx.message.guild.owner_id:
-        if settings_filter.get(ctx.message.guild.id) == None:
-            settings_filter[ctx.message.guild.id] == 1
+        if settings_filter.get(str(ctx.message.guild.id)) == None:
+            settings_filter[str(ctx.message.guild.id)] == 1
             await ctx.send('Filtering disabled!')
-        elif settings_filter[ctx.message.guild.id] == 0:
-            settings_filter[ctx.message.guild.id] == 1
+        elif settings_filter[str(ctx.message.guild.id)] == 0:
+            settings_filter[str(ctx.message.guild.id)] == 1
             await ctx.send('Filtering disabled!')
-        elif settings_filter[ctx.message.guild.id] == 1:
-            settings_filter[ctx.message.guild.id] == 0
+        elif settings_filter[str(ctx.message.guild.id)] == 1:
+            settings_filter[str(ctx.message.guild.id)] == 0
             await ctx.send('Filtering enabled!')
     else:
         await ctx.send('Only server owners can set this!')
