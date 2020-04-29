@@ -305,7 +305,7 @@ async def say(ctx, *, arg):
 @bot.command(pass_context=True,hidden=True)
 async def ownersend(ctx):
     """ [Debug] Sends the server's owner."""
-    await ctx.send(ctx.message.guild.owner)
+    await ctx.send(ctx.message.guild.owner_id)
 
 @bot.command(pass_context=True)
 async def discord(ctx):
