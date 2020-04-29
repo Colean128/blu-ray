@@ -302,13 +302,15 @@ async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
     if any(s in arg for s in brfilter.badwords):
         if settings_filter.get(str(ctx.message.guild.id)) == None:
-            print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
+            # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
             await ctx.send('Your message contains filtered words!')
+
         elif settings_filter[str(ctx.message.guild.id)] == 0:
-            print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
+            # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
             await ctx.send('Your message contains filtered words!')
+
         else:
-            print(str(ctx.message.author.id) +' Sent ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering off')
+            # print(str(ctx.message.author.id) +' Sent ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering off')
             await ctx.send(arg)
     else:
         await ctx.send(arg)
@@ -320,12 +322,15 @@ async def sayfilter(ctx):
         if settings_filter.get(str(ctx.message.guild.id)) == None:
             settings_filter[str(ctx.message.guild.id)] = 1
             await ctx.send('Filtering disabled!')
+
         elif settings_filter[str(ctx.message.guild.id)] == 0:
             settings_filter[str(ctx.message.guild.id)] = 1
             await ctx.send('Filtering disabled!')
+
         elif settings_filter[str(ctx.message.guild.id)] == 1:
             settings_filter[str(ctx.message.guild.id)] = 0
             await ctx.send('Filtering enabled!')
+
     else:
         await ctx.send('Only server owners can set this!')
 
@@ -373,7 +378,7 @@ print('Loading settings.')
 if os.path.exists('settings_filter.json') == True:
     f = open('settings_filter.json')
     settings_filter = json.load(f)
-    print(settings_filter)
+    # print(settings_filter)
     f.close()
 else:
     settings_filter = {}
