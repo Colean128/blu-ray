@@ -71,6 +71,9 @@ async def shutdown(ctx):
     """[Owner] Save the bank and shutdown."""
     if ctx.message.author.id == config.owner:
         msg = await ctx.send('Saving bank balances.')
+        with open('settings_filter.json', 'w') as f:
+            json.dump(settings_filter, f)
+            f.close()
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
             await msg.edit(content='Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
@@ -309,6 +312,38 @@ async def say(ctx, *, arg):
             await ctx.send(arg)
     else:
         await ctx.send(arg)
+
+@bot.command(pass_context=True, hidden=True)
+async def sayfilter(ctx):
+    """[Settings] Toggle the filter for the say command."""
+    if ctx.message.author.id == ctx.message.guild.owner_id:
+        if settings_filter.get(ctx.message.guild.id) == None:
+            settings_filter[ctx.message.guild.id] == 1
+            await ctx.send('Filtering disabled!')
+        elif settings_filter[ctx.message.guild.id] == 0:
+            settings_filter[ctx.message.guild.id] == 1
+            await ctx.send('Filtering disabled!')
+        elif settings_filter[ctx.message.guild.id] == 1:
+            settings_filter[ctx.message.guild.id] == 0
+            await ctx.send('Filtering enabled!')
+    else:
+        await ctx.send('Only server owners can set this!')
+
+@bot.command(pass_context=True, hidden=True)
+async def sayset(ctx):
+    """[Debug] Replies with settings."""
+    if ctx.message.author.id == config.owner:
+        await ctx.send(str(settings_filter))
+
+@bot.command(pass_context=True, hidden=True)
+async def saveset(ctx):
+    """[Settings] Save settings to a file."""
+    if ctx.message.author.id == config.owner:
+        msg = await ctx.send('Saving settings.')
+        with open('settings_filter.json', 'w') as f:
+            json.dump(settings_filter, f)
+            await msg.edit(content='Saved settings to file')
+            f.close()
 
 @bot.command(pass_context=True,hidden=True)
 async def ownersend(ctx):
