@@ -232,10 +232,14 @@ async def spottoken():
 @bot.command(pass_context=True)
 async def uptime(ctx):
     """[Info] Bot uptime since last reboot"""
-    time_diff = 70
+    time_diff = round(time.time() - bootsec)
     minute = round(time_diff / 60)
     seconds = time_diff % 60
-    await ctx.send(minute+':'+seconds)
+    if seconds <= 9:
+        displaysec = "0"+str(seconds)
+        await ctx.send(str(minute)+':'+str(displaysec))
+    else:
+        await ctx.send(str(minute)+':'+str(seconds))
 
 @bot.command(pass_context=True)
 async def artist(ctx, *, arg):
