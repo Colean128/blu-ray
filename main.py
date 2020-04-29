@@ -298,7 +298,12 @@ async def playlist(ctx, *, arg):
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
     if any(s in arg for s in brfilter.badwords):
-        await ctx.send('Your message contains filtered words!')
+        if settings_filter[ctx.message.guild.id] == 0 or settings_filter.get(ctx.message.guild.id == None:
+            print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
+            await ctx.send('Your message contains filtered words!')
+        else:
+            print(str(ctx.message.author.id) +' Sent ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering off')
+            await ctx.send(arg)
     else:
         await ctx.send(arg)
 
