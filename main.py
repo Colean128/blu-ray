@@ -3,6 +3,7 @@ import aiohttp
 import config
 import random
 import json
+import time
 import os
 import asyncio
 import brfilter
@@ -70,6 +71,9 @@ async def shutdown(ctx):
     """[Owner] Save the bank and shutdown."""
     if ctx.message.author.id == config.owner:
         msg = await ctx.send('Saving bank balances.')
+        with open('settings_filter.json', 'w') as f:
+            json.dump(settings_filter, f)
+            f.close()
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
             await msg.edit(content='Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
@@ -228,31 +232,123 @@ async def spottoken():
                     global spottoke
                     spottoke = (js['access_token'])
 
-@bot.command(pass_context=True,hidden=True)
-async def spotify(ctx, *, arg):
-    """[Info] Search for albums and tracks on Spotify."""
+@bot.command(pass_context=True)
+async def uptime(ctx):
+    """[Info] Bot uptime since last reboot"""
+    time_diff = round(time.time() - bootsec)
+    minute = round(time_diff / 60)
+    seconds = time_diff % 60
+    if seconds <= 9:
+        displaysec = "0"+str(seconds)
+        await ctx.send(str(minute)+':'+str(displaysec))
+    else:
+        await ctx.send(str(minute)+':'+str(seconds))
+
+@bot.command(pass_context=True)
+async def artist(ctx, *, arg):
+    """[Info] Search for artists on Spotify."""
     await spottoken()
     async with aiohttp.ClientSession() as session:
         async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
             if r1.status == 200:
                 # Note to self: don't fuck with this code, you'll probably spend two days fixing it.
                 js = await r1.json()
-                # print(js)
-                jsfuckmeintheassplease = js['artists']['items'][0]['external_urls']['spotify']
-                await ctx.send('Is this the artist you were looking for? '+jsfuckmeintheassplease)
+                jsparse = js['artists']['items'][0]['external_urls']['spotify']
+                await ctx.send('Is this the artist you were looking for? '+jsparse)
+            else:
+                print(r1.status)
+
+@bot.command(pass_context=True)
+async def album(ctx, *, arg):
+    """[Info] Search for albums on Spotify."""
+    await spottoken()
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=album&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
+            if r1.status == 200:
+                js = await r1.json()
+                jsparse = js['albums']['items'][0]['external_urls']['spotify']
+                await ctx.send('Is this the album you were looking for? '+jsparse)
+            else:
+                print(r1.status)
+
+@bot.command(pass_context=True)
+async def track(ctx, *, arg):
+    """[Info] Search for tracks on Spotify."""
+    await spottoken()
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=track&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
+            if r1.status == 200:
+                js = await r1.json()
+                jsparse = js['tracks']['items'][0]['external_urls']['spotify']
+                await ctx.send('Is this the track you were looking for? '+jsparse)
+            else:
+                print(r1.status)
+
+@bot.command(pass_context=True)
+async def playlist(ctx, *, arg):
+    """[Info] Search for playlists on Spotify."""
+    await spottoken()
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=playlist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
+            if r1.status == 200:
+                js = await r1.json()
+                jsparse = js['playlists']['items'][0]['external_urls']['spotify']
+                await ctx.send('Is this the playlist you were looking for? '+jsparse)
             else:
                 print(r1.status)
 
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
-    if 'cock and ball torture' in arg or 'cbt' in arg:
-        await ctx.send('https://www.youtube.com/watch?v=fR9ClX0egTc All hail the CBT country national anthem.')
-    else:
-        if any(s in arg for s in brfilter.badwords):
+    if any(s in arg for s in brfilter.badwords):
+        if settings_filter.get(str(ctx.message.guild.id)) == None:
+            # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
             await ctx.send('Your message contains filtered words!')
+
+        elif settings_filter[str(ctx.message.guild.id)] == 0:
+            # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
+            await ctx.send('Your message contains filtered words!')
+
         else:
+            # print(str(ctx.message.author.id) +' Sent ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering off')
             await ctx.send(arg)
+    else:
+        await ctx.send(arg)
+
+@bot.command(pass_context=True)
+async def sayfilter(ctx):
+    """[Settings] Toggle the filter for the say command."""
+    if ctx.message.author.id == ctx.message.guild.owner_id:
+        if settings_filter.get(str(ctx.message.guild.id)) == None:
+            settings_filter[str(ctx.message.guild.id)] = 1
+            await ctx.send('Filtering disabled!')
+
+        elif settings_filter[str(ctx.message.guild.id)] == 0:
+            settings_filter[str(ctx.message.guild.id)] = 1
+            await ctx.send('Filtering disabled!')
+
+        elif settings_filter[str(ctx.message.guild.id)] == 1:
+            settings_filter[str(ctx.message.guild.id)] = 0
+            await ctx.send('Filtering enabled!')
+
+    else:
+        await ctx.send('Only server owners can set this!')
+
+@bot.command(pass_context=True, hidden=True)
+async def sayset(ctx):
+    """[Debug] Replies with settings."""
+    if ctx.message.author.id == config.owner:
+        await ctx.send(str(settings_filter))
+
+@bot.command(pass_context=True, hidden=True)
+async def saveset(ctx):
+    """[Settings] Save settings to a file."""
+    if ctx.message.author.id == config.owner:
+        msg = await ctx.send('Saving settings.')
+        with open('settings_filter.json', 'w') as f:
+            json.dump(settings_filter, f)
+            await msg.edit(content='Saved settings to file')
+            f.close()
 
 @bot.command(pass_context=True)
 async def discord(ctx):
@@ -273,6 +369,16 @@ if os.path.exists('save_bank.json') == True:
 else:
     bank = {}
 
-print('Bot running.')
-bot.run(config.token)
+print('Loading settings.')
+if os.path.exists('settings_filter.json') == True:
+    f = open('settings_filter.json')
+    settings_filter = json.load(f)
+    # print(settings_filter)
+    f.close()
+else:
+    settings_filter = {}
 
+
+print('Bot running.')
+bootsec = time.time()
+bot.run(config.token)
