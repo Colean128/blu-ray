@@ -315,7 +315,7 @@ async def say(ctx, *, arg):
     else:
         await ctx.send(arg)
 
-@bot.command(pass_context=True, hidden=True)
+@bot.command(pass_context=True)
 async def sayfilter(ctx):
     """[Settings] Toggle the filter for the say command."""
     if ctx.message.author.id == ctx.message.guild.owner_id:
@@ -349,11 +349,6 @@ async def saveset(ctx):
             json.dump(settings_filter, f)
             await msg.edit(content='Saved settings to file')
             f.close()
-
-@bot.command(pass_context=True,hidden=True)
-async def ownersend(ctx):
-    """ [Debug] Sends the server's owner."""
-    await ctx.send(ctx.message.guild.owner_id)
 
 @bot.command(pass_context=True)
 async def discord(ctx):
