@@ -211,7 +211,13 @@ async def r34(ctx, *, arg):
     """[NSFW] Search Rule34.
     Command restricted to NSFW channels."""
     if ctx.message.channel.is_nsfw():
-        await ctx.send("Testing. Add R34 API soon.")
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://rule34.xxx/index.php?page=dapi&s=post&q='+arg+'&limit=1') as r:
+                if r.status == 200:
+                    js = await r.json()
+                    await ctx.send(js)
+                else:
+                    await ctx.send('Search failed.')
     else:
         await ctx.send("This command is restricted to NSFW channels.")
 
