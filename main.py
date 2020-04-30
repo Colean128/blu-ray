@@ -502,5 +502,4 @@ except KeyboardInterrupt:
         json.dump(tagso, f)
         print('Files saved, shutting off bot')
         f.close()
-    print('Logged out')
-    await bot.logout()
+    print('Bot exited.')
