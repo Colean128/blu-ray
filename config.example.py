@@ -1,10 +1,11 @@
-testing = 0
+testing = False
 
-if testing == 1:
-    token = 'EXAMPLE'
-else:    
-    token = 'EXAMPLE'
+if testing:
+    token = 'token here'
+    prefix = 'tbr/'
+else:
+    token = 'token here'
+    prefix = 'br/'
 
-prefix = 'br/'
-owner = INSERT_ID_HERE
-spotifyapikey = INSERT_KEY_HERE
+owner = snowflake here
+spotifyapikey = 'base64 key here'
