@@ -212,7 +212,7 @@ async def r34(ctx, *, arg):
     Command restricted to NSFW channels."""
     if ctx.message.channel.is_nsfw():
         async with aiohttp.ClientSession() as session:
-            async with session.get('https://rule34.xxx/index.php?page=dapi&s=post&q='+arg+'&limit=1') as r:
+            async with session.get('https://r34-json.herokuapp.com/posts?tags='+arg) as r:
                 if r.status == 200:
                     js = await r.json()
                     await ctx.send(js)
