@@ -471,14 +471,14 @@ try:
     if os.path.exists('tags.json') == True:
         f = open('tags.json')
         tags = json.load(f)
-        print(tags)
+        # print(tags)
         f.close()
     else:
         tags = {}
     if os.path.exists('tagso.json') == True:
         f = open('tagso.json')
         tagso = json.load(f)
-        print(tagso)
+        # print(tagso)
         f.close()
     else:
         tagso = {}
@@ -500,6 +500,5 @@ except KeyboardInterrupt:
         f.close()
     with open('tagso.json', 'w') as f:
         json.dump(tagso, f)
-        print('Files saved, shutting off bot')
+        print('Files saved, bot exited.')
         f.close()
-    print('Bot exited.')
