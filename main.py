@@ -215,7 +215,7 @@ async def r34(ctx, arg):
             async with session.get('https://r34-json-api.herokuapp.com/posts?tags={arg}&limit=1') as r:
                 if r.status == 200:
                     js = await r.json()
-                    await ctx.send(js)
+                    await ctx.send(js[0])
                 else:
                     await ctx.send('Search failed.')
     else:
