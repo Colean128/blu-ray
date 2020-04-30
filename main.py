@@ -213,7 +213,7 @@ try:
                     js = await r.json()
                     await ctx.send(js['why'])
 
-    @bot.command(pass_context=True, hidden=True)
+    @bot.command(pass_context=True)
     async def r34(ctx, arg):
         """[NSFW] Search Rule34.
         Command restricted to NSFW channels."""
