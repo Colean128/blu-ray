@@ -426,7 +426,7 @@ async def create(ctx, arg1, arg2):
         await ctx.send('Tag made!')
 
 @bot.command(pass_context=True)
-async def delete(ctx, arg1):
+async def delete(ctx, arg):
     """[Tags] Deletes a tag."""
     if tags.get(arg) == None:
         await ctx.send('No tag exists with that name.')
