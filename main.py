@@ -211,9 +211,9 @@ async def r34(ctx, *, arg):
     """[NSFW] Search Rule34.
     Command restricted to NSFW channels."""
     if ctx.message.channel.is_nsfw():
-        ctx.send("Testing. Add R34 API soon.")
+        await ctx.send("Testing. Add R34 API soon.")
     else:
-        ctx.send("This command is restricted to NSFW channels.")
+        await ctx.send("This command is restricted to NSFW channels.")
 
 @bot.command(pass_context=True)
 async def cat(ctx):
