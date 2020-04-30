@@ -212,10 +212,10 @@ async def r34(ctx, arg):
     Command restricted to NSFW channels."""
     if ctx.message.channel.is_nsfw():
         async with aiohttp.ClientSession() as session:
-            async with session.get('https://r34-json-api.herokuapp.com/posts?tags={arg}&limit=1') as r:
+            async with session.get('https://r34-json-api.herokuapp.com/posts?tags='+arg+'&limit=1') as r:
                 if r.status == 200:
                     js = await r.json()
-                    await ctx.send(js[0])
+                    await ctx.send(js)
                 else:
                     await ctx.send('Search failed.')
     else:
