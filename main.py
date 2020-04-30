@@ -146,7 +146,7 @@ async def hug(ctx, *, member: discord.Member):
     """[Fun] Hug your best friend!"""
     await ctx.send('{0} gave a hug to {1}!'.format(ctx.message.author.mention, member.mention))
     async with aiohttp.ClientSession() as session:
-        async with session.get('https://nekos.life/api/v2/img/cuddle') as r:
+        async with session.get('https://nekos.life/api/v2/img/hug') as r:
             if r.status == 200:
                 js = await r.json()
                 await ctx.send(js['url'])
@@ -207,15 +207,17 @@ async def why(ctx):
                 await ctx.send(js['why'])
 
 @bot.command(pass_context=True, hidden=True)
-async def r34(ctx, *, arg):
+async def r34(ctx, arg):
     """[NSFW] Search Rule34.
     Command restricted to NSFW channels."""
     if ctx.message.channel.is_nsfw():
         async with aiohttp.ClientSession() as session:
-            async with session.get('https://r34-json-api.herokuapp.com/posts?tags={arg}') as r:
+            async with session.get('https://r34-json-api.herokuapp.com/posts?tags='+str(arg)) as r:
                 if r.status == 200:
                     js = await r.json()
-                    await ctx.send(js)
+                    rand = random.randint(1,20)
+                    jsparse = js[rand]['file_url']
+                    await ctx.send(jsparse)
                 else:
                     await ctx.send('Search failed.')
     else:
