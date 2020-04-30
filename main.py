@@ -416,7 +416,9 @@ async def create(ctx, arg1, arg2):
     """[Tags] Creates a tag."""
     if tags.get(arg1) != None:
         await ctx.send('A tag already exists with that name.')
-    elif any(s in arg.lower() for s in brfilter.badwords):
+    elif any(s in arg1.lower() for s in brfilter.badwords):
+        await ctx.send('Your tag contains filtered words.')
+    elif any(s in arg2.lower() for s in brfilter.badwords):
         await ctx.send('Your message contains filtered words.')
     else:
         tags[arg1] = arg2
