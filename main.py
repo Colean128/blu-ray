@@ -207,7 +207,7 @@ async def why(ctx):
                 await ctx.send(js['why'])
 
 @bot.command(pass_context=True, hidden=True)
-async def r34(ctx, arg):
+async def r34(ctx, *, arg):
     """[NSFW] Search Rule34.
     Command restricted to NSFW channels."""
     if ctx.message.channel.is_nsfw():
