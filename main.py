@@ -68,15 +68,21 @@ async def savebank(ctx):
 
 @bot.command(pass_context=True, hidden=True)
 async def shutdown(ctx):
-    """[Owner] Save the bank and shutdown."""
+    """[Owner] Save all files and shutdown."""
     if ctx.message.author.id == config.owner:
-        msg = await ctx.send('Saving bank balances.')
+        msg = await ctx.send('Saving files.')
         with open('settings_filter.json', 'w') as f:
             json.dump(settings_filter, f)
             f.close()
         with open('save_bank.json', 'w') as f:
             json.dump(bank, f)
-            await msg.edit(content='Saved bank balances to file.\nGood night!\n*Cave Story Theme starts to loop.*')
+            f.close()
+        with open('tags.json', 'w') as f:
+            json.dump(tags, f)
+            f.close()
+        with open('tagso.json', 'w') as f:
+            json.dump(tagso, f)
+            await msg.edit(content='Saved!\nGood night!\n*Cave Story Theme starts to loop.*')
             f.close()
         print('Logged out')
         await bot.logout()
@@ -317,7 +323,7 @@ async def playlist(ctx, *, arg):
 @bot.command(pass_context=True)
 async def say(ctx, *, arg):
     """[Fun] Make the bot say stuff."""
-    if any(s in arg for s in brfilter.badwords):
+    if any(s in arg.lower() for s in brfilter.badwords):
         if settings_filter.get(str(ctx.message.guild.id)) == None:
             # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
             await ctx.send('Your message contains filtered words!')
@@ -367,6 +373,26 @@ async def saveset(ctx):
             await msg.edit(content='Saved settings to file')
             f.close()
 
+@bot.command(pass_context=True, hidden=True)
+async def saytags(ctx):
+    """[Debug] Replies with tags."""
+    if ctx.message.author.id == config.owner:
+        await ctx.send(str(tags))
+        await ctx.send(str(tagso))
+
+@bot.command(pass_context=True, hidden=True)
+async def savetags(ctx):
+    """[Settings] Save tags to a file."""
+    if ctx.message.author.id == config.owner:
+        msg = await ctx.send('Saving tags.')
+        with open('tags.json', 'w') as f:
+            json.dump(tags, f)
+            f.close()
+        with open('tagso.json', 'w') as f:
+            json.dump(tagso, f)
+            await msg.edit(content='Saved tags to file')
+            f.close()
+
 @bot.command(pass_context=True)
 async def discord(ctx):
     """[Info] Join the Blu-Ray Facility discord!"""
@@ -376,6 +402,49 @@ async def discord(ctx):
 async def invite(ctx):
     """[Info] Add the Blu-Ray bot to your server!"""
     await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
+
+@bot.command(pass_context=True)
+async def view(ctx, arg):
+    """[Tags] View a tag."""
+    if tags.get(arg) == None:
+        await ctx.send('No tag exists with that name.')
+    else:
+        await ctx.send(tags[arg])
+
+@bot.command(pass_context=True)
+async def create(ctx, arg1, arg2):
+    """[Tags] Creates a tag."""
+    if tags.get(arg1) != None:
+        await ctx.send('A tag already exists with that name.')
+    elif any(s in arg.lower() for s in brfilter.badwords):
+        await ctx.send('Your message contains filtered words.')
+    else:
+        tags[arg1] = arg2
+        tagso[arg1] = ctx.message.author.id
+        await ctx.send('Tag made!')
+
+@bot.command(pass_context=True)
+async def delete(ctx, arg1):
+    """[Tags] Deletes a tag."""
+    if tags.get(arg) == None:
+        await ctx.send('No tag exists with that name.')
+    elif tagso[arg] != ctx.message.author.id:
+        await ctx.send('You don\'t own that tag.')
+    else:
+        tags.pop(arg, None)
+        tagso.pop(arg, None)
+        await ctx.send('Tag deleted!')
+
+@bot.command(pass_context=True)
+async def edit(ctx, arg1, arg2):
+    """[Tags] Edits a tag."""
+    if tags.get(arg1) == None:
+        await ctx.send('No tag exists with that name.')
+    elif tagso[arg1] != ctx.message.author.id:
+        await ctx.send('You don\'t own that tag.')
+    else:
+        tags[arg1] = arg2
+        await ctx.send('Tag edited!')
 
 print('Loading bank.')
 if os.path.exists('save_bank.json') == True:
@@ -394,7 +463,22 @@ if os.path.exists('settings_filter.json') == True:
     f.close()
 else:
     settings_filter = {}
-
+    
+print('Loading tags.')
+if os.path.exists('tags.json') == True:
+    f = open('tags.json')
+    tags = json.load(f)
+    print(tags)
+    f.close()
+else:
+    tags = {}
+if os.path.exists('tagso.json') == True:
+    f = open('tagso.json')
+    tagso = json.load(f)
+    print(tagso)
+    f.close()
+else:
+    tagso = {}
 
 print('Bot running.')
 bootsec = time.time()
