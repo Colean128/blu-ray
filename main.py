@@ -349,7 +349,7 @@ try:
                 await ctx.send('You\'ve been banned from the say command.')
                 await ctx.send('Join our support server to appeal the ban. https://discord.gg/g2SWnrg')
         elif settings_superfilterbans.get(str(ctx.message.author.id)) != None:
-            elif settings_superfilterbans[str(ctx.message.author.id)] == 1:
+            if settings_superfilterbans[str(ctx.message.author.id)] == 1:
                 await ctx.delete_message(ctx.message)
                 await ctx.send('Your message contained super filtered words!')
                 await ctx.send('You\'ve been banned from the say command.')
