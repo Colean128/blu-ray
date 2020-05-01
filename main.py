@@ -405,6 +405,19 @@ try:
         await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
 
     @bot.command(pass_context=True)
+    async def bruno(ctx):
+        """[Fun] A Bruno Powroznik special."""
+        if settings_filter.get(str(ctx.message.guild.id)) == None:
+            await ctx.send('This server has filtering enabled.')
+
+        elif settings_filter[str(ctx.message.guild.id)] == 0:
+            await ctx.send('This server has filtering enabled.')
+
+        else:
+            x = random.randint(0,6)
+            await ctx.send(brunopowroznik[x])
+
+    @bot.command(pass_context=True)
     async def view(ctx, arg):
         """[Tags] View a tag."""
         if tags.get(arg) == None:
@@ -448,6 +461,8 @@ try:
         else:
             tags[arg1] = arg2
             await ctx.send('Tag edited!')
+
+    brunopowroznik = {0:'https://www.youtube.com/watch?v=6LvlG2dTQKg',1:'https://www.youtube.com/watch?v=ILvd5buCEnU',2:'https://www.youtube.com/watch?v=nEDw_WKeQoc',3:'https://www.youtube.com/watch?v=0YrU9ASVw6w',4:'https://www.youtube.com/watch?v=GxMXWqSauZA',5:'https://www.youtube.com/watch?v=9rtD2omE2N0',6:'https://www.youtube.com/watch?v=-Tqn5NqXskM'}
 
     print('Loading bank.')
     if os.path.exists('save_bank.json') == True:
