@@ -78,6 +78,9 @@ try:
             with open('save_bank.json', 'w') as f:
                 json.dump(bank, f)
                 f.close()
+            with open('settings_superfilterbans.json', 'w') as f:
+                json.dump(settings_superfilterbans, f)
+                f.close()
             with open('tags.json', 'w') as f:
                 json.dump(tags, f)
                 f.close()
@@ -85,7 +88,7 @@ try:
                 json.dump(tagso, f)
                 await msg.edit(content='Saved!\nGood night!\n*Cave Story Theme starts to loop.*')
                 f.close()
-            print('Logged out')
+            print('Logged out.')
             await bot.logout()
 
     @bot.command(pass_context=True, hidden=True)
@@ -213,7 +216,7 @@ try:
                     js = await r.json()
                     await ctx.send(js['why'])
 
-    @bot.command(pass_context=True, hidden=True)
+    @bot.command(pass_context=True)
     async def r34(ctx, arg):
         """[NSFW] Search Rule34.
         Command restricted to NSFW channels."""
@@ -336,13 +339,38 @@ try:
             else:
                 # print(str(ctx.message.author.id) +' Sent ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering off')
                 await ctx.send(arg)
+        elif any(s in arg.lower() for s in brfilter.superbadwords):
+            if settings_superfilterbans.get(str(ctx.message.author.id)) == None:
+                settings_superfilterbans[str(ctx.message.author.id)] = 0
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nThe next time you use those, I\'ll have to ban you from this command!```')
+            elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
+                settings_superfilterbans[str(ctx.message.author.id)] = 1
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('https://discord.gg/g2SWnrg')
+        elif settings_superfilterbans.get(str(ctx.message.author.id)) != None:
+            if settings_superfilterbans[str(ctx.message.author.id)] == 1:
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('https://discord.gg/g2SWnrg')
         else:
             await ctx.send(arg)
+
+    @bot.command(pass_context=True,hidden=True)
+    async def sfunban(ctx, *, arg):
+        """[Owner] Unban someone from Superfilter"""
+        if ctx.message.author.id == config.owner:
+            await ctx.send(str(arg)+' has been unbanned from Superfilter.')
+            settings_superfilterbans[arg] = 0
 
     @bot.command(pass_context=True)
     async def sayfilter(ctx):
         """[Settings] Toggle the filter for the say command."""
-        if ctx.message.author.id == ctx.message.guild.owner_id:
+        if ctx.message.author.id == ctx.message.guild.owner_id or ctx.message.author.id == config.owner:
             if settings_filter.get(str(ctx.message.guild.id)) == None:
                 settings_filter[str(ctx.message.guild.id)] = 1
                 await ctx.send('Filtering disabled!')
@@ -357,6 +385,22 @@ try:
 
         else:
             await ctx.send('Only server owners can set this!')
+
+    @bot.command(pass_context=True, hidden=True)
+    async def saysf(ctx):
+        """[Debug] Replies with superfilter bans."""
+        if ctx.message.author.id == config.owner:
+            await ctx.send(str(settings_superfilterbans))
+
+    @bot.command(pass_context=True, hidden=True)
+    async def savesf(ctx):
+        """[Settings] Save superfilter bans to a file."""
+        if ctx.message.author.id == config.owner:
+            msg = await ctx.send('Saving superfilter bans.')
+            with open('settings_superfilterbans.json', 'w') as f:
+                json.dump(settings_filter, f)
+                await msg.edit(content='Saved superfilter bans to file')
+                f.close()
 
     @bot.command(pass_context=True, hidden=True)
     async def sayset(ctx):
@@ -405,6 +449,19 @@ try:
         await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')    
 
     @bot.command(pass_context=True)
+    async def bruno(ctx):
+        """[Fun] A Bruno Powroznik special."""
+        if settings_filter.get(str(ctx.message.guild.id)) == None:
+            await ctx.send('This server has filtering enabled.')
+
+        elif settings_filter[str(ctx.message.guild.id)] == 0:
+            await ctx.send('This server has filtering enabled.')
+
+        else:
+            x = random.randint(0,6)
+            await ctx.send(brunopowroznik[x])
+
+    @bot.command(pass_context=True)
     async def view(ctx, arg):
         """[Tags] View a tag."""
         if tags.get(arg) == None:
@@ -449,6 +506,8 @@ try:
             tags[arg1] = arg2
             await ctx.send('Tag edited!')
 
+    brunopowroznik = {0:'https://www.youtube.com/watch?v=6LvlG2dTQKg',1:'https://www.youtube.com/watch?v=ILvd5buCEnU',2:'https://www.youtube.com/watch?v=nEDw_WKeQoc',3:'https://www.youtube.com/watch?v=0YrU9ASVw6w',4:'https://www.youtube.com/watch?v=GxMXWqSauZA',5:'https://www.youtube.com/watch?v=9rtD2omE2N0',6:'https://www.youtube.com/watch?v=-Tqn5NqXskM'}
+
     print('Loading bank.')
     if os.path.exists('save_bank.json') == True:
         f = open('save_bank.json')
@@ -483,6 +542,15 @@ try:
     else:
         tagso = {}
 
+    print('Loading superfilter bans.')
+    if os.path.exists('settings_superfilterbans.json') == True:
+        f = open('settings_superfilterbans.json')
+        settings_superfilterbans = json.load(f)
+        # print(settings_superfilterbans)
+        f.close()
+    else:
+        settings_superfilterbans = {}
+
     print('Bot running.')
     bootsec = time.time()
     bot.run(config.token)
@@ -497,6 +565,9 @@ except KeyboardInterrupt:
         f.close()
     with open('tags.json', 'w') as f:
         json.dump(tags, f)
+        f.close()
+    with open('settings_superfilterbans.json', 'w') as f:
+        json.dump(settings_superfilterbans, f)
         f.close()
     with open('tagso.json', 'w') as f:
         json.dump(tagso, f)
