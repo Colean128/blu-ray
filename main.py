@@ -393,7 +393,7 @@ try:
             await ctx.send(str(settings_superfilterbans))
 
     @bot.command(pass_context=True, hidden=True)
-    async def saveset(ctx):
+    async def savesf(ctx):
         """[Settings] Save superfilter bans to a file."""
         if ctx.message.author.id == config.owner:
             msg = await ctx.send('Saving superfilter bans.')
