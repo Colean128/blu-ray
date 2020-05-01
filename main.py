@@ -78,6 +78,9 @@ try:
             with open('save_bank.json', 'w') as f:
                 json.dump(bank, f)
                 f.close()
+            with open('settings_superfilterbans.json', 'w') as f:
+                json.dump(settings_superfilterbans, f)
+                f.close()
             with open('tags.json', 'w') as f:
                 json.dump(tags, f)
                 f.close()
@@ -85,7 +88,7 @@ try:
                 json.dump(tagso, f)
                 await msg.edit(content='Saved!\nGood night!\n*Cave Story Theme starts to loop.*')
                 f.close()
-            print('Logged out')
+            print('Logged out.')
             await bot.logout()
 
     @bot.command(pass_context=True, hidden=True)
@@ -352,10 +355,17 @@ try:
             if settings_superfilterbans[str(ctx.message.author.id)] == 1:
                 msg = ctx.message
                 await msg.delete()
-                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('```Superfilter Alert\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
                 await ctx.send('https://discord.gg/g2SWnrg')
         else:
             await ctx.send(arg)
+
+    @bot.command(pass_context=True,hidden=True)
+    async def sfunban(ctx, *, arg):
+        """[Owner] Unban someone from Superfilter""")
+        if ctx.message.author.id == config.owner:
+            await ctx.send(str(arg)+' has been unbanned from Superfilter.')
+            settings_superfilterbans[arg] = 0
 
     @bot.command(pass_context=True)
     async def sayfilter(ctx):
@@ -375,6 +385,22 @@ try:
 
         else:
             await ctx.send('Only server owners can set this!')
+
+    @bot.command(pass_context=True, hidden=True)
+    async def saysf(ctx):
+        """[Debug] Replies with superfilter bans."""
+        if ctx.message.author.id == config.owner:
+            await ctx.send(str(settings_superfilterbans))
+
+    @bot.command(pass_context=True, hidden=True)
+    async def saveset(ctx):
+        """[Settings] Save superfilter bans to a file."""
+        if ctx.message.author.id == config.owner:
+            msg = await ctx.send('Saving superfilter bans.')
+            with open('settings_superfilterbans.json', 'w') as f:
+                json.dump(settings_filter, f)
+                await msg.edit(content='Saved superfilter bans to file')
+                f.close()
 
     @bot.command(pass_context=True, hidden=True)
     async def sayset(ctx):
@@ -539,6 +565,9 @@ except KeyboardInterrupt:
         f.close()
     with open('tags.json', 'w') as f:
         json.dump(tags, f)
+        f.close()
+    with open('settings_superfilterbans.json', 'w') as f:
+        json.dump(settings_superfilterbans, f)
         f.close()
     with open('tagso.json', 'w') as f:
         json.dump(tagso, f)
