@@ -362,7 +362,7 @@ try:
 
     @bot.command(pass_context=True,hidden=True)
     async def sfunban(ctx, *, arg):
-        """[Owner] Unban someone from Superfilter""")
+        """[Owner] Unban someone from Superfilter"""
         if ctx.message.author.id == config.owner:
             await ctx.send(str(arg)+' has been unbanned from Superfilter.')
             settings_superfilterbans[arg] = 0
