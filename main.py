@@ -324,13 +324,7 @@ try:
     @bot.command(pass_context=True)
     async def say(ctx, *, arg):
         """[Fun] Make the bot say stuff."""
-        if settings_superfilterbans[str(ctx.message.author.id)] == 1:
-            await ctx.delete_message(ctx.message)
-            await ctx.send('Your message contained super filtered words!')
-            await ctx.send('You\'ve been banned from the say command.')
-            await ctx.send('Join our support server to appeal the ban. https://discord.gg/g2SWnrg')
-
-        elif any(s in arg.lower() for s in brfilter.badwords):
+        if any(s in arg.lower() for s in brfilter.badwords):
             if settings_filter.get(str(ctx.message.guild.id)) == None:
                 # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
                 await ctx.send('Your message contains filtered words!')
@@ -350,6 +344,12 @@ try:
                 await ctx.send('The next time you use those, I\'ll have to ban you from this command!')
             elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
                 settings_superfilterbans[str(ctx.message.author.id)] = 0
+                await ctx.delete_message(ctx.message)
+                await ctx.send('Your message contained super filtered words!')
+                await ctx.send('You\'ve been banned from the say command.')
+                await ctx.send('Join our support server to appeal the ban. https://discord.gg/g2SWnrg')
+        elif settings_superfilterbans.get(str(ctx.message.author.id)) != None:
+            elif settings_superfilterbans[str(ctx.message.author.id)] == 1:
                 await ctx.delete_message(ctx.message)
                 await ctx.send('Your message contained super filtered words!')
                 await ctx.send('You\'ve been banned from the say command.')
