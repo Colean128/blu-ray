@@ -339,18 +339,21 @@ try:
         elif any(s in arg.lower() for s in brfilter.superbadwords):
             if settings_superfilterbans.get(str(ctx.message.author.id)) == None:
                 settings_superfilterbans[str(ctx.message.author.id)] = 0
-                await ctx.delete_message(ctx.message)
+                msg = ctx.message
+                await msg.delete()
                 await ctx.send('Your message contained super filtered words!')
                 await ctx.send('The next time you use those, I\'ll have to ban you from this command!')
             elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
                 settings_superfilterbans[str(ctx.message.author.id)] = 0
-                await ctx.delete_message(ctx.message)
+                msg = ctx.message
+                await msg.delete()
                 await ctx.send('Your message contained super filtered words!')
                 await ctx.send('You\'ve been banned from the say command.')
                 await ctx.send('Join our support server to appeal the ban. https://discord.gg/g2SWnrg')
         elif settings_superfilterbans.get(str(ctx.message.author.id)) != None:
             if settings_superfilterbans[str(ctx.message.author.id)] == 1:
-                await ctx.delete_message(ctx.message)
+                msg = ctx.message
+                await msg.delete()
                 await ctx.send('Your message contained super filtered words!')
                 await ctx.send('You\'ve been banned from the say command.')
                 await ctx.send('Join our support server to appeal the ban. https://discord.gg/g2SWnrg')
