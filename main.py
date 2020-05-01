@@ -357,6 +357,8 @@ try:
                 await msg.delete()
                 await ctx.send('```Superfilter Alert\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
                 await ctx.send('https://discord.gg/g2SWnrg')
+            else:
+                await ctx.send(arg)
         else:
             await ctx.send(arg)
 
