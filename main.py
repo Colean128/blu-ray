@@ -342,7 +342,7 @@ try:
     @bot.command(pass_context=True)
     async def sayfilter(ctx):
         """[Settings] Toggle the filter for the say command."""
-        if ctx.message.author.id == ctx.message.guild.owner_id:
+        if ctx.message.author.id == ctx.message.guild.owner_id or ctx.message.author.id == config.owner:
             if settings_filter.get(str(ctx.message.guild.id)) == None:
                 settings_filter[str(ctx.message.guild.id)] = 1
                 await ctx.send('Filtering disabled!')
