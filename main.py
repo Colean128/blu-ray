@@ -343,7 +343,7 @@ try:
                 await msg.delete()
                 await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nThe next time you use those, I\'ll have to ban you from this command!```')
             elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
-                settings_superfilterbans[str(ctx.message.author.id)] = 0
+                settings_superfilterbans[str(ctx.message.author.id)] = 1
                 msg = ctx.message
                 await msg.delete()
                 await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
