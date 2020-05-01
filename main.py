@@ -324,7 +324,13 @@ try:
     @bot.command(pass_context=True)
     async def say(ctx, *, arg):
         """[Fun] Make the bot say stuff."""
-        if any(s in arg.lower() for s in brfilter.badwords):
+        if settings_superfilterbans[str(ctx.message.author.id)] == 1:
+            await ctx.delete_message(ctx.message)
+            await ctx.send('Your message contained super filtered words!')
+            await ctx.send('You\'ve been banned from the say command.')
+            await ctx.send('Join our support server to appeal the ban. https://discord.gg/g2SWnrg')
+
+        elif any(s in arg.lower() for s in brfilter.badwords):
             if settings_filter.get(str(ctx.message.guild.id)) == None:
                 # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
                 await ctx.send('Your message contains filtered words!')
@@ -336,6 +342,18 @@ try:
             else:
                 # print(str(ctx.message.author.id) +' Sent ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering off')
                 await ctx.send(arg)
+        elif any(s in arg.lower() for s in brfilter.superbadwords):
+            if settings_superfilterbans.get(str(ctx.message.author.id)) == None:
+                settings_superfilterbans[str(ctx.message.author.id)] = 0
+                await ctx.delete_message(ctx.message)
+                await ctx.send('Your message contained super filtered words!')
+                await ctx.send('The next time you use those, I\'ll have to ban you from this command!')
+            elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
+                settings_superfilterbans[str(ctx.message.author.id)] = 0
+                await ctx.delete_message(ctx.message)
+                await ctx.send('Your message contained super filtered words!')
+                await ctx.send('You\'ve been banned from the say command.')
+                await ctx.send('Join our support server to appeal the ban. https://discord.gg/g2SWnrg')
         else:
             await ctx.send(arg)
 
@@ -497,6 +515,15 @@ try:
         f.close()
     else:
         tagso = {}
+
+    print('Loading superfilter bans.')
+    if os.path.exists('settings_superfilterbans.json') == True:
+        f = open('settings_superfilterbans.json')
+        settings_superfilterbans = json.load(f)
+        # print(settings_superfilterbans)
+        f.close()
+    else:
+        settings_superfilterbans = {}
 
     print('Bot running.')
     bootsec = time.time()
