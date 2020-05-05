@@ -19,14 +19,6 @@ class Info(commands.Cog):
         """[Info] Play table tennis with the bot."""
         await ctx.send('Pong!')
 
-    @commands.function()
-    async def spottoken(self):
-        async with aiohttp.ClientSession() as session:
-            async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
-                if r.status == 200:
-                    js = await r.json()
-                    global spottoke
-                    spottoke = (js['access_token'])
 
     @commands.command()
     async def joindate(self, ctx, *, member: discord.Member):
@@ -48,7 +40,11 @@ class Info(commands.Cog):
     @commands.command()
     async def artist(self, ctx, *, arg):
         """[Info] Search for artists on Spotify."""
-        await spottoken()
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    spottoke = (js['access_token'])
         async with aiohttp.ClientSession() as session:
             async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=artist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
                 if r1.status == 200:
@@ -62,7 +58,11 @@ class Info(commands.Cog):
     @commands.command()
     async def album(self, ctx, *, arg):
         """[Info] Search for albums on Spotify."""
-        await spottoken()
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    spottoke = (js['access_token'])
         async with aiohttp.ClientSession() as session:
             async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=album&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
                 if r1.status == 200:
@@ -75,7 +75,11 @@ class Info(commands.Cog):
     @commands.command()
     async def track(self, ctx, *, arg):
         """[Info] Search for tracks on Spotify."""
-        await spottoken()
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    spottoke = (js['access_token'])
         async with aiohttp.ClientSession() as session:
             async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=track&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
                 if r1.status == 200:
@@ -88,7 +92,11 @@ class Info(commands.Cog):
     @commands.command()
     async def playlist(self, ctx, *, arg):
         """[Info] Search for playlists on Spotify."""
-        await spottoken()
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    spottoke = (js['access_token'])
         async with aiohttp.ClientSession() as session:
             async with session.get('https://api.spotify.com/v1/search?q='+arg+'&type=playlist&limit=1', headers={'Authorization': 'Bearer '+ spottoke}) as r1:
                 if r1.status == 200:
