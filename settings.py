@@ -15,7 +15,7 @@ class Settings(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-	@commands.command(pass_context=True)
+    @commands.command(pass_context=True)
 		async def sayfilter(self, ctx):
 			"""[Settings] Toggle the filter for the say command."""
 			settings_filter = await main.bot_load_filter()
