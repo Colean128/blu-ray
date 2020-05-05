@@ -7,6 +7,7 @@ import time
 import os
 import asyncio
 import brfilter
+import main
 from discord.ext import tasks, commands
 brunopowroznik = {0:'https://www.youtube.com/watch?v=6LvlG2dTQKg',1:'https://www.youtube.com/watch?v=ILvd5buCEnU',2:'https://www.youtube.com/watch?v=nEDw_WKeQoc',3:'https://www.youtube.com/watch?v=0YrU9ASVw6w',4:'https://www.youtube.com/watch?v=GxMXWqSauZA',5:'https://www.youtube.com/watch?v=9rtD2omE2N0',6:'https://www.youtube.com/watch?v=-Tqn5NqXskM'}
 
@@ -110,8 +111,8 @@ class Fun(commands.Cog):
     @commands.command()
     async def say(self, ctx, *, arg):
         """Make the bot say stuff."""
-        settings_superfilterbans = await bot_load_sfbans()
-        settings_filter = await bot_load_filter()
+        settings_superfilterbans = await main.bot_load_sfbans()
+        settings_filter = await main.bot_load_filter()
         if any(s in arg.lower() for s in brfilter.badwords):
             if settings_filter.get(str(ctx.message.guild.id)) == None:
                 # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
@@ -130,14 +131,14 @@ class Fun(commands.Cog):
                 msg = ctx.message
                 await msg.delete()
                 await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nThe next time you use those, I\'ll have to ban you from this command!```')
-                await bot_save_sfbans(settings_superfilterbans)
+                await main.bot_save_sfbans(settings_superfilterbans)
             elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
                 settings_superfilterbans[str(ctx.message.author.id)] = 1
                 msg = ctx.message
                 await msg.delete()
                 await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
                 await ctx.send('https://discord.gg/g2SWnrg')
-                await bot_save_sfbans(settings_superfilterbans)
+                await main.bot_save_sfbans(settings_superfilterbans)
         elif settings_superfilterbans.get(str(ctx.message.author.id)) != None:
             if settings_superfilterbans[str(ctx.message.author.id)] == 1:
                 msg = ctx.message
@@ -152,7 +153,7 @@ class Fun(commands.Cog):
     @commands.command()
     async def bruno(self, ctx):
         """A Bruno Powroznik special."""
-        settings_filter = await bot_load_filter()
+        settings_filter = await main.bot_load_filter()
         if settings_filter.get(str(ctx.message.guild.id)) == None:
             await ctx.send('This server has filtering enabled.')
 
