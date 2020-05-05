@@ -43,7 +43,7 @@ class Fun(commands.Cog):
             async with session.get('https://nekos.life/api/v2/img/slap') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('{0} slapped {1}!'.format(ctx.message.author.username, member.username), js['url'])
+                    embed = await main.buildEmbed('{0} slapped {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
                     embed.add_(url = imgUrl)
                     await ctx.send(embed = embed)
 
@@ -54,7 +54,7 @@ class Fun(commands.Cog):
             async with session.get('https://nekos.life/api/v2/img/hug') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('{0} gave a hug to {1}!'.format(ctx.message.author.username, member.username), js['url'])
+                    embed = await main.buildEmbed('{0} gave a hug to {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
                     await ctx.send(embed = embed)
 
     @commands.command()
