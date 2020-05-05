@@ -19,7 +19,6 @@ class Info(commands.Cog):
         """[Info] Play table tennis with the bot."""
         await ctx.send('Pong!')
 
-
     @commands.command()
     async def joindate(self, ctx, *, member: discord.Member):
         """[Info] Tells you the join date of somebody."""
@@ -28,6 +27,7 @@ class Info(commands.Cog):
     @commands.command()
     async def uptime(self, ctx):
         """[Info] Bot uptime since last reboot"""
+        bootsec = self.bootsec
         time_diff = round(time.time() - bootsec)
         minute = round(time_diff / 60)
         seconds = time_diff % 60
