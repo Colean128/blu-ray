@@ -25,7 +25,7 @@ class Tags(commands.Cog):
             await ctx.send(tags[arg])
 
     @commands.command(pass_context=True)
-    async def create(ctx, arg1, arg2):
+    async def create(self, ctx, arg1, arg2):
         """[Tags] Creates a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()
@@ -43,7 +43,7 @@ class Tags(commands.Cog):
             await ctx.send('Tag made!')
 
     @commands.command(pass_context=True)
-    async def delete(ctx, arg):
+    async def delete(self, ctx, arg):
         """[Tags] Deletes a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()
@@ -59,7 +59,7 @@ class Tags(commands.Cog):
             await ctx.send('Tag deleted!')
 
     @commands.command(pass_context=True)
-    async def edit(ctx, arg1, arg2):
+    async def edit(self, ctx, arg1, arg2):
         """[Tags] Edits a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()

@@ -18,6 +18,11 @@ try:
     
     bot = commands.Bot(command_prefix=pogfix)
 
+    async def buildEmbed(title, imgUrl):
+        embed = discord.Embed(title = title)
+        embed.set_image(url = imageUrl)
+        return embed
+
     async def bot_load_sfbans():
         if os.path.exists('settings_superfilterbans.json') == True:
             f = open('settings_superfilterbans.json')
