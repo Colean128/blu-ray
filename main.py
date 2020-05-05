@@ -18,7 +18,8 @@ try:
     
     bot = commands.Bot(command_prefix=pogfix)
     
-    
+    async def bot_get_bootsec():
+        return bootsec
 
     @bot.command(pass_context=True)
     async def bank_register(ctx):
@@ -280,6 +281,7 @@ try:
             tags[arg1] = arg2
             await ctx.send('Tag edited!')
 
+    print('Loading json files')
     if os.path.exists('save_bank.json') == True:
         f = open('save_bank.json')
         bank = json.load(f)
@@ -320,7 +322,7 @@ try:
     else:
         settings_superfilterbans = {}
 
-    # print('Bot running.')
+    print('Bot running.')
     bootsec = time.time()
     for c in cogs: 
         bot.load_extension(c)
