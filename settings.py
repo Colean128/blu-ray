@@ -17,7 +17,7 @@ class Settings(commands.Cog):
 
     @commands.command(pass_context=True)
     async def sayfilter(self, ctx):
-        """[Settings] Toggle the filter for the say command."""
+        """Toggle the filter for the say command."""
         settings_filter = await main.bot_load_filter()
         if ctx.message.author.id == ctx.message.guild.owner_id or ctx.message.author.id == config.owner:
             if settings_filter.get(str(ctx.message.guild.id)) == None:

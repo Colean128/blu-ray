@@ -17,7 +17,7 @@ class Owner(commands.Cog):
 
     @commands.command(pass_context=True,hidden=True)
     async def sfunban(self, ctx, *, arg):
-        """[Owner] Unban someone from Superfilter"""
+        """Unban someone from Superfilter"""
         if ctx.message.author.id == config.owner:
             settings_superfilterbans = await main.bot_load_sfbans()
             await ctx.send(str(arg)+' has been unbanned from Superfilter.')
@@ -26,7 +26,7 @@ class Owner(commands.Cog):
 
     @commands.command(pass_context=True, hidden=True)
     async def bank_reset(self, ctx):
-        """[Owner] Reset all bank accounts!"""
+        """Reset all bank accounts!"""
         if ctx.message.author.id == config.owner:
             bank = await main.bot_load_bank()
             bank.clear()
@@ -35,7 +35,7 @@ class Owner(commands.Cog):
 
     @commands.command(pass_context=True, hidden=True)
     async def ibank_reset(self, ctx, arg):
-        """[Owner] Reset a bank account!"""
+        """Reset a bank account!"""
         if ctx.message.author.id == config.owner:
             bank = await main.bot_load_bank()
             bank.pop(arg, None)
@@ -44,7 +44,7 @@ class Owner(commands.Cog):
 
     @commands.command(pass_context=True, hidden=True)
     async def shutdown(self, ctx):
-        """[Owner] Shutdown the bot."""
+        """Shutdown the bot."""
         if ctx.message.author.id == config.owner:
             await ctx.send('Bot shutting down.')
             print('Logged out.')
@@ -52,7 +52,7 @@ class Owner(commands.Cog):
 
     @commands.command(pass_context=True, hidden=True)
     async def set_balance(self, ctx, arg1, arg2):
-        """[Owner] Save the bank and shutdown."""
+        """Save the bank and shutdown."""
         if ctx.message.author.id == config.owner:
             bank = await main.bot_load_bank()
             bank[str(arg1)] = int(arg2)

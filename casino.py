@@ -17,7 +17,7 @@ class Casino(commands.Cog):
 
     @commands.command(pass_context=True)
     async def slot(self, ctx, *, arg):
-        """[Casino] Play the slots!"""
+        """Play the slots!"""
         bank = await main.bot_load_bank()
         if int(arg) <= 9:
             await ctx.send('You have to bet at least 10 Dosh!')

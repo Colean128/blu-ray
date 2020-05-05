@@ -17,7 +17,7 @@ class Bank(commands.Cog):
 
     @commands.command(pass_context=True)
     async def bank_register(self, ctx):
-        """[Bank] Register a bank account!"""
+        """Register a bank account!"""
         bank = await main.bot_load_bank()
         if str(ctx.message.author.id) in bank:
             await ctx.send('Sorry, but you already have an account with the Bank of Sony.')
@@ -28,7 +28,7 @@ class Bank(commands.Cog):
 
     @commands.command(pass_context=True)
     async def balance(self, ctx):
-        """[Bank] Check your bank account."""
+        """Check your bank account."""
         bank = await main.bot_load_bank()
         await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
 

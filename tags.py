@@ -17,7 +17,7 @@ class Tags(commands.Cog):
 
     @commands.command(pass_context=True)
     async def view(self, ctx, arg):
-        """[Tags] View a tag."""
+        """View a tag."""
         tags = await main.bot_load_tags()
         if tags.get(arg) == None:
             await ctx.send('No tag exists with that name.')
@@ -26,7 +26,7 @@ class Tags(commands.Cog):
 
     @commands.command(pass_context=True)
     async def create(self, ctx, arg1, arg2):
-        """[Tags] Creates a tag."""
+        """Creates a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()
         if tags.get(arg1) != None:
@@ -44,7 +44,7 @@ class Tags(commands.Cog):
 
     @commands.command(pass_context=True)
     async def delete(self, ctx, arg):
-        """[Tags] Deletes a tag."""
+        """Deletes a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()
         if tags.get(arg) == None:
@@ -60,7 +60,7 @@ class Tags(commands.Cog):
 
     @commands.command(pass_context=True)
     async def edit(self, ctx, arg1, arg2):
-        """[Tags] Edits a tag."""
+        """Edits a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()
         if tags.get(arg1) == None:
