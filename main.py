@@ -18,6 +18,45 @@ try:
     
     bot = commands.Bot(command_prefix=pogfix)
 
+    async def bot_load_sfbans():
+        if os.path.exists('settings_superfilterbans.json') == True:
+            f = open('settings_superfilterbans.json')
+            settings_superfilterbans = json.load(f)
+            # print(settings_superfilterbans)
+            f.close()
+        else:
+            settings_superfilterbans = {}
+        
+        return settings_superfilterbans
+
+    async def bot_save_sfbans(sfbans):
+        try:
+            with open('settings_superfilterbans.json', 'w') as f:
+                json.dump(sfbans, f)
+                f.close()
+                return 1
+        except:
+            return 0
+
+    async def bot_load_filter():
+        if os.path.exists('settings_filter.json') == True:
+            f = open('settings_filter.json')
+            settings_filter = json.load(f)
+            f.close()
+        else:
+            settings_filter = {}
+        
+        return settings_filter
+
+    async def bot_save_filter(settings_filter):
+        try:
+            with open('settings_filter.json', 'w') as f:
+                json.dump(settings_filter, f)
+                f.close()
+                return 1
+        except:
+            return 0
+
     @bot.command(pass_context=True)
     async def bank_register(ctx):
         """[Bank] Register a bank account!"""
@@ -311,14 +350,6 @@ try:
             f.close()
         else:
             tagso = {}
-
-        if os.path.exists('settings_superfilterbans.json') == True:
-            f = open('settings_superfilterbans.json')
-            settings_superfilterbans = json.load(f)
-            # print(settings_superfilterbans)
-            f.close()
-        else:
-            settings_superfilterbans = {}
 
         print('Bot running.')
         for c in cogs: 
