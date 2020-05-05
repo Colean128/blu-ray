@@ -280,7 +280,8 @@ try:
         else:
             tags[arg1] = arg2
             await ctx.send('Tag edited!')
-    if __name__ = '__main__':
+
+    if __name__ == '__main__':
         print('Loading json files')
         if os.path.exists('save_bank.json') == True:
             f = open('save_bank.json')
