@@ -44,7 +44,6 @@ class Fun(commands.Cog):
                 if r.status == 200:
                     js = await r.json()
                     embed = await main.buildEmbed('{0} slapped {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
-                    embed.add_(url = imgUrl)
                     await ctx.send(embed = embed)
 
     @commands.command()
