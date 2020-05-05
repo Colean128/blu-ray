@@ -23,8 +23,8 @@ class Fun(commands.Cog):
             async with session.get('https://nekos.life/api/v2/img/meow') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('Here\'s your cat picture!', js)
-                    await ctx.send(js['url'])
+                    embed = await main.buildEmbed('Here\'s your cat picture!', js['url'])
+                    await ctx.send(embed = embed)
     
     @commands.command()
     async def dog(self, ctx):
