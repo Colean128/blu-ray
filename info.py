@@ -9,6 +9,7 @@ import asyncio
 import brfilter
 import main
 from discord.ext import tasks, commands
+bootsec = time.time()
 
 class Info(commands.Cog):
     def __init__(self, bot):
@@ -28,7 +29,6 @@ class Info(commands.Cog):
     @commands.command()
     async def uptime(self, ctx):
         """[Info] Bot uptime since last reboot"""
-        bootsec = await main.bot_get_bootsec()
         time_diff = round(time.time() - bootsec)
         minute = round(time_diff / 60)
         seconds = time_diff % 60
