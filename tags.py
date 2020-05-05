@@ -18,7 +18,7 @@ class Tags(commands.Cog):
     @commands.command(pass_context=True)
     async def view(self, ctx, arg):
         """[Tags] View a tag."""
-        tags = main.bot_load_tags()
+        tags = await main.bot_load_tags()
         if tags.get(arg) == None:
             await ctx.send('No tag exists with that name.')
         else:
@@ -27,8 +27,8 @@ class Tags(commands.Cog):
     @commands.command(pass_context=True)
     async def create(ctx, arg1, arg2):
         """[Tags] Creates a tag."""
-        tags = main.bot_load_tags()
-        tagso = main.bot_load_tagso()
+        tags = await main.bot_load_tags()
+        tagso = await main.bot_load_tagso()
         if tags.get(arg1) != None:
             await ctx.send('A tag already exists with that name.')
         elif any(s in arg1.lower() for s in brfilter.badwords):
@@ -45,8 +45,8 @@ class Tags(commands.Cog):
     @commands.command(pass_context=True)
     async def delete(ctx, arg):
         """[Tags] Deletes a tag."""
-        tags = main.bot_load_tags()
-        tagso = main.bot_load_tagso()
+        tags = await main.bot_load_tags()
+        tagso = await main.bot_load_tagso()
         if tags.get(arg) == None:
             await ctx.send('No tag exists with that name.')
         elif tagso[arg] != ctx.message.author.id:
@@ -61,8 +61,8 @@ class Tags(commands.Cog):
     @commands.command(pass_context=True)
     async def edit(ctx, arg1, arg2):
         """[Tags] Edits a tag."""
-        tags = main.bot_load_tags()
-        tagso = main.bot_load_tagso()
+        tags = await main.bot_load_tags()
+        tagso = await main.bot_load_tagso()
         if tags.get(arg1) == None:
             await ctx.send('No tag exists with that name.')
         elif tagso[arg1] != ctx.message.author.id:
