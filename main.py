@@ -20,7 +20,7 @@ try:
 
     async def buildEmbed(title, imgUrl):
         embed = discord.Embed(title = title)
-        embed.set_image(url = imageUrl)
+        embed.set_image(url = imgUrl)
         return embed
 
     async def bot_load_sfbans():
