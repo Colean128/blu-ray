@@ -8,7 +8,6 @@ import os
 import asyncio
 import brfilter
 from discord.ext import tasks, commands
-import main
 
 class Info(commands.Cog):
     def __init__(self, bot):
