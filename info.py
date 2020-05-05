@@ -27,7 +27,7 @@ class Info(commands.Cog):
     @commands.command()
     async def uptime(self, ctx):
         """[Info] Bot uptime since last reboot"""
-        bootsec = self.bootsec
+        bootsec = main.bootsec
         time_diff = round(time.time() - bootsec)
         minute = round(time_diff / 60)
         seconds = time_diff % 60
