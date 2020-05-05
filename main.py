@@ -280,53 +280,53 @@ try:
         else:
             tags[arg1] = arg2
             await ctx.send('Tag edited!')
+    if __name__ = '__main__':
+        print('Loading json files')
+        if os.path.exists('save_bank.json') == True:
+            f = open('save_bank.json')
+            bank = json.load(f)
+            # print(bank)
+            f.close()
+        else:
+            bank = {}
 
-    print('Loading json files')
-    if os.path.exists('save_bank.json') == True:
-        f = open('save_bank.json')
-        bank = json.load(f)
-        # print(bank)
-        f.close()
-    else:
-        bank = {}
+        if os.path.exists('settings_filter.json') == True:
+            f = open('settings_filter.json')
+            settings_filter = json.load(f)
+            # print(settings_filter)
+            f.close()
+        else:
+            settings_filter = {}
+                
+        if os.path.exists('tags.json') == True:
+            f = open('tags.json')
+            tags = json.load(f)
+            # print(tags)
+            f.close()
+        else:
+            tags = {}
 
-    if os.path.exists('settings_filter.json') == True:
-        f = open('settings_filter.json')
-        settings_filter = json.load(f)
-        # print(settings_filter)
-        f.close()
-    else:
-        settings_filter = {}
-            
-    if os.path.exists('tags.json') == True:
-        f = open('tags.json')
-        tags = json.load(f)
-        # print(tags)
-        f.close()
-    else:
-        tags = {}
+        if os.path.exists('tagso.json') == True:
+            f = open('tagso.json')
+            tagso = json.load(f)
+            # print(tagso)
+            f.close()
+        else:
+            tagso = {}
 
-    if os.path.exists('tagso.json') == True:
-        f = open('tagso.json')
-        tagso = json.load(f)
-        # print(tagso)
-        f.close()
-    else:
-        tagso = {}
+        if os.path.exists('settings_superfilterbans.json') == True:
+            f = open('settings_superfilterbans.json')
+            settings_superfilterbans = json.load(f)
+            # print(settings_superfilterbans)
+            f.close()
+        else:
+            settings_superfilterbans = {}
 
-    if os.path.exists('settings_superfilterbans.json') == True:
-        f = open('settings_superfilterbans.json')
-        settings_superfilterbans = json.load(f)
-        # print(settings_superfilterbans)
-        f.close()
-    else:
-        settings_superfilterbans = {}
-
-    print('Bot running.')
-    bootsec = time.time()
-    for c in cogs: 
-        bot.load_extension(c)
-    bot.run(config.token)
+        print('Bot running.')
+        bootsec = time.time()
+        for c in cogs: 
+            bot.load_extension(c)
+        bot.run(config.token)
 except KeyboardInterrupt:
     print('Keyboard Interrupt detected!')
     print('Exiting gracefully!')

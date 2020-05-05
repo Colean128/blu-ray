@@ -7,6 +7,7 @@ import time
 import os
 import asyncio
 import brfilter
+import main
 from discord.ext import tasks, commands
 
 class Info(commands.Cog):
