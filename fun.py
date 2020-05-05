@@ -8,7 +8,6 @@ import os
 import asyncio
 import brfilter
 from discord.ext import tasks, commands
-import main
 brunopowroznik = {0:'https://www.youtube.com/watch?v=6LvlG2dTQKg',1:'https://www.youtube.com/watch?v=ILvd5buCEnU',2:'https://www.youtube.com/watch?v=nEDw_WKeQoc',3:'https://www.youtube.com/watch?v=0YrU9ASVw6w',4:'https://www.youtube.com/watch?v=GxMXWqSauZA',5:'https://www.youtube.com/watch?v=9rtD2omE2N0',6:'https://www.youtube.com/watch?v=-Tqn5NqXskM'}
 
 class Fun(commands.Cog):
