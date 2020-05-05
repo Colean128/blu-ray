@@ -28,31 +28,33 @@ class Fun(commands.Cog):
     
     @commands.command()
     async def dog(self, ctx):
-        """Have a cat picture!"""
+        """Have a dog picture!"""
         async with aiohttp.ClientSession() as session:
             async with session.get('https://nekos.life/api/v2/img/woof') as r:
                 if r.status == 200:
                     js = await r.json()
-                    await ctx.send(js['url'])
+                    embed = await main.buildEmbed('Here\'s your dog picture!', js['url'])
+                    await ctx.send(embed = embed)
+
     @commands.command()
     async def slap(self, ctx, *, member: discord.Member):
         """Slap somebody around the face!"""
-        await ctx.send('{0} slapped {1}!'.format(ctx.message.author.mention, member.mention))
         async with aiohttp.ClientSession() as session:
             async with session.get('https://nekos.life/api/v2/img/slap') as r:
                 if r.status == 200:
                     js = await r.json()
-                    await ctx.send(js['url'])
+                    embed = await main.buildEmbed('{0} slapped {1}!'.format(ctx.message.author.mention, member.mention), js['url'])
+                    await ctx.send(embed = embed)
 
     @commands.command()
     async def hug(self, ctx, *, member: discord.Member):
         """Hug your best friend!"""
-        await ctx.send('{0} gave a hug to {1}!'.format(ctx.message.author.mention, member.mention))
         async with aiohttp.ClientSession() as session:
             async with session.get('https://nekos.life/api/v2/img/hug') as r:
                 if r.status == 200:
                     js = await r.json()
-                    await ctx.send(js['url'])
+                    embed = await main.buildEmbed('{0} gave a hug to {1}!'.format(ctx.message.author.mention, member.mention), js['url'])
+                    await ctx.send(embed = embed)
 
     @commands.command()
     async def dice(self, ctx):

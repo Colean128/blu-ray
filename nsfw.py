@@ -24,9 +24,10 @@ class NSFW(commands.Cog):
                 async with session.get('https://r34-json-api.herokuapp.com/posts?tags='+str(arg)) as r:
                     if r.status == 200:
                         js = await r.json()
-                        rand = random.randint(1,20)
-                        jsparse = js[rand]['file_url']
-                        await ctx.send(jsparse)
+                        rand = random.randint(1,30)
+                        js = await r.json()
+                        embed = await main.buildEmbed('Rule34 search results for **'+str(arg)+'**.', js[rand]['file_url'])
+                        await ctx.send(embed = embed)
                     else:
                         await ctx.send('Search failed.')
         else:
