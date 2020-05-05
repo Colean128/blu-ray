@@ -18,17 +18,17 @@ class Info(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        """[Info] Play table tennis with the bot."""
+        """Play table tennis with the bot."""
         await ctx.send('Pong!')
 
     @commands.command()
     async def joindate(self, ctx, *, member: discord.Member):
-        """[Info] Tells you the join date of somebody."""
+        """Tells you the join date of somebody."""
         await ctx.send('{0} joined on {0.joined_at}'.format(member))
 
     @commands.command()
     async def uptime(self, ctx):
-        """[Info] Bot uptime since last reboot"""
+        """Bot uptime since last reboot"""
         time_diff = round(time.time() - bootsec)
         minute = round(time_diff / 60)
         seconds = time_diff % 60
@@ -40,7 +40,7 @@ class Info(commands.Cog):
 
     @commands.command()
     async def artist(self, ctx, *, arg):
-        """[Info] Search for artists on Spotify."""
+        """Search for artists on Spotify."""
         async with aiohttp.ClientSession() as session:
             async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
                 if r.status == 200:
@@ -58,7 +58,7 @@ class Info(commands.Cog):
 
     @commands.command()
     async def album(self, ctx, *, arg):
-        """[Info] Search for albums on Spotify."""
+        """Search for albums on Spotify."""
         async with aiohttp.ClientSession() as session:
             async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
                 if r.status == 200:
@@ -75,7 +75,7 @@ class Info(commands.Cog):
 
     @commands.command()
     async def track(self, ctx, *, arg):
-        """[Info] Search for tracks on Spotify."""
+        """Search for tracks on Spotify."""
         async with aiohttp.ClientSession() as session:
             async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
                 if r.status == 200:
@@ -92,7 +92,7 @@ class Info(commands.Cog):
 
     @commands.command()
     async def playlist(self, ctx, *, arg):
-        """[Info] Search for playlists on Spotify."""
+        """Search for playlists on Spotify."""
         async with aiohttp.ClientSession() as session:
             async with session.post('https://accounts.spotify.com/api/token', headers={'Authorization': 'Basic '+ config.spotifyapikey}, data={"grant_type": "client_credentials"}) as r:
                 if r.status == 200:
@@ -109,12 +109,12 @@ class Info(commands.Cog):
 
     @commands.command()
     async def discord(self, ctx):
-        """[Info] Join the Blu-Ray Facility discord!"""
+        """Join the Blu-Ray Facility discord!"""
         await ctx.send('https://discord.gg/g2SWnrg')
 
     @commands.command()
     async def invite(self, ctx):
-        """[Info] Add the Blu-Ray bot to your server!"""
+        """Add the Blu-Ray bot to your server!"""
         await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')  
 
 def setup(bot):
