@@ -45,7 +45,7 @@ class Bank(commands.Cog):
         else:
             bank[str(ctx.message.author.id)] = bank[str(ctx.message.author.id)] - arg1
             bank[str(arg2.id)] = bank[str(arg2.id)] + arg1
-            await ctx.send(str(arg1)+' transferred to '+str(arg2.nick)+'.')
+            await ctx.send(str(arg1)+' transferred to '+str(arg2.name)+'.')
             await main.bot_save_bank(bank)
 
 def setup(bot):
