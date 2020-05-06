@@ -50,6 +50,13 @@ class Owner(commands.Cog):
                 await ctx.send("```"+str(eval(str(arg2)))+"```")
 
     @commands.command(pass_context=True, hidden=True)
+    async def exec(self, ctx, arg1: int, *, arg2):
+        """"""
+        if ctx.message.author.id == config.owner:
+            if arg1 == 1:
+                await ctx.send("```"+str(exec(str(arg2)))+"```")
+
+    @commands.command(pass_context=True, hidden=True)
     async def shutdown(self, ctx):
         """Shutdown the bot."""
         if ctx.message.author.id == config.owner:
