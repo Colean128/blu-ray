@@ -22,7 +22,7 @@ class Info(commands.Cog):
         lat1 = time.time()
         message = await ctx.send("Pinging...")
         lat2 = time.time() - lat1
-        latency = lat2 / 1000000
+        latency = round(lat2) / 1000000
         await message.delete()
         await ctx.send("Ping: **{0}ms**".format(latency))
 
