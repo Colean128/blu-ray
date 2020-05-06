@@ -36,9 +36,9 @@ class Bank(commands.Cog):
     async def transfer(self, ctx, arg1: discord.Member, arg2):
         """Transfer money to your friend!"""
         bank = await main.bot_load_bank()
-        if str(ctx.message.author.id) in bank != True:
+        if bank.get(str(ctx.message.author.id)) != None:
             await ctx.send('You don\'t have a Bank of Sony account!')
-        elif str(arg1.id) in bank != True:
+        elif bank.get(str(arg1.id)) != None:
             await ctx.send('The person you\'re transferring money to doesn\'t have a Bank of Sony account!')
         elif bank[str(ctx.message.author.id)] < arg2:
             await ctx.send('You don\'t have enough money!')
