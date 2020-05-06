@@ -33,19 +33,19 @@ class Bank(commands.Cog):
         await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
     
     @commands.command(pass_content=True)
-    async def transfer(self, ctx, arg1: discord.Member, arg2: int):
+    async def transfer(self, ctx, arg1: int, *, arg2: discord.Member):
         """Transfer money to your friend!"""
         bank = await main.bot_load_bank()
         if bank.get(str(ctx.message.author.id)) == None:
             await ctx.send('You don\'t have a Bank of Sony account!')
-        elif bank.get(str(arg1.id)) == None:
+        elif bank.get(str(arg2.id)) == None:
             await ctx.send('The person you\'re transferring money to doesn\'t have a Bank of Sony account!')
-        elif bank[str(ctx.message.author.id)] < arg2:
+        elif bank[str(ctx.message.author.id)] < arg1:
             await ctx.send('You don\'t have enough money!')
         else:
-            bank[str(ctx.message.author.id)] = bank[str(ctx.message.author.id)] - arg2
-            bank[str(arg1.id)] = bank[str(arg1.id)] + arg2
-            await ctx.send(str(arg2)+' transferred to '+str(arg1.nick)+'.')
+            bank[str(ctx.message.author.id)] = bank[str(ctx.message.author.id)] - arg1
+            bank[str(arg2.id)] = bank[str(arg1.id)] + arg1
+            await ctx.send(str(arg1)+' transferred to '+str(arg2.nick)+'.')
             await main.bot_save_bank(bank)
 
 def setup(bot):
