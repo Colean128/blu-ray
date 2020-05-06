@@ -20,10 +20,9 @@ class Info(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         """Play table tennis with the bot."""
-        message = await ctx.send("Pinging...")
         latency = self.bot.latency * 1000
         await message.delete()
-        await ctx.send("Ping: **{0}ms**".format(latency))
+        await ctx.send("Pong!: **{0}ms**".format(latency))
 
     @commands.command()
     async def joindate(self, ctx, *, member: discord.Member):
