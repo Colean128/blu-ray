@@ -43,6 +43,13 @@ class Owner(commands.Cog):
             await main.bot_save_bank(bank)
 
     @commands.command(pass_context=True, hidden=True)
+    async def eval(self, ctx, arg1: int, *, arg2):
+        """"""
+        if ctx.message.author.id == config.owner:
+            if arg1 == 1:
+                await ctx.send("```"+str(eval(str(arg2)))+"```")
+
+    @commands.command(pass_context=True, hidden=True)
     async def shutdown(self, ctx):
         """Shutdown the bot."""
         if ctx.message.author.id == config.owner:
