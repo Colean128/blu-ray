@@ -21,7 +21,6 @@ class Info(commands.Cog):
     async def ping(self, ctx):
         """Play table tennis with the bot."""
         latency = self.bot.latency * 1000
-        await message.delete()
         await ctx.send("Pong!: **{0}ms**".format(latency))
 
     @commands.command()
