@@ -4,7 +4,7 @@ import config
 import random
 import json
 import time
-import datetime
+from datetime import datetime, timedelta
 import os
 import asyncio
 import brfilter
@@ -21,7 +21,7 @@ class Info(commands.Cog):
     async def ping(self, ctx):
         """Play table tennis with the bot."""
         message = await ctx.send("Pinging...")
-        latency = (time.time() - time.mktime(utc.localize(message.created_at).utctimetuple())) / 1000000
+        latency = (time.time() - message.created_at.total_seconds()) / 1000000
         await message.delete()
         await ctx.send("Ping: **{0}ms**".format(latency))
 
