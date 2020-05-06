@@ -24,7 +24,7 @@ class Info(commands.Cog):
         lat2 = time.time() - lat1
         latency = lat2 / 1000000
         await message.delete()
-        await ctx.send("Ping: **{0}ms**", latency)
+        await ctx.send("Ping: **{0}ms**".format(latency))
 
     @commands.command()
     async def joindate(self, ctx, *, member: discord.Member):
