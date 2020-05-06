@@ -37,7 +37,7 @@ class Bank(commands.Cog):
         """Transfer money to your friend!"""
         bank = await main.bot_load_bank()
         if str(ctx.message.author.id) in bank != True:
-            await ctx.send('You don\'t have a Bank of Sony account!'
+            await ctx.send('You don\'t have a Bank of Sony account!')
         elif str(arg1.id) in bank != True:
             await ctx.send('The person you\'re transferring money to doesn\'t have a Bank of Sony account!')
         elif bank[str(ctx.message.author.id)] < arg2:
