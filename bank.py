@@ -33,7 +33,7 @@ class Bank(commands.Cog):
         await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
     
     @commands.command(pass_content=True)
-    async def transfer(self, ctx, arg1: discord.Member, arg2):
+    async def transfer(self, ctx, arg1: discord.Member, arg2: int):
         """Transfer money to your friend!"""
         bank = await main.bot_load_bank()
         if bank.get(str(ctx.message.author.id)) == None:
