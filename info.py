@@ -19,9 +19,9 @@ class Info(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         """Play table tennis with the bot."""
-        message = ctx.send("Pinging...")
-        latency = (time.time() - message.created_at) / 1000000 # this is converting nanoseconds to milliseconds
-        ctx.send("Ping: **{0}ms**", latency)
+        message = await ctx.send("Pinging...")
+        latency = (time.time() - message.created_at) / 1000000
+        await ctx.send("Ping: **{0}ms**", latency)
 
     @commands.command()
     async def joindate(self, ctx, *, member: discord.Member):
