@@ -30,7 +30,8 @@ class Fun(commands.Cog):
     @commands.command(aliases=["8ball"])
     async def eightball(self, ctx, *, question):
         """Ask the magic 8-ball a question."""
-
+        settings_superfilterbans = await main.bot_load_sfbans()
+        settings_filter = await main.bot_load_filter()
         randomnum = random.randint(0,19)
         if any(s in question.lower() for s in brfilter.badwords):
             if settings_filter.get(str(ctx.message.guild.id)) == None:
