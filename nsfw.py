@@ -44,7 +44,7 @@ class NSFW(commands.Cog):
             async with session.get('https://nekos.life/api/v2/img/classic') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('{0} fucked {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
+                    embed = await main.buildEmbed('{0} fucked {1}!'.format(ctx.message.author.name, member.name), js['url'])
                     await ctx.send(embed = embed)
 
 def setup(bot):
