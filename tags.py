@@ -29,12 +29,47 @@ class Tags(commands.Cog):
         """Creates a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()
+        settings_superfilterbans = await main.bot_load_sfbans()
         if tags.get(arg1) != None:
             await ctx.send('A tag already exists with that name.')
         elif any(s in arg1.lower() for s in brfilter.badwords):
             await ctx.send('Your tag contains filtered words.')
         elif any(s in arg2.lower() for s in brfilter.badwords):
             await ctx.send('Your message contains filtered words.')
+        elif any(s in arg1.lower() for s in brfilter.superbadwords):
+            if settings_superfilterbans.get(str(ctx.message.author.id)) == None:
+                settings_superfilterbans[str(ctx.message.author.id)] = 0
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nThe next time you use those, I\'ll have to ban you from this command!```')
+                await main.bot_save_sfbans(settings_superfilterbans)
+            elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
+                settings_superfilterbans[str(ctx.message.author.id)] = 1
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('https://discord.gg/g2SWnrg')
+                await main.bot_save_sfbans(settings_superfilterbans)
+        elif any(s in arg2.lower() for s in brfilter.superbadwords):
+            if settings_superfilterbans.get(str(ctx.message.author.id)) == None:
+                settings_superfilterbans[str(ctx.message.author.id)] = 0
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nThe next time you use those, I\'ll have to ban you from this command!```')
+                await main.bot_save_sfbans(settings_superfilterbans)
+            elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
+                settings_superfilterbans[str(ctx.message.author.id)] = 1
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('https://discord.gg/g2SWnrg')
+                await main.bot_save_sfbans(settings_superfilterbans)
+        elif settings_superfilterbans.get(str(ctx.message.author.id)) != None:
+            if settings_superfilterbans[str(ctx.message.author.id)] == 1:
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('https://discord.gg/g2SWnrg')
         else:
             tags[arg1] = arg2
             tagso[arg1] = ctx.message.author.id
