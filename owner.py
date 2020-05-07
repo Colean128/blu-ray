@@ -41,7 +41,7 @@ class Owner(commands.Cog):
             bank.pop(arg, None)
             await ctx.send('Account ID '+str(arg)+' has been wiped.')
             await main.bot_save_bank(bank)
-            
+
     @commands.command(pass_context=True, hidden=True)
     async def shutdown(self, ctx):
         """Shutdown the bot."""
@@ -58,6 +58,14 @@ class Owner(commands.Cog):
             bank[str(arg1)] = int(arg2)
             await ctx.send('Set Account ID '+str(arg1)+ '\'s balance to ' + str(arg2) + ' Dosh.')
             await main.bot_save_bank(bank)
+
+    @commands.command()
+    async def eval(self, ctx, argeval):
+        """"""
+        if ctx.message.author.id == config.owner:
+            await ctx.send('```'+eval(str(argeval))+'```')
+        else:
+            await ctx.send('No eval for you!')
 
 def setup(bot):
     bot.add_cog(Owner(bot))
