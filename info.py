@@ -20,7 +20,7 @@ class Info(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         """Play table tennis with the bot."""
-        latency = self.bot.latency * 1000
+        latency = round(self.bot.latency * 1000)
         await ctx.send("Pong!: **{0}ms**".format(latency))
 
     @commands.command()
@@ -50,7 +50,7 @@ class Info(commands.Cog):
     async def stats(self, ctx):
         """Stats about the bot."""
         embed = await main.buildEmbed_basic('Bot Stats')
-        embed.add_field(name="Version", value="1.1.1", inline=True)
+        embed.add_field(name="Version", value="Freestyle (testing branch)", inline=True)
         guilds = await self.bot.fetch_guilds().flatten()
         embed.add_field(name="Guilds", value=str(len(guilds)), inline=True)
         time_diff = round(time.time() - bootsec)
