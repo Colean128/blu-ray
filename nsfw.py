@@ -37,7 +37,7 @@ class NSFW(commands.Cog):
             await ctx.send("This command is restricted to NSFW channels.")
 
     @commands.command(pass_context=True)
-    async def fuck(self, ctx, member):
+    async def fuck(self, ctx, member: discord.Member):
         """Fuck your friend.
         Command restricted to NSFW channels."""
         async with aiohttp.ClientSession() as session:
