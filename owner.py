@@ -63,7 +63,10 @@ class Owner(commands.Cog):
     async def eval(self, ctx, argeval):
         """"""
         if ctx.message.author.id == config.owner:
-            await ctx.send('```'+str(eval(str(argeval)))+'```')
+            if inspect.isawaitable(command)
+                await ctx.send('```'+await str(eval(str(argeval)))+'```')
+            else:
+                await ctx.send('```'+str(eval(str(argeval)))+'```')
         else:
             await ctx.send('No eval for you!')
 
