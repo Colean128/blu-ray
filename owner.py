@@ -66,9 +66,9 @@ class Owner(commands.Cog):
         res = eval(argeval)
         if ctx.message.author.id == config.owner:
             if inspect.isawaitable(res):
-                await ctx.send('```'+await str(res)+'```')
+                await ctx.send('```'+await res+'```')
             else:
-                await ctx.send('```'+str(res)+'```')
+                await ctx.send('```'+res+'```')
         else:
             await ctx.send('No eval for you!')
 
