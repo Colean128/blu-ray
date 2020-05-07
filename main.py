@@ -14,13 +14,17 @@ try:
 
 
     bank = {}
-    cogs = ['bank','casino','fun','info','nsfw','owner','settings','tags']
-    
+    cogs = ['casino','fun','info','nsfw','owner','settings','tags','economy']
+
     bot = commands.Bot(command_prefix=pogfix)
 
     async def buildEmbed(title, imgUrl):
         embed = discord.Embed(title = title)
         embed.set_image(url = imgUrl)
+        return embed
+
+    async def buildEmbed_basic(title):
+        embed = discord.Embed(title = title)
         return embed
 
     async def bot_load_sfbans():
@@ -31,7 +35,7 @@ try:
             f.close()
         else:
             settings_superfilterbans = {}
-        
+
         return settings_superfilterbans
 
     async def bot_save_sfbans(sfbans):
@@ -50,7 +54,7 @@ try:
             f.close()
         else:
             settings_filter = {}
-        
+
         return settings_filter
 
     async def bot_save_filter(settings_filter):
@@ -69,7 +73,7 @@ try:
             f.close()
         else:
             bank = {}
-        
+
         return bank
 
     async def bot_save_bank(bank):
@@ -88,7 +92,7 @@ try:
             f.close()
         else:
             tags = {}
-        
+
         return tags
 
     async def bot_save_tags(tags):
@@ -107,7 +111,7 @@ try:
             f.close()
         else:
             tagso = {}
-        
+
         return tagso
 
     async def bot_save_tagso(tagso):
@@ -122,7 +126,7 @@ try:
     if __name__ == '__main__':
         print('Loading json files')
         print('Bot running.')
-        for c in cogs: 
+        for c in cogs:
             bot.load_extension(c)
         bot.run(config.token)
 

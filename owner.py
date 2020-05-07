@@ -59,5 +59,13 @@ class Owner(commands.Cog):
             await ctx.send('Set Account ID '+str(arg1)+ '\'s balance to ' + str(arg2) + ' Dosh.')
             await main.bot_save_bank(bank)
 
+    @commands.command(pass_context=True, hidden=True)
+    async def eval(self, ctx, argeval):
+        """"""
+        if ctx.message.author.id == config.owner:
+            await ctx.send('```'+str(eval(str(argeval)))+'```')
+        else:
+            await ctx.send('No eval for you!')
+
 def setup(bot):
     bot.add_cog(Owner(bot))

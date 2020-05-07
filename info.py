@@ -4,6 +4,7 @@ import config
 import random
 import json
 import time
+from datetime import datetime, timedelta
 import os
 import asyncio
 import brfilter
@@ -19,24 +20,13 @@ class Info(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         """Play table tennis with the bot."""
-        await ctx.send('Pong!')
+        latency = self.bot.latency * 1000
+        await ctx.send("Pong!: **{0}ms**".format(latency))
 
     @commands.command()
     async def joindate(self, ctx, *, member: discord.Member):
         """Tells you the join date of somebody."""
         await ctx.send('{0} joined on {0.joined_at}'.format(member))
-
-    @commands.command()
-    async def uptime(self, ctx):
-        """Bot uptime since last reboot"""
-        time_diff = round(time.time() - bootsec)
-        minute = round(time_diff / 60)
-        seconds = time_diff % 60
-        if seconds <= 9:
-            displaysec = "0"+str(seconds)
-            await ctx.send(str(minute)+':'+str(displaysec))
-        else:
-            await ctx.send(str(minute)+':'+str(seconds))
 
     @commands.command()
     async def artist(self, ctx, *, arg):
@@ -55,6 +45,24 @@ class Info(commands.Cog):
                     await ctx.send('Is this the artist you were looking for? '+jsparse)
                 else:
                     print(r1.status)
+
+    @commands.command(aliases=["uptime"])
+    async def stats(self, ctx):
+        """Stats about the bot."""
+        embed = await main.buildEmbed_basic('Bot Stats')
+        embed.add_field(name="Version", value="1.1.1", inline=True)
+        guilds = await self.bot.fetch_guilds().flatten()
+        embed.add_field(name="Guilds", value=str(len(guilds)), inline=True)
+        time_diff = round(time.time() - bootsec)
+        minute = round(time_diff / 60)
+        seconds = time_diff % 60
+        if seconds <= 9:
+            displaysec = "0"+str(seconds)
+            embed.add_field(name="Uptime", value=str(minute)+":"+str(displaysec), inline=True)
+        else:
+            embed.add_field(name="Uptime", value=str(minute)+":"+str(seconds), inline=True)
+
+        await ctx.send(embed = embed)
 
     @commands.command()
     async def album(self, ctx, *, arg):
@@ -115,7 +123,7 @@ class Info(commands.Cog):
     @commands.command()
     async def invite(self, ctx):
         """Add the Blu-Ray bot to your server!"""
-        await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')  
+        await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')
 
 def setup(bot):
     bot.add_cog(Info(bot))
