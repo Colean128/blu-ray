@@ -65,6 +65,10 @@ class Info(commands.Cog):
         embed.add_field(name="Version", value="Tesseract (testing branch)", inline=True)
         guilds = await self.bot.fetch_guilds(limit=150).flatten()
         embed.add_field(name="Guilds", value=str(len(guilds)), inline=True)
+        time_diff = round(time.time() - bootsec)
+        minute = round(time_diff / 60)
+        seconds = time_diff % 60
+        embed.add_field(name="Uptime", value=str(minute)+":"+str(seconds), inline=True)
         await ctx.send(embed = embed)
 
     @commands.command()
