@@ -8,6 +8,7 @@ import os
 import asyncio
 import brfilter
 import main
+import inspect
 from discord.ext import tasks, commands
 
 class Owner(commands.Cog):
