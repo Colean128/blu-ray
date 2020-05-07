@@ -16,7 +16,7 @@ class Economy(commands.Cog):
         self._last_member = None
 
     @commands.command(pass_context=True)
-    @commands.cooldown(1, 7200, type=<BucketType.user: 0>)
+    @commands.cooldown(1, 7200, commands.BucketType.user)
     async def work(self, ctx):
         """Work for your money."""
         bank = await main.bot_load_bank()
