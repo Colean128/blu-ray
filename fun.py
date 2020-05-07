@@ -30,8 +30,8 @@ class Fun(commands.Cog):
     @commands.command(aliases=["8ball"])
     async def eightball(self, ctx, question):
         """Ask me a question!"""
-        random = random.randint(0,19)
-        await ctx.send(ctx.message.author.nick+' asked the magic 8-ball, **'+str(question)+'**. The magic 8-ball says **'+eightballresponses[random]+'**.')
+        randomnum = random.randint(0,19)
+        await ctx.send(ctx.message.author.nick+' asked the magic 8-ball, **'+str(question)+'**. The magic 8-ball says **'+eightballresponses[randomnum]+'**.')
 
     @commands.command()
     async def dog(self, ctx):
