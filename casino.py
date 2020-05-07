@@ -16,17 +16,10 @@ class Casino(commands.Cog):
         self._last_member = None
 
     @commands.command(pass_context=True)
-    async def slot(self, ctx, *, arg):
+    async def slot(self, ctx, *, arg: int):
         """Play the slots!"""
         bank = await main.bot_load_bank()
-        if isinstance(arg, int) != True:
-            if isinstance(arg, str) == True:
-                await ctx.send('The machine only accepts integers! Take your dirty strings to the tags system.')
-            elif isinstance(arg, float) == True:
-                await ctx.send('The machine only accepts integers! Why do you even need decimals with your float?')
-            else:
-                await ctx.send('The machine only accepts integers! Wait, what the hell kinda variable are you trying to put into it anyway?')
-        elif int(arg) <= 9:
+        if int(arg) <= 9:
             await ctx.send('You have to bet at least 10 Dosh!')
         else:
             if bank[str(ctx.message.author.id)] >= int(arg):
