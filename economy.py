@@ -48,6 +48,8 @@ class Economy(commands.Cog):
         bank = await main.bot_load_bank()
         if bank.get(str(ctx.message.author.id)) == None:
             await ctx.send('You don\'t have a Bank of Sony account!')
+        elif arg1 <= 0:
+            await ctx.send('You need to send actual money!')
         elif bank.get(str(arg2.id)) == None:
             await ctx.send('The person you\'re transferring money to doesn\'t have a Bank of Sony account!')
         elif bank[str(ctx.message.author.id)] < arg1:
