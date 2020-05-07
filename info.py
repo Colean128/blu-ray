@@ -63,6 +63,8 @@ class Info(commands.Cog):
         """Stats about the bot."""
         embed = await main.buildEmbed_basic('Bot Stats')
         embed.add_field(name="Version", value="Tesseract (testing branch)", inline=True)
+        guilds = await client.fetch_guilds(limit=150).flatten()
+        embed.add_field(name="Guilds", value=str(len(guilds)), inline=True)
         await ctx.send(embed = embed)
 
     @commands.command()
