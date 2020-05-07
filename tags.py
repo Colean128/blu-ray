@@ -63,13 +63,14 @@ class Tags(commands.Cog):
         """Edits a tag."""
         tags = await main.bot_load_tags()
         tagso = await main.bot_load_tagso()
+        settings_superfilterbans = await main.bot_load_sfbans()
         if tags.get(arg1) == None:
             await ctx.send('No tag exists with that name.')
         elif tagso[arg1] != ctx.message.author.id:
             await ctx.send('You don\'t own that tag.')
         elif any(s in arg2.lower() for s in brfilter.badwords):
             await ctx.send('Your message contains filtered words.')
-        elif any(s in arg.lower() for s in brfilter.superbadwords):
+        elif any(s in arg2.lower() for s in brfilter.superbadwords):
             if settings_superfilterbans.get(str(ctx.message.author.id)) == None:
                 settings_superfilterbans[str(ctx.message.author.id)] = 0
                 msg = ctx.message
