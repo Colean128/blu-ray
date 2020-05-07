@@ -29,18 +29,6 @@ class Info(commands.Cog):
         await ctx.send('{0} joined on {0.joined_at}'.format(member))
 
     @commands.command()
-    async def uptime(self, ctx):
-        """Bot uptime since last reboot"""
-        time_diff = round(time.time() - bootsec)
-        minute = round(time_diff / 60)
-        seconds = time_diff % 60
-        if seconds <= 9:
-            displaysec = "0"+str(seconds)
-            await ctx.send(str(minute)+':'+str(displaysec))
-        else:
-            await ctx.send(str(minute)+':'+str(seconds))
-
-    @commands.command()
     async def artist(self, ctx, *, arg):
         """Search for artists on Spotify."""
         async with aiohttp.ClientSession() as session:
@@ -58,17 +46,22 @@ class Info(commands.Cog):
                 else:
                     print(r1.status)
 
-    @commands.command()
+    @commands.command(aliases="uptime")
     async def stats(self, ctx):
         """Stats about the bot."""
         embed = await main.buildEmbed_basic('Bot Stats')
         embed.add_field(name="Version", value="Tesseract (testing branch)", inline=True)
-        guilds = await self.bot.fetch_guilds(limit=150).flatten()
+        guilds = await self.bot.fetch_guilds().flatten()
         embed.add_field(name="Guilds", value=str(len(guilds)), inline=True)
         time_diff = round(time.time() - bootsec)
         minute = round(time_diff / 60)
         seconds = time_diff % 60
-        embed.add_field(name="Uptime", value=str(minute)+":"+str(seconds), inline=True)
+        if seconds <= 9:
+            displaysec = "0"+str(seconds)
+            embed.add_field(name="Uptime", value=str(minute)+":"+str(displaysec), inline=True)
+        else:
+            embed.add_field(name="Uptime", value=str(minute)+":"+str(seconds), inline=True)
+
         await ctx.send(embed = embed)
 
     @commands.command()
