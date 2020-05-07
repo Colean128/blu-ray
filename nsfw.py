@@ -9,9 +9,7 @@ import asyncio
 import brfilter
 import main
 from discord.ext import tasks, commands
-headers = {
-    'User-Agent': 'Blu-Ray 1.1.2 (Discord bot by Zayne64 on GitHub)'
-    }
+headers = {'User-Agent': 'Blu-Ray 1.1.2 (Discord bot by Zayne64 on GitHub)'}
 class NSFW(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -22,8 +20,8 @@ class NSFW(commands.Cog):
         """Search Rule34.
         Command restricted to NSFW channels."""
         if ctx.message.channel.is_nsfw():
-            async with aiohttp.ClientSession() as session:
-                async with session.get('https://r34-json-api.herokuapp.com/posts?tags='+str(arg), headers=headers) as r:
+            async with aiohttp.ClientSession(headers=headers) as session:
+                async with session.get('https://r34-json-api.herokuapp.com/posts?tags='+str(arg)) as r:
                     if r.status == 200:
                         js = await r.json()
                         rand = random.randint(1,100)
@@ -43,8 +41,8 @@ class NSFW(commands.Cog):
         """Search e621.
         Command restricted to NSFW channels."""
         if ctx.message.channel.is_nsfw():
-            async with aiohttp.ClientSession() as session:
-                async with session.get('https://e621.net/post/index.json?limit=100&tags='+str(arg), headers=headers) as r:
+            async with aiohttp.ClientSession(headers=headers) as session:
+                async with session.get('https://e621.net/post/index.json?limit=100&tags='+str(arg)) as r:
                     if r.status == 200:
                         js = await r.json()
                         rand = random.randint(1,100)
