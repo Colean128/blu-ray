@@ -15,7 +15,7 @@ class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-    
+
     @commands.command()
     async def cat(self, ctx):
         """Have a cat picture!"""
@@ -25,7 +25,7 @@ class Fun(commands.Cog):
                     js = await r.json()
                     embed = await main.buildEmbed('Here\'s your cat picture!', js['url'])
                     await ctx.send(embed = embed)
-    
+
     @commands.command()
     async def dog(self, ctx):
         """Have a dog picture!"""

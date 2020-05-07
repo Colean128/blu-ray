@@ -59,6 +59,13 @@ class Info(commands.Cog):
                     print(r1.status)
 
     @commands.command()
+    async def stats(self, ctx):
+        """Stats about the bot."""
+        embed = await main.buildEmbed_basic('Bot Stats')
+        embed.add_field(*, "Version", "Tesseract (testing branch)", inline=True)
+        await ctx.send(embed = embed)
+
+    @commands.command()
     async def album(self, ctx, *, arg):
         """Search for albums on Spotify."""
         async with aiohttp.ClientSession() as session:
@@ -117,7 +124,7 @@ class Info(commands.Cog):
     @commands.command()
     async def invite(self, ctx):
         """Add the Blu-Ray bot to your server!"""
-        await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')  
+        await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot')
 
 def setup(bot):
     bot.add_cog(Info(bot))
