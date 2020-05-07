@@ -15,7 +15,7 @@ class NSFW(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['rule34'])
     async def r34(self, ctx, arg):
         """Search Rule34.
         Command restricted to NSFW channels."""
@@ -24,10 +24,13 @@ class NSFW(commands.Cog):
                 async with session.get('https://r34-json-api.herokuapp.com/posts?tags='+str(arg)) as r:
                     if r.status == 200:
                         js = await r.json()
-                        rand = random.randint(1,30)
-                        js = await r.json()
-                        embed = await main.buildEmbed('Rule34 search results for **'+str(arg)+'**.', js[rand]['file_url'])
-                        await ctx.send(embed = embed)
+                        rand = random.randint(1,100)
+                        if '.webm' in js[rand]['file_url']:
+                            await ctx.send('Rule34 search results for **'+str(arg)+'**.')
+                            await ctx.send('Video: '+js[rand]['file_url'])
+                        else:
+                            embed = await main.buildEmbed('Rule34 search results for **'+str(arg)+'**.', js[rand]['file_url'])
+                            await ctx.send(embed = embed)
                     else:
                         await ctx.send('Search failed.')
         else:
