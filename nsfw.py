@@ -18,7 +18,7 @@ class NSFW(commands.Cog):
         self._last_member = None
 
     @commands.command(pass_context=True, aliases=['rule34'])
-    async def r34(self, ctx, arg):
+    async def r34(self, ctx, *, arg):
         """Search Rule34.
         Command restricted to NSFW channels."""
         if ctx.message.channel.is_nsfw():
@@ -39,12 +39,12 @@ class NSFW(commands.Cog):
             await ctx.send("This command is restricted to NSFW channels.")
 
     @commands.command(pass_context=True)
-    async def e621(self, ctx, arg):
+    async def e621(self, ctx, *, arg):
         """Search e621.
         Command restricted to NSFW channels."""
         if ctx.message.channel.is_nsfw():
             async with aiohttp.ClientSession() as session:
-                async with session.get('https://e621.net/post/index.json?limit=100&tags='+str(arg)) as r:
+                async with session.get('https://e621.net/post/index.json?limit=100&tags='+str(arg), headers=headers) as r:
                     if r.status == 200:
                         js = await r.json()
                         rand = random.randint(1,100)
