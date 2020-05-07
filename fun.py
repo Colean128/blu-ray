@@ -10,6 +10,7 @@ import brfilter
 import main
 from discord.ext import tasks, commands
 brunopowroznik = {0:'https://www.youtube.com/watch?v=6LvlG2dTQKg',1:'https://www.youtube.com/watch?v=ILvd5buCEnU',2:'https://www.youtube.com/watch?v=nEDw_WKeQoc',3:'https://www.youtube.com/watch?v=0YrU9ASVw6w',4:'https://www.youtube.com/watch?v=GxMXWqSauZA',5:'https://www.youtube.com/watch?v=9rtD2omE2N0',6:'https://www.youtube.com/watch?v=-Tqn5NqXskM'}
+8ballresponses = {0: 'It is certain.', 1: 'Without a doubt.', 2: 'Yes – definitely.', 3: 'You may rely on it', 4: 'As I see it, yes.', 5: 'Most likely.', 6: 'Outlook good.', 7: 'Yes.', 8: 'Signs point to yes.', 9: 'It is decidedly so.', 10: 'Reply hazy, try again.', 11: 'Ask again later.', 12: 'Better not tell you now.', 13: 'Cannot predict now.', 14: 'Concentrate and ask again.', 15: 'Don\'t count on it.', 16: 'My reply is no.', 17: 'My sources say no.', 18: 'Outlook not so good.', 19: 'Very doubtful.'}
 
 class Fun(commands.Cog):
     def __init__(self, bot):
@@ -25,6 +26,12 @@ class Fun(commands.Cog):
                     js = await r.json()
                     embed = await main.buildEmbed('Here\'s your cat picture!', js['url'])
                     await ctx.send(embed = embed)
+
+    @commands.command()
+    async def 8ball(self, ctx, question):
+        """Ask me a question!"""
+        random = random.randint(0,19)
+        await ctx.send(ctx.message.author.nick+' asked the magic 8-ball, **'+str(question)+'**. The magic 8-ball says **'+8ballresponses[random]+'**.')
 
     @commands.command()
     async def dog(self, ctx):
