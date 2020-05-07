@@ -61,7 +61,7 @@ class Owner(commands.Cog):
             await main.bot_save_bank(bank)
 
     @commands.command(pass_context=True, hidden=True)
-    async def eval(self, ctx, argeval):
+    async def eval(self, ctx, *, argeval):
         """"""
         res = eval(argeval)
         if ctx.message.author.id == config.owner:
