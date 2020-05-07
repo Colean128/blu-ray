@@ -46,7 +46,7 @@ class Info(commands.Cog):
                 else:
                     print(r1.status)
 
-    @commands.command(aliases="uptime")
+    @commands.command(aliases=["uptime"])
     async def stats(self, ctx):
         """Stats about the bot."""
         embed = await main.buildEmbed_basic('Bot Stats')
