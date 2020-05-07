@@ -19,8 +19,8 @@ class Casino(commands.Cog):
     async def slot(self, ctx, *, arg):
         """Play the slots!"""
         bank = await main.bot_load_bank()
-        if isintance(arg, int) != True:
-            if isintance(arg, str) == True:
+        if isinstance(arg, int) != True:
+            if isinstance(arg, str) == True:
                 await ctx.send('The machine only accepts integers! Take your dirty strings to the tags system.')
             elif isinstance(arg, float) == True:
                 await ctx.send('The machine only accepts integers! Why do you even need decimals with your float?')
