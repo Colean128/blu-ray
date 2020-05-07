@@ -32,7 +32,42 @@ class Fun(commands.Cog):
         """Ask the magic 8-ball a question."""
 
         randomnum = random.randint(0,19)
-        await ctx.send(ctx.message.author.nick+' asked the magic 8-ball, **'+str(question)+'**\nThe magic 8-ball says **'+eightballresponses[randomnum]+'**')
+        if any(s in question.lower() for s in brfilter.badwords):
+            if settings_filter.get(str(ctx.message.guild.id)) == None:
+                # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
+                await ctx.send('Your message contains filtered words!')
+
+            elif settings_filter[str(ctx.message.guild.id)] == 0:
+                # print(str(ctx.message.author.id) +' Tried to send ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering on')
+                await ctx.send('Your message contains filtered words!')
+
+            else:
+                # print(str(ctx.message.author.id) +' Sent ' + str(arg) +' to server ID ' + str(ctx.message.guild.id) + ' with filtering off')
+                await ctx.send(arg)
+        elif any(s in question.lower() for s in brfilter.superbadwords):
+            if settings_superfilterbans.get(str(ctx.message.author.id)) == None:
+                settings_superfilterbans[str(ctx.message.author.id)] = 0
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nThe next time you use those, I\'ll have to ban you from this command!```')
+                await main.bot_save_sfbans(settings_superfilterbans)
+            elif settings_superfilterbans[str(ctx.message.author.id)] == 0:
+                settings_superfilterbans[str(ctx.message.author.id)] = 1
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYour message contained super filtered words!\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('https://discord.gg/g2SWnrg')
+                await main.bot_save_sfbans(settings_superfilterbans)
+        elif settings_superfilterbans.get(str(ctx.message.author.id)) != None:
+            if settings_superfilterbans[str(ctx.message.author.id)] == 1:
+                msg = ctx.message
+                await msg.delete()
+                await ctx.send('```Superfilter Alert\nYou\'ve been banned from the say command.\nJoin our support server to appeal the ban.```')
+                await ctx.send('https://discord.gg/g2SWnrg')
+            else:
+                await ctx.send(ctx.message.author.name+' asked the magic 8-ball, **'+str(question)+'**\nThe magic 8-ball says **'+eightballresponses[randomnum]+'**')
+        else:
+            await ctx.send(ctx.message.author.name+' asked the magic 8-ball, **'+str(question)+'**\nThe magic 8-ball says **'+eightballresponses[randomnum]+'**')
 
     @commands.command()
     async def dog(self, ctx):
@@ -45,17 +80,17 @@ class Fun(commands.Cog):
                     await ctx.send(embed = embed)
 
     @commands.command()
-    async def slap(self, ctx, *, member: discord.Member):
+    async def slap(self, ctx, *, member: discord.User):
         """Slap somebody around the face!"""
         async with aiohttp.ClientSession() as session:
             async with session.get('https://nekos.life/api/v2/img/slap') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('{0} slapped {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
+                    embed = await main.buildEmbed('{0} slapped {1}!'.format(ctx.message.author.name, member.name), js['url'])
                     await ctx.send(embed = embed)
 
     @commands.command()
-    async def hug(self, ctx, *, member: discord.Member):
+    async def hug(self, ctx, *, member: discord.User):
         """Hug your best friend!"""
         async with aiohttp.ClientSession() as session:
             async with session.get('https://nekos.life/api/v2/img/hug') as r:

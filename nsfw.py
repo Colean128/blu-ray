@@ -40,12 +40,13 @@ class NSFW(commands.Cog):
     async def fuck(self, ctx, *, member: discord.User):
         """Fuck your friend.
         Command restricted to NSFW channels."""
-        async with aiohttp.ClientSession() as session:
-            async with session.get('https://nekos.life/api/v2/img/classic') as r:
-                if r.status == 200:
-                    js = await r.json()
-                    embed = await main.buildEmbed('{0} fucked {1}!'.format(ctx.message.author.name, member.name), js['url'])
-                    await ctx.send(embed = embed)
+        if ctx.message.channel.is_nsfw():
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://nekos.life/api/v2/img/classic') as r:
+                    if r.status == 200:
+                        js = await r.json()
+                        embed = await main.buildEmbed('{0} fucked {1}!'.format(ctx.message.author.name, member.name), js['url'])
+                        await ctx.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(NSFW(bot))
