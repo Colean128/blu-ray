@@ -39,8 +39,11 @@ class Economy(commands.Cog):
     @commands.command(pass_context=True)
     async def balance(self, ctx):
         """Check your bank account."""
-        bank = await main.bot_load_bank()
-        await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
+        try:
+            bank = await main.bot_load_bank()
+            await ctx.send('Bank of Sony ATM\nAccount ID ' + str(ctx.message.author.id) + ' bank balance.\nBalance: ' + str(bank[str(ctx.message.author.id)]) + ' Dosh')
+        except KeyError:
+            await ctx.send('You don\'t have a Bank of Sony account!')
 
     @commands.command(pass_content=True)
     async def transfer(self, ctx, arg1: int, *, arg2: discord.User):
