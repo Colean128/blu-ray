@@ -37,25 +37,15 @@ class NSFW(commands.Cog):
             await ctx.send("This command is restricted to NSFW channels.")
 
     @commands.command(pass_context=True)
-    async def e621(self, ctx, *, arg):
-        """Search e621.
+    async def fuck(self, ctx, *, arg):
+        """Fuck your friend.
         Command restricted to NSFW channels."""
-        if ctx.message.channel.is_nsfw():
-            async with aiohttp.ClientSession(headers=headers) as session:
-                async with session.get('https://e621.net/post/index.json?limit=100&tags='+str(arg)) as r:
-                    if r.status == 200:
-                        js = await r.json()
-                        rand = random.randint(1,100)
-                        if '.webm' in js[rand]['file_url']:
-                            await ctx.send('e621 search results for **'+str(arg)+'**.')
-                            await ctx.send('Video: '+js[rand]['file_url'])
-                        else:
-                            embed = await main.buildEmbed('e621 search results for **'+str(arg)+'**.', js[rand]['file_url'])
-                            await ctx.send(js)
-                    else:
-                        await ctx.send('Search failed.')
-        else:
-            await ctx.send("This command is restricted to NSFW channels.")
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://nekos.life/api/v2/img/classic') as r:
+                if r.status == 200:
+                    js = await r.json()
+                    embed = await main.buildEmbed('{0} fucked {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
+                    await ctx.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(NSFW(bot))
