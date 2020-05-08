@@ -24,7 +24,7 @@ class NSFW(commands.Cog):
                 async with session.get('https://r34-json-api.herokuapp.com/posts?tags='+str(arg)) as r:
                     if r.status == 200:
                         js = await r.json()
-                        rand = random.randint(1,100)
+                        rand = random.randint(0,99)
                         if '.webm' in js[rand]['file_url']:
                             await ctx.send('Rule34 search results for **'+str(arg)+'**.')
                             await ctx.send('Video: '+js[rand]['file_url'])
