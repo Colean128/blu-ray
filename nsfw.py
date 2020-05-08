@@ -16,6 +16,7 @@ class NSFW(commands.Cog):
         self._last_member = None
 
     @commands.command(pass_context=True, aliases=['rule34'])
+    @commands.cooldown(1, 3, commands.BucketType.user)
     async def r34(self, ctx, *, arg):
         """Search Rule34.
         Command restricted to NSFW channels."""
