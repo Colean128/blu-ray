@@ -97,7 +97,7 @@ class Fun(commands.Cog):
             async with session.get('https://nekos.life/api/v2/img/hug') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('{0} gave a hug to {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
+                    embed = await main.buildEmbed('{0} gave a hug to {1}!'.format(ctx.message.author.nick, member.name), js['url'])
                     await ctx.send(embed = embed)
 
 
@@ -108,7 +108,7 @@ class Fun(commands.Cog):
             async with session.get('https://nekos.life/api/v2/img/kiss') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('{0} kissed {1}!'.format(ctx.message.author.nick, member.nick), js['url'])
+                    embed = await main.buildEmbed('{0} kissed {1}!'.format(ctx.message.author.nick, member.name), js['url'])
                     await ctx.send(embed = embed)
 
 
@@ -120,7 +120,7 @@ class Fun(commands.Cog):
             async with session.get('https://nekos.life/api/v2/img/pat') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = await main.buildEmbed('{0} pat {1} on the head!'.format(ctx.message.author.nick, member.nick), js['url'])
+                    embed = await main.buildEmbed('{0} pat {1} on the head!'.format(ctx.message.author.nick, member.name), js['url'])
                     await ctx.send(embed = embed)
 
 
