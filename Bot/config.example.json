@@ -1,0 +1,7 @@
+﻿{
+  "token": "discord bot token here",
+  "prefixes": [
+    "br/"
+  ],
+  "spotify": "base64 key here"
+}
