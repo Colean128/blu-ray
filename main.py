@@ -14,7 +14,7 @@ try:
 
 
     bank = {}
-    cogs = ['casino','fun','info','nsfw','owner','settings','tags','economy']
+    cogs = ['casino','fun','info','nsfw','owner','settings','economy']
 
     bot = commands.Bot(command_prefix=pogfix)
 

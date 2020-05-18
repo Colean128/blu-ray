@@ -28,7 +28,8 @@ class NSFW(commands.Cog):
                         rand = random.randint(0,99)
                         if '.webm' in js[rand]['file_url']:
                             await ctx.send('Rule34 search results for **'+str(arg)+'**.')
-                            await ctx.send('Video: '+js[rand]['file_url'])
+                            videourl = js[rand]['file_url']
+                            await ctx.send('Video: '+videourl[46:])
                         else:
                             embed = await main.buildEmbed('Rule34 search results for **'+str(arg)+'**.', js[rand]['file_url'])
                             await ctx.send(embed = embed)
