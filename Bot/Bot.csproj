@@ -147,6 +147,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy config.json $(ProjectDir)\$(OutDir)</PostBuildEvent>
+    <PostBuildEvent>echo Copying configuration
+copy $(ProjectDir)config.json $(ProjectDir)$(OutDir) &gt; nul</PostBuildEvent>
   </PropertyGroup>
 </Project>
