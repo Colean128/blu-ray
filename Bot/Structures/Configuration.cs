@@ -17,7 +17,7 @@
 using Newtonsoft.Json;
 using System.IO;
 
-namespace Bot
+namespace Bot.Structures
 {
     internal class Configuration
     {
