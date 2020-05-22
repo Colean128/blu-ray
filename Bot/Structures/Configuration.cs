@@ -12,14 +12,14 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.If not, see<http://www.gnu.org/licenses/>.
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Newtonsoft.Json;
 using System.IO;
 
 namespace Bot.Structures
 {
-    internal class Configuration
+    public class Configuration
     {
         [JsonProperty("token")]
         public string Token { get; private set; }

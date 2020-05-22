@@ -12,7 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.If not, see<http://www.gnu.org/licenses/>.
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Bot.Commands;
 using Bot.Structures;
@@ -32,8 +32,7 @@ namespace Bot
         private DiscordClient client;
         private CommandsNextExtension commands;
         private InteractivityExtension interactivity;
-        private SpotifyWebAPI spotify;
-
+        
         public static void Main(string[] args)
         {
             Configuration configuration;
@@ -48,8 +47,14 @@ namespace Bot
             new Program().RunAsync(configuration).GetAwaiter().GetResult();
         }
 
-        private async Task RunAsync(Configuration configuration)
+        internal async Task RunAsync(Configuration configuration)
         {
+            Spotify.InitializeAPI(new SpotifyWebAPI
+            {
+                AccessToken = configuration.Spotify,
+                TokenType = "Bearer"
+            });
+
             client = new DiscordClient(new DiscordConfiguration
             {
                 AutoReconnect = true,
@@ -70,7 +75,7 @@ namespace Bot
             client.GuildAvailable += OnGuildJoin;
             client.GuildCreated += OnGuildJoin;
 
-            client.GuildDeleted += OnGuildLeave;            
+            client.GuildDeleted += OnGuildLeave;
 
             commands = client.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -86,6 +91,7 @@ namespace Bot
             commands.CommandErrored += OnCommandError;
 
             commands.RegisterCommands<Fun>();
+            commands.RegisterCommands<Owner>();
 
             interactivity = client.UseInteractivity(new InteractivityConfiguration
             {
@@ -93,12 +99,6 @@ namespace Bot
                 PaginationDeletion = PaginationDeletion.DeleteEmojis,
                 PollBehaviour = PollBehaviour.DeleteEmojis
             });
-
-            spotify = new SpotifyWebAPI
-            {
-                AccessToken = configuration.Spotify,
-                TokenType = "Bearer"
-            };
 
             await client.ConnectAsync();
 

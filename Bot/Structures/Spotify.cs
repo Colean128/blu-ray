@@ -12,20 +12,16 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// along with this program. If not, see<http://www.gnu.org/licenses/>.
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using SpotifyAPI.Web;
 
-[assembly: AssemblyTitle("Blu-Ray Discord bot")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Bot")]
-[assembly: AssemblyCopyright("Copyright © Colean, Apfel 2020")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: ComVisible(false)]
-[assembly: Guid("f4f564b1-b1b6-4451-835c-7356f6178d42")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+namespace Bot.Structures
+{
+    public class Spotify
+    {
+        public static SpotifyWebAPI API { get; private set; }
+
+        internal static void InitializeAPI(SpotifyWebAPI api) => API = api;
+    }
+}

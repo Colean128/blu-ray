@@ -12,7 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.If not, see<http://www.gnu.org/licenses/>.
+// along with this program. If not, see<http://www.gnu.org/licenses/>.
 
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Bot.Structures
 {
-    internal class NekosLifeWhyQuestion
+    public class NekosLifeWhyQuestion
     {
         private const string nekosLifeURL = "https://nekos.life/api/v2/why";
 
