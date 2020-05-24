@@ -78,7 +78,7 @@ namespace Bot.Commands
         public async Task Dog(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Here's your dog picture!").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Woof)));
 
         [Command("hug"), Description("Hugs another member."), Aliases("squeeze"), RequireGuild]
-        public async Task Hug(CommandContext context, [RemainingText] DiscordMember member = null)
+        public async Task Hug(CommandContext context, [RemainingText, Description("Member to hug.")] DiscordMember member = null)
         {
             if (member == null)
             {
@@ -90,7 +90,7 @@ namespace Bot.Commands
         }
 
         [Command("kiss"), Description("Kisses another member."), Aliases("smooch"), RequireGuild]
-        public async Task Kiss(CommandContext context, [RemainingText] DiscordMember member = null)
+        public async Task Kiss(CommandContext context, [RemainingText, Description("Member to kiss.")] DiscordMember member = null)
         {
             if (member == null)
             {
@@ -102,7 +102,7 @@ namespace Bot.Commands
         }
 
         [Command("pat"), Description("Hugs another member."), Aliases("pet", "headpat"), RequireGuild]
-        public async Task Pat(CommandContext context, [RemainingText] DiscordMember member = null)
+        public async Task Pat(CommandContext context, [RemainingText, Description("Member to pat on the head.")] DiscordMember member = null)
         {
             if (member == null)
             {
@@ -117,7 +117,7 @@ namespace Bot.Commands
         public async Task Ping(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
 
         [Command("slap"), Description("Slaps another member."), Aliases("hit"), RequireGuild]
-        public async Task Slap(CommandContext context, [RemainingText] DiscordMember member = null)
+        public async Task Slap(CommandContext context, [RemainingText, Description("Member to slap.")] DiscordMember member = null)
         {
             if (member == null)
             {
