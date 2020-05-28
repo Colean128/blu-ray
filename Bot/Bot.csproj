@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DSharpPlus, Version=4.0.0.697, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DSharpPlus.4.0.0-nightly-00697\lib\netstandard2.0\DSharpPlus.dll</HintPath>
@@ -212,7 +215,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-        <!-- This does not work outside Windows.
+    <!-- This does not work outside Windows.
     <PostBuildEvent>echo Copying configuration
 copy $(ProjectDir)config.json $(ProjectDir)$(OutDir) &gt; nul</PostBuildEvent>
         -->
