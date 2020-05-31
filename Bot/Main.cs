@@ -15,13 +15,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Bot.Commands;
+using Bot.Managers;
 using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
-using SpotifyAPI.Web;
 using System;
 using System.Threading.Tasks;
 
@@ -49,11 +49,7 @@ namespace Bot
 
         internal async Task RunAsync(Configuration configuration)
         {
-            Spotify.InitializeAPI(new SpotifyWebAPI
-            {
-                AccessToken = configuration.Spotify,
-                TokenType = "Bearer"
-            });
+            await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret);
 
             client = new DiscordClient(new DiscordConfiguration
             {

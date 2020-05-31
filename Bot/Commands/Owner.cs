@@ -25,7 +25,6 @@ using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using SpotifyAPI.Web;
 
 namespace Bot.Commands
 {
@@ -95,7 +94,6 @@ namespace Bot.Commands
             public DiscordClient client { get; set; }
             public CommandsNextExtension commands { get; set; }
             public InteractivityExtension interactivity { get; set; }
-            public SpotifyWebAPI spotify { get; set; }
 
             public DiscordChannel channel { get; set; }
             public DiscordGuild guild { get; set; }
@@ -110,7 +108,6 @@ namespace Bot.Commands
                 client = context.Client;
                 commands = context.Client.GetCommandsNext();
                 interactivity = context.Client.GetInteractivity();
-                spotify = Spotify.API;
 
                 channel = context.Channel;
                 guild = context.Guild;

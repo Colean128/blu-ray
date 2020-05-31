@@ -21,6 +21,15 @@ namespace Bot.Structures
 {
     public class Configuration
     {
+        public class SpotifyConfiguration
+        {
+            [JsonProperty("id")]
+            public string ID { get; private set; }
+
+            [JsonProperty("secret")]
+            public string Secret { get; private set; }
+        }
+
         [JsonProperty("token")]
         public string Token { get; private set; }
 
@@ -28,7 +37,7 @@ namespace Bot.Structures
         public string[] Prefixes { get; private set; }
 
         [JsonProperty("spotify")]
-        public string Spotify { get; private set; }
+        public SpotifyConfiguration Spotify { get; private set; }
 
         public Configuration() { }
 
