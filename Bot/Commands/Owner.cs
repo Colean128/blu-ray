@@ -44,8 +44,7 @@ namespace Bot.Commands
                 ScriptOptions options = ScriptOptions.Default
                 .WithImports("System", "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks",
                 "DSharpPlus", "DSharpPlus.CommandsNext", "DSharpPlus.Entities", "DSharpPlus.Interactivity", "DSharpPlus.Net",
-                "SpotifyAPI.Web", "SpotifyAPI.Web.Enums", "SpotifyAPI.Web.Models",
-                "Bot", "Bot.Commands", "Bot.Structures")
+                "Bot", "Bot.Commands", "Bot.Managers")
                 .WithReferences(AppDomain.CurrentDomain.GetAssemblies().Where(xa => !xa.IsDynamic && !string.IsNullOrWhiteSpace(xa.Location)));
 
                 Script script = CSharpScript.Create(code, options, typeof(EvaluationContent));
