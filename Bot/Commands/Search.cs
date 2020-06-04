@@ -64,7 +64,9 @@ namespace Bot.Commands
                 {
                     Color = new DiscordColor("1DB954"),
                     Description = $"**{track.Name}** by {artists}.\nLength: **{string.Format("{0:D2}:{1:D2}", span.Minutes, span.Seconds)}**.",
-                    ThumbnailUrl = track.Album.Images[0].URL,
+                    Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail {
+                        Url = track.Album.Images[0].URL,
+                    },                    
                     Title = "Search result",
                     Url = track.URL
                 }.Build());
@@ -81,7 +83,10 @@ namespace Bot.Commands
             {
                 Color = new DiscordColor("1DB954"),
                 Description = $"Album **{album.Name}** by **{artists}**",
-                ThumbnailUrl = album.Images[0].URL,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+                {
+                    Url = album.Images[0].URL,
+                },
                 Title = "Search result",
                 Url = album.URL
             }.Build());

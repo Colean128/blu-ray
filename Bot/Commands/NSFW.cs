@@ -59,7 +59,7 @@ namespace Bot.Commands
                     .AddField("Tags", tags).AddField("Type", entry.Type, true)
                     .AddField("Creator", $"[URL]({entry.CreatorURL})");
 
-                if (entry.Type == "video") builder.WithDescription($"**[Video URL]({entry.URL})**").WithThumbnailUrl(entry.PreviewURL);
+                if (entry.Type == "video") builder.WithDescription($"**[Video URL]({entry.URL})**").WithThumbnail(entry.PreviewURL);
                 else builder.WithImageUrl(entry.URL);
 
                 await context.RespondAsync(embed: builder.Build());
@@ -87,7 +87,7 @@ namespace Bot.Commands
                 .AddField("Tags", tags).AddField("Type", entry.Type, true)
                 .AddField("Creator", $"[URL]({entry.CreatorURL})");
 
-            if (entry.Type == "video") builder.WithDescription(builder.Description + $"\n**[Video URL]({entry.URL})**").WithThumbnailUrl(entry.PreviewURL);
+            if (entry.Type == "video") builder.WithDescription(builder.Description + $"\n**[Video URL]({entry.URL})**").WithThumbnail(entry.PreviewURL);
             else builder.WithImageUrl(entry.URL);
 
             await context.RespondAsync(embed: builder.Build());
