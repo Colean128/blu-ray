@@ -19,6 +19,7 @@ using Bot.Managers;
 using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
@@ -122,6 +123,7 @@ namespace Bot
 
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await client.ConnectAsync();
+            await client.UpdateStatusAsync(new DiscordActivity(configuration.Prefixes[0]+"help", ActivityType.ListeningTo));
             await Task.Delay(-1);
         }
 
