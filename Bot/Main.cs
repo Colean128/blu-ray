@@ -49,8 +49,6 @@ namespace Bot
 
         internal async Task RunAsync(Configuration configuration)
         {
-            await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret);
-
             client = new DiscordClient(new DiscordConfiguration
             {
                 AutoReconnect = true,
@@ -97,8 +95,8 @@ namespace Bot
                 PollBehaviour = PollBehaviour.DeleteEmojis
             });
 
+            await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await client.ConnectAsync();
-
             await Task.Delay(-1);
         }
 
