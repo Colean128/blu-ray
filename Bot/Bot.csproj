@@ -45,14 +45,21 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DSharpPlus, Version=4.0.0.697, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DSharpPlus.4.0.0-nightly-00697\lib\netstandard2.0\DSharpPlus.dll</HintPath>
+    <Reference Include="DSharpPlus, Version=4.0.0.699, Culture=neutral, PublicKeyToken=null">
+      <HintPath>../packages/DSharpPlus.4.0.0-nightly-00699/lib/netstandard2.0/DSharpPlus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DSharpPlus.CommandsNext, Version=4.0.0.697, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DSharpPlus.CommandsNext.4.0.0-nightly-00697\lib\netstandard2.0\DSharpPlus.CommandsNext.dll</HintPath>
+    <Reference Include="DSharpPlus.CommandsNext, Version=4.0.0.699, Culture=neutral, PublicKeyToken=null">
+      <HintPath>../packages/DSharpPlus.CommandsNext.4.0.0-nightly-00699/lib/netstandard2.0/DSharpPlus.CommandsNext.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DSharpPlus.Interactivity, Version=4.0.0.697, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DSharpPlus.Interactivity.4.0.0-nightly-00697\lib\netstandard2.0\DSharpPlus.Interactivity.dll</HintPath>
+    <Reference Include="DSharpPlus.Interactivity, Version=4.0.0.699, Culture=neutral, PublicKeyToken=null">
+      <HintPath>../packages/DSharpPlus.Interactivity.4.0.0-nightly-00699/lib/netstandard2.0/DSharpPlus.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Humanizer, Version=2.8.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e">
+      <HintPath>../packages/Humanizer.Core.2.8.26/lib/netstandard2.0/Humanizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -146,9 +153,6 @@
     <Reference Include="Microsoft.CodeAnalysis.CSharp">
       <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Humanizer">
-      <HintPath>..\packages\Humanizer.Core.2.8.11\lib\netstandard2.0\Humanizer.dll</HintPath>
-    </Reference>
     <Reference Include="System.Composition.AttributedModel">
       <HintPath>..\packages\System.Composition.AttributedModel.1.4.1\lib\net461\System.Composition.AttributedModel.dll</HintPath>
     </Reference>
@@ -185,7 +189,7 @@
     <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
-  <Compile Include="Main.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Commands\Fun.cs" />
     <Compile Include="Commands\NSFW.cs" />
     <Compile Include="Commands\Owner.cs" />
