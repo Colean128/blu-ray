@@ -22,24 +22,51 @@ namespace Bot.Managers
 
         public class SearchResponse
         {
-            public class TracksElement
+            public class ArtistElement
             {
-                public class ItemElement
-                {
-                    public class ArtistElement
-                    {
-                        
-                    }
+                [JsonProperty("id")]
+                public string ID { get; private set; }
 
-                    public class AlbumElement
-                    {
+                [JsonProperty("name")]
+                public string Name { get; private set; }
 
-                    }
-                }
+                public string URL { get => "https://open.spotify.com/artist/" + ID; }
             }
 
-            [JsonProperty("tracks")]
-            public TracksElement Tracks { get; private set; }
+            public class AlbumElement
+            {
+                public class ImageElement
+                {
+                    [JsonProperty("height")]
+                    public int Height { get; private set; }
+
+                    [JsonProperty("width")]
+                    public int Width { get; private set; }
+
+                    [JsonProperty("url")]
+                    public string URL { get; private set; }
+                }
+
+                [JsonProperty("artists")]
+                public ArtistElement[] Artists;
+
+                [JsonProperty("id")]
+                public string ID { get; private set; }
+
+                [JsonProperty("images")]
+                public ImageElement[] Images { get; private set; }
+
+                [JsonProperty("name")]
+                public string Name { get; private set; }
+
+                [JsonProperty("release_date")]
+                public string ReleaseDate { get; private set; }
+
+                [JsonProperty("total_tracks")]
+                public int TotalTracks { get; private set; }
+
+                public string URL { get => "https://open.spotify.com/album/" + ID; }
+            }
         }
 
         private static string base64Encode(string plainText) => Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
