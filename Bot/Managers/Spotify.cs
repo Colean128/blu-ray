@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Bot.Managers
 {
@@ -108,6 +109,12 @@ namespace Bot.Managers
                 [JsonProperty("items")]
                 public TrackElement[] Items { get; private set; }
             }
+
+            [JsonProperty("albums")]
+            public AlbumsElement Albums { get; private set; }
+
+            [JsonProperty("tracks")]
+            public TracksElement Tracks { get; private set; }
         }
 
         private static string base64Encode(string plainText) => Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
@@ -126,7 +133,7 @@ namespace Bot.Managers
             {
                 try
                 {
-                    Task.Delay(currentAuth.Expires * 1000);
+                    Task.Delay((currentAuth.Expires + 2) * 1000);
 
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://accounts.spotify.com/api/token?grant_type=client_credentials");
                     request.Headers.Add("Authorization", $"Basic {base64Encode(clientID + ":" + clientSecret)}");
@@ -175,7 +182,7 @@ namespace Bot.Managers
 
         public static async Task<SearchResponse> SearchAsync(string query)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.spotify.com/v1/search?q=&type=track,album&limit=1");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://api.spotify.com/v1/search?q={HttpUtility.UrlEncode(query)}&type=track,album&limit=1");
             request.Headers.Add("Authorization", $"Bearer {currentAuth.AccessToken}");
             request.ContentType = "application/x-www-form-urlencoded";
             request.Method = "GET";
