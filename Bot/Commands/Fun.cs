@@ -66,10 +66,14 @@ namespace Bot.Commands
             .WithDescription($"You've asked the magic 8-Ball the following question:\n```\n{question}\n```\nMy Answer is: **{eightballResponses[new Random().Next(0, eightballResponses.Length - 1)]}**."));
 
         [Command("bruno"), Description("Shows you a random Bruno Powroznik video."), Aliases("powroznik")]
-        public async Task Bruno(CommandContext context) => await context.RespondAsync($"Here's a Bruno Powroznik video for you:\n\n{brunoVideos[new Random().Next(0, brunoVideos.Length-1)]}");
+        public async Task Bruno(CommandContext context) => await context.RespondAsync($"Here's a Bruno Powroznik video for you:\n\n{brunoVideos[new Random().Next(0, brunoVideos.Length - 1)]}");
 
         [Command("cat"), Description("Shows a cute picture of a cat."), Aliases("meow")]
         public async Task Cat(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Here's your cat picture!").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Meow)));
+
+        [Command("say"), Description("Make the bot say something funny!")]
+
+        public async Task Say(CommandContext context, [Description("Make the bot say something funny!"), RemainingText] string text) => await context.RespondAsync($"{text}");
 
         [Command("dice"), Description("Rolls a dice of a range from 1 to 6."), Aliases("roll")]
         public async Task Dice(CommandContext context) => await context.RespondAsync($"You rolled the dice. You got a **{new Random().Next(1, 6)}**.");
