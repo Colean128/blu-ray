@@ -1,0 +1,10 @@
+﻿{
+  "token": "Token here"
+  "prefixes": [
+    "tbr/"
+  ],
+  "spotify": {
+    "id": "ID here",
+    "secret": "Secret here"
+  }
+}
