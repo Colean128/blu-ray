@@ -9,8 +9,8 @@ On my crusade to making this bot as easily usable and installable as possible, I
 
 # Credits
 - **[Colean](https://github.com/Zayne64)** - Developer of the bot
-- **[Apfel](https://github.com/Apfel)** - The bot's host and the sheer abundance of support and help given during the Cogs + Embeds update, in addition to full support in the C# port
-- ~~**[LoganDark](https://github.com/LoganDark)** - Assistance with the Spotify commands~~
+- **[Apfel](https://github.com/Apfel)** - Developer and hoster of the bot
+- **[LoganDark](https://github.com/LoganDark)** - Assistance with the Spotify commands
 - Creators of all libraries and APIs used in this project
 
 # Invite
