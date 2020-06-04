@@ -61,28 +61,28 @@ namespace Bot.Commands
         };
 
         [Command("8ball"), Description("Ask the magic 8-Ball a question."), Aliases("eightball", "oracle")]
-        public async Task Eightball(CommandContext context, [Description("The question to ask the 8-Ball about."), RemainingText] string question) => await context.RespondAsync(embed: new DiscordEmbedBuilder()
+        public async Task EightballAsync(CommandContext context, [Description("The question to ask the 8-Ball about."), RemainingText] string question) => await context.RespondAsync(embed: new DiscordEmbedBuilder()
             .WithAuthor($"{context.User.Username}", iconUrl: context.User.AvatarUrl)
             .WithDescription($"You've asked the magic 8-Ball the following question:\n```\n{question}\n```\nMy Answer is: **{eightballResponses[new Random().Next(0, eightballResponses.Length - 1)]}**."));
 
         [Command("bruno"), Description("Shows you a random Bruno Powroznik video."), Aliases("powroznik")]
-        public async Task Bruno(CommandContext context) => await context.RespondAsync($"Here's a Bruno Powroznik video for you:\n\n{brunoVideos[new Random().Next(0, brunoVideos.Length - 1)]}");
+        public async Task BrunoAsync(CommandContext context) => await context.RespondAsync($"Here's a Bruno Powroznik video for you:\n\n{brunoVideos[new Random().Next(0, brunoVideos.Length - 1)]}");
 
         [Command("cat"), Description("Shows a cute picture of a cat."), Aliases("meow")]
-        public async Task Cat(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Here's your cat picture!").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Meow)));
+        public async Task CatAsync(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Here's your cat picture!").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Meow)));
 
         [Command("say"), Description("Make the bot say something funny!")]
 
-        public async Task Say(CommandContext context, [Description("Make the bot say something funny!"), RemainingText] string text) => await context.RespondAsync($"{text}");
+        public async Task SayAsync(CommandContext context, [Description("Make the bot say something funny!"), RemainingText] string text) => await context.RespondAsync($"{text}");
 
         [Command("dice"), Description("Rolls a dice of a range from 1 to 6."), Aliases("roll")]
-        public async Task Dice(CommandContext context) => await context.RespondAsync($"You rolled the dice. You got a **{new Random().Next(1, 6)}**.");
+        public async Task DiceAsync(CommandContext context) => await context.RespondAsync($"You rolled the dice. You got a **{new Random().Next(1, 6)}**.");
 
         [Command("dog"), Description("Shows a cute picture of a dog."), Aliases("woof")]
-        public async Task Dog(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Here's your dog picture!").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Woof)));
+        public async Task DogAsync(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Here's your dog picture!").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Woof)));
 
         [Command("hug"), Description("Hugs another member."), Aliases("squeeze"), RequireGuild]
-        public async Task Hug(CommandContext context, [RemainingText, Description("Member to hug.")] DiscordMember member = null)
+        public async Task HugAsync(CommandContext context, [RemainingText, Description("Member to hug.")] DiscordMember member = null)
         {
             if (member == null)
             {
@@ -94,7 +94,7 @@ namespace Bot.Commands
         }
 
         [Command("kiss"), Description("Kisses another member."), Aliases("smooch"), RequireGuild]
-        public async Task Kiss(CommandContext context, [RemainingText, Description("Member to kiss.")] DiscordMember member = null)
+        public async Task KissAsync(CommandContext context, [RemainingText, Description("Member to kiss.")] DiscordMember member = null)
         {
             if (member == null)
             {
@@ -106,7 +106,7 @@ namespace Bot.Commands
         }
 
         [Command("pat"), Description("Hugs another member."), Aliases("pet", "headpat"), RequireGuild]
-        public async Task Pat(CommandContext context, [RemainingText, Description("Member to pat on the head.")] DiscordMember member = null)
+        public async Task PatAsync(CommandContext context, [RemainingText, Description("Member to pat on the head.")] DiscordMember member = null)
         {
             if (member == null)
             {
@@ -118,10 +118,10 @@ namespace Bot.Commands
         }
 
         [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
-        public async Task Ping(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
+        public async Task PingAsync(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
 
         [Command("slap"), Description("Slaps another member."), Aliases("hit"), RequireGuild]
-        public async Task Slap(CommandContext context, [RemainingText, Description("Member to slap.")] DiscordMember member = null)
+        public async Task SlapAsync(CommandContext context, [RemainingText, Description("Member to slap.")] DiscordMember member = null)
         {
             if (member == null)
             {
@@ -133,7 +133,7 @@ namespace Bot.Commands
         }
 
         [Command("why"), Description("Gives you a random question."), Aliases("what")]
-        public async Task Why(CommandContext context)
+        public async Task WhyAsync(CommandContext context)
         {
             string question = await NekosLifeWhyQuestion.GetAsync();
             await context.RespondAsync($"Here's a question for you:\n\n{char.ToUpper(question[0]) + question.Substring(1)}");

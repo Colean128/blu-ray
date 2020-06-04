@@ -1,6 +1,23 @@
+// Blu-Ray Discord Bot
+// Copyright(C) 2020 Colean, Apfel
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 using DSharpPlus;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -127,13 +144,13 @@ namespace Bot.Managers
 
         private static AuthorizationResponse currentAuth;
 
-        private static Task authorizeRefreshThread()
+        private static async Task authorizeRefreshThread()
         {
             while (true)
             {
                 try
                 {
-                    Task.Delay((currentAuth.Expires + 2) * 1000);
+                    await Task.Delay(currentAuth.Expires * 1000);
 
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://accounts.spotify.com/api/token?grant_type=client_credentials");
                     request.Headers.Add("Authorization", $"Basic {base64Encode(clientID + ":" + clientSecret)}");
@@ -141,13 +158,14 @@ namespace Bot.Managers
                     request.Method = "POST";
                     request.ContentLength = 0;
 
-                    WebResponse message = request.GetResponse();
-                    currentAuth = JsonConvert.DeserializeObject<AuthorizationResponse>(new System.IO.StreamReader(message.GetResponseStream()).ReadToEnd());
+                    WebResponse message = await request.GetResponseAsync();
+                    currentAuth = JsonConvert.DeserializeObject<AuthorizationResponse>(await new StreamReader(message.GetResponseStream()).ReadToEndAsync());
+                    logger.LogMessage(LogLevel.Debug, "Spotify", "Re-authorized successfully.", DateTime.Now);
                 }
                 catch (Exception ex)
                 {
-                    logger.LogMessage(LogLevel.Error, "Spotify", "The manager failed to authorize! Spotify will be unavailable.", DateTime.Now, ex);
-                    return Task.CompletedTask;
+                    logger.LogMessage(LogLevel.Error, "Spotify", "The manager failed to authorize! Spotify will be unavailable for a few moments.", DateTime.Now, ex);
+                    continue;
                 }
             }
         }
@@ -177,7 +195,7 @@ namespace Bot.Managers
                 return;
             }
 
-            new Thread(new ThreadStart(() => authorizeRefreshThread())).Start();
+            new Thread(new ThreadStart(async () => await authorizeRefreshThread())).Start();
         }
 
         public static async Task<SearchResponse> SearchAsync(string query)

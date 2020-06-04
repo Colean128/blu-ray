@@ -33,6 +33,9 @@ namespace Bot.Structures
         [JsonProperty("token")]
         public string Token { get; private set; }
 
+        [JsonProperty("loglevel")]
+        public string LogLevel { get; private set; }
+
         [JsonProperty("prefixes")]
         public string[] Prefixes { get; private set; }
 
@@ -52,6 +55,7 @@ namespace Bot.Structures
             file.Close();
 
             Token = config.Token;
+            LogLevel = config.LogLevel;
             Prefixes = config.Prefixes;
             Spotify = config.Spotify;
         }

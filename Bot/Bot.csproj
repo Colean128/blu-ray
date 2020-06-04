@@ -185,15 +185,16 @@
     <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
+  <Compile Include="Main.cs" />
     <Compile Include="Commands\Fun.cs" />
-    <Compile Include="Structures\NekosLifeImage.cs" />
-    <Compile Include="Structures\Configuration.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\NekosLifeWhyQuestion.cs" />
-    <Compile Include="Commands\Owner.cs" />
-    <Compile Include="Managers\Spotify.cs" />
     <Compile Include="Commands\NSFW.cs" />
+    <Compile Include="Commands\Owner.cs" />
+    <Compile Include="Commands\Search.cs" />
+    <Compile Include="Managers\Spotify.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\Configuration.cs" />
+    <Compile Include="Structures\NekosLifeImage.cs" />
+    <Compile Include="Structures\NekosLifeWhyQuestion.cs" />
     <Compile Include="Structures\Rule34Entry.cs" />
   </ItemGroup>
   <ItemGroup>

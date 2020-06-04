@@ -49,10 +49,34 @@ namespace Bot
 
         internal async Task RunAsync(Configuration configuration)
         {
+            LogLevel level;
+            switch (configuration.LogLevel)
+            {
+            case "Debug":
+                level = LogLevel.Debug;
+                break;
+
+            case "Info":
+                level = LogLevel.Info;
+                break;
+
+            case "Warning":
+                level = LogLevel.Warning;
+                break;
+
+            case "Error":
+                level = LogLevel.Error;
+                break;
+
+            default:
+                level = LogLevel.Critical;
+                break;
+            }
+
             client = new DiscordClient(new DiscordConfiguration
             {
                 AutoReconnect = true,
-                LogLevel = LogLevel.Info,
+                LogLevel = level,
                 Token = configuration.Token,
                 TokenType = TokenType.Bot,
                 ShardCount = 1,
@@ -87,6 +111,7 @@ namespace Bot
             commands.RegisterCommands<Fun>();
             commands.RegisterCommands<NSFW>();
             commands.RegisterCommands<Owner>();
+            commands.RegisterCommands<Search>();
 
             interactivity = client.UseInteractivity(new InteractivityConfiguration
             {
