@@ -189,7 +189,9 @@
     <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Main.cs" />
     <Compile Include="Commands\Fun.cs" />
+    <Compile Include="Commands\Info.cs" />
     <Compile Include="Commands\NSFW.cs" />
     <Compile Include="Commands\Owner.cs" />
     <Compile Include="Commands\Search.cs" />

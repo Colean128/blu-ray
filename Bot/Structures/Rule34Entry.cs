@@ -15,9 +15,6 @@ namespace Bot.Structures
         [JsonProperty("rating")]
         public string Rating { get; private set; }
 
-        [JsonProperty("tags")]
-        public string[] Tags { get; private set; }
-
         [JsonProperty("id")]
         public string ID { get; private set; }
 
@@ -32,6 +29,8 @@ namespace Bot.Structures
 
         [JsonProperty("preview_url")]
         public string PreviewURL { get; private set; }
+
+        public string PostURL { get => "https://rule34.xxx/index.php?page=post&s=view&id=" + ID; }
 
         public Rule34Entry() { }
 

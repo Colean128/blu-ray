@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Text;
 using System.Threading.Tasks;
 using Bot.Structures;
 using DSharpPlus.CommandsNext;
@@ -31,11 +30,7 @@ namespace Bot.Commands
         {
             Rule34Entry[] entries;
             Rule34Entry entry;
-
-            StringBuilder tagBuilder;
-            string tags;
-
-            DiscordEmbedBuilder builder;
+            DiscordEmbedBuilder builder = new DiscordEmbedBuilder();
 
             if (query == null)
             {
@@ -48,18 +43,12 @@ namespace Bot.Commands
 
                 entry = entries[new Random().Next(0, entries.Length - 1)];
 
-                tagBuilder = new StringBuilder();
-                foreach (string tag in entry.Tags) tagBuilder.Append("`" + tag + "`, ");
-
-                tags = tagBuilder.ToString();
-                tags = tags.Substring(0, tags.LastIndexOf(", "));
-
-                builder = new DiscordEmbedBuilder().WithTitle("Random post")
+                builder.WithTitle("Random post")
+                    .WithUrl(entry.PostURL)
                     .AddField("Score", entry.Score).AddField("Rating", entry.Rating, true)
-                    .AddField("Tags", tags).AddField("Type", entry.Type, true)
                     .AddField("Creator", $"[URL]({entry.CreatorURL})");
 
-                if (entry.Type == "video") builder.WithDescription($"**[Video URL]({entry.URL})**").WithThumbnail(entry.PreviewURL);
+                if (entry.Type == "video") builder.WithThumbnail(entry.PreviewURL).Description += $"\n**[Video URL]({entry.URL})**";
                 else builder.WithImageUrl(entry.URL);
 
                 await context.RespondAsync(embed: builder.Build());
@@ -75,20 +64,18 @@ namespace Bot.Commands
 
             entry = entries[new Random().Next(0, entries.Length - 1)];
 
-            tagBuilder = new StringBuilder();
-            foreach (string tag in entry.Tags) tagBuilder.Append("`" + tag + "`, ");
-
-            tags = tagBuilder.ToString();
-            tags = tags.Substring(0, tags.LastIndexOf(", "));
-
-            builder = new DiscordEmbedBuilder().WithTitle("Searched post")
+            builder.WithTitle("Searched post")
                 .WithDescription($"Query:\n```\n{query}\n```")
+                .WithUrl(entry.PostURL)
                 .AddField("Score", entry.Score).AddField("Rating", entry.Rating, true)
-                .AddField("Tags", tags).AddField("Type", entry.Type, true)
                 .AddField("Creator", $"[URL]({entry.CreatorURL})");
 
-            if (entry.Type == "video") builder.WithDescription(builder.Description + $"\n**[Video URL]({entry.URL})**").WithThumbnail(entry.PreviewURL);
+            if (entry.Type == "video") builder.WithThumbnail(entry.PreviewURL).Description += $"\n**[Video URL]({entry.URL})**";
             else builder.WithImageUrl(entry.URL);
+
+            if (entries.Length >= 100) builder.WithFooter("Found 100 or more results for this query.");
+            else builder.WithFooter($"Found ${entries.Length} results.");
+
 
             await context.RespondAsync(embed: builder.Build());
         }
