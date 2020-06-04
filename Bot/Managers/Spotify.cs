@@ -67,6 +67,47 @@ namespace Bot.Managers
 
                 public string URL { get => "https://open.spotify.com/album/" + ID; }
             }
+
+            public class TrackElement
+            {
+                [JsonProperty("album")]
+                public AlbumElement Album { get; private set; }
+
+                [JsonProperty("artists")]
+                public ArtistElement[] Artists { get; private set; }
+
+                [JsonProperty("duration_ms")]
+                public int Duration { get; private set; }
+
+                [JsonProperty("explicit")]
+                public bool Expicit { get; private set; }
+
+                [JsonProperty("id")]
+                public string ID { get; private set; }
+
+                [JsonProperty("name")]
+                public string Name { get; private set; }
+
+                [JsonProperty("popularity")]
+                public string Popularity { get; private set; }
+
+                [JsonProperty("track_number")]
+                public int TrackNumber { get; private set; }
+
+                public string URL { get => "https://open.spotify.com/track/" + ID; }
+            }
+
+            public class AlbumsElement
+            {
+                [JsonProperty("items")]
+                public AlbumElement[] Items { get; private set; }
+            }
+
+            public class TracksElement
+            {
+                [JsonProperty("items")]
+                public TrackElement[] Items { get; private set; }
+            }
         }
 
         private static string base64Encode(string plainText) => Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
