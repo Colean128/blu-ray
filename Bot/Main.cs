@@ -110,6 +110,7 @@ namespace Bot
             commands.CommandErrored += OnCommandError;
 
             commands.RegisterCommands<Fun>();
+            commands.RegisterCommands<Info>();
             commands.RegisterCommands<NSFW>();
             commands.RegisterCommands<Owner>();
             commands.RegisterCommands<Search>();
