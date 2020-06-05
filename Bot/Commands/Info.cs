@@ -29,7 +29,7 @@ namespace Bot.Commands
         {
             if (member == null) member = context.Member;
 
-            if (member.Presence.Activity == null)
+            if (member.Presence.Activity.Name == null)
             {
                 await context.RespondAsync("You're not playing any game at the moment.");
                 return;
