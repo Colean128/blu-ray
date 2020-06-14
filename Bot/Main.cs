@@ -33,6 +33,7 @@ namespace Bot
         private DiscordClient client;
         private CommandsNextExtension commands;
         private InteractivityExtension interactivity;
+        private Configuration.StatusConfiguration status;
         
         public static void Main(string[] args)
         {
@@ -45,10 +46,10 @@ namespace Bot
                 return;
             }
 
-            new Program().RunAsync(configuration).GetAwaiter().GetResult();
+            new Program().RunAsync(configuration, (args.Length > 1 ? int.Parse(args[1]) : 0), (args.Length > 2 ? int.Parse(args[2]) : 1)).GetAwaiter().GetResult();
         }
 
-        internal async Task RunAsync(Configuration configuration)
+        internal async Task RunAsync(Configuration configuration, int shardId, int shardCount)
         {
             LogLevel level;
             switch (configuration.LogLevel)
@@ -74,14 +75,16 @@ namespace Bot
                 break;
             }
 
+            status = configuration.Status;
+
             client = new DiscordClient(new DiscordConfiguration
             {
                 AutoReconnect = true,
                 LogLevel = level,
                 Token = configuration.Token,
                 TokenType = TokenType.Bot,
-                ShardCount = 1,
-                ShardId = 0,
+                ShardCount = shardCount,
+                ShardId = shardId,
                 UseInternalLogHandler = true
             });
 
@@ -124,14 +127,14 @@ namespace Bot
 
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await client.ConnectAsync();
-            await client.UpdateStatusAsync(new DiscordActivity(configuration.Prefixes[0]+"help", ActivityType.ListeningTo));
             await Task.Delay(-1);
         }
 
-        private Task OnClientReady(ReadyEventArgs e)
+        private async Task OnClientReady(ReadyEventArgs e)
         {
             e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);
-            return Task.CompletedTask;
+
+            await e.Client.UpdateStatusAsync(new DiscordActivity(status.Name, status.Type));
         }
 
         private Task OnClientError(ClientErrorEventArgs e)

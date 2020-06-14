@@ -1,10 +1,14 @@
 ﻿{
-  "token": "Token here"
+  "token": "Token here",
   "prefixes": [
-    "tbr/"
+    "br/"
   ],
   "spotify": {
     "id": "ID here",
     "secret": "Secret here"
+  },
+  "status": {
+    "name": "movies on a PS3.",
+    "type": "Watching"
   }
 }
