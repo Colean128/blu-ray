@@ -35,7 +35,7 @@ namespace Bot.Commands
                 return;
             }
 
-            string message = $"**{member.Username}#{member.Discriminator}** is playing **{member.Presence.Activity.Name}**";
+            string message = $"**{member.Username}#{member.Discriminator}** has been playing **{member.Presence.Activity.Name}**";
             if (member.Presence.Activity.RichPresence == null)
             {
                 await context.RespondAsync(message + ".");
@@ -43,7 +43,7 @@ namespace Bot.Commands
             }
 
             DiscordEmbedBuilder builder = new DiscordEmbedBuilder()
-                .WithTitle(member.Presence.Activity.RichPresence.Application.Name)
+                .WithTitle(member.Presence.Activity.Name)
                 .WithDescription($"{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.Details : "")}");
             
             if (member.Presence.Activity.RichPresence.LargeImage != null) builder.WithThumbnail(member.Presence.Activity.RichPresence.LargeImage.Url);

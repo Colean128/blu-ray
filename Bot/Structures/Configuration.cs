@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using DSharpPlus.Entities;
 using Newtonsoft.Json;
 using System.IO;
 
@@ -30,6 +31,15 @@ namespace Bot.Structures
             public string Secret { get; private set; }
         }
 
+        public class StatusConfiguration
+        {
+            [JsonProperty("name")]
+            public string Name { get; private set; }
+
+            [JsonProperty("Type")]
+            public ActivityType Type { get; private set; }
+        }
+
         [JsonProperty("token")]
         public string Token { get; private set; }
 
@@ -41,6 +51,9 @@ namespace Bot.Structures
 
         [JsonProperty("spotify")]
         public SpotifyConfiguration Spotify { get; private set; }
+
+        [JsonProperty("status")]
+        public StatusConfiguration Status { get; private set; }
 
         public Configuration() { }
 
@@ -58,6 +71,7 @@ namespace Bot.Structures
             LogLevel = config.LogLevel;
             Prefixes = config.Prefixes;
             Spotify = config.Spotify;
+            Status = config.Status;
         }
     }
 }
