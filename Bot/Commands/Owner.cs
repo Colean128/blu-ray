@@ -1,4 +1,5 @@
-﻿// Blu-Ray Discord Bot
+// Blu-Ray Discord Bot
+//
 // Copyright(C) 2020 Colean, Apfel
 //
 // This program is free software: you can redistribute it and/or modify
@@ -41,7 +42,7 @@ namespace Bot.Commands
             try
             {
                 ScriptOptions options = ScriptOptions.Default
-                .WithImports("System", "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks",
+                .WithImports("System", "System.Collections.Generic", "System.IO", "System.Linq", "System.Text", "System.Threading.Tasks",
                 "DSharpPlus", "DSharpPlus.CommandsNext", "DSharpPlus.Entities", "DSharpPlus.Interactivity", "DSharpPlus.Net",
                 "Bot", "Bot.Commands", "Bot.Managers")
                 .WithReferences(AppDomain.CurrentDomain.GetAssemblies().Where(xa => !xa.IsDynamic && !string.IsNullOrWhiteSpace(xa.Location)));
