@@ -87,6 +87,8 @@ namespace Bot
                 UseInternalLogHandler   = true
             });
 
+            Events.supportGuildId = configuration.SupportId;
+
             client.Ready += async (ReadyEventArgs e) =>
             {
                 e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);

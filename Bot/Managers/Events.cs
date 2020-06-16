@@ -27,6 +27,8 @@ namespace Bot.Managers
 {
     public class Events
     {
+        internal static ulong supportGuildId;
+        
         public static Task OnClientResumed(ReadyEventArgs e)
         {
             e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", "Resumed session.", DateTime.Now);
@@ -57,18 +59,26 @@ namespace Bot.Managers
                 if (member.IsBot) botAmount++;
             }
 
-            if (currentMember == null) await e.Guild.LeaveAsync();
-
-            int percentage = botAmount / members.Count * 100;
-            if (members.Count > 5 && percentage >= 20)
+            int percentage = Convert.ToInt32(Math.Round((double)botAmount / (double)members.Count * 100.0f));
+            if (e.Guild.Id != supportGuildId && members.Count > 5 && percentage >= 20)
             {
                 e.Client.DebugLogger.LogMessage(LogLevel.Info, "Guilds", $"Joined guild \"{e.Guild.Name}\" (ID: {e.Guild.Id}). High bot density: {percentage}% ({members.Count} - {botAmount}).", DateTime.Now);
+
+                if (currentMember == null)
+                {
+                    await e.Guild.LeaveAsync();
+                    return;
+                }
 
                 IReadOnlyList<DiscordChannel> channels = await e.Guild.GetChannelsAsync();
                 
                 for (int i = 0; i != members.Count + 1; i++) if (channels[i].PermissionsFor(currentMember).HasPermission(Permissions.SendMessages))
                 {
-                    await channels[i].SendMessageAsync(embed: new DiscordEmbedBuilder().WithTitle("High bot density").WithDescription($"Hello everyone!\nI'm sorry to remind you that I'll have to leave this guild.\n{percentage}% of all members in this server are bots, which is more than the allowed amount  of bots that servers can have, if they want to use Blu-Ray.\nDue to limited resources, we cannot, and, even if this wouldn't be a problem, we will not support the idea of bot farms.\n\nIf you still want to use Blu-Ray, remove other bots, please.\n\nIf you believe this judgement is invalid, you can leave an issue on the GitHub repository: https://github.com/Zayne64/blu-ray\n\nSincerely,\nthe team behind the Blu-Ray bot.").Build());
+                    await channels[i].SendMessageAsync(embed: new DiscordEmbedBuilder()
+                        .WithAuthor($"{e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator}", "https://github.com/Zayne64/Blu-Ray", currentMember.GetAvatarUrl(ImageFormat.Png))
+                        .WithDescription($"Hello everyone!\nWe're sorry to remind you that Blu-Ray has to leave this guild.\n{percentage}% of all members in this server are bots, which is more than the allowed amount of bots that servers can have, if they want to use the Blu-Ray Discord bot.\nDue to limited resources, we cannot, and, even if this wouldn't be a problem, we will not support the idea of bot farms.\n\nIf you still want to use Blu-Ray, remove other bots, please.\n\nIf you believe this judgement is invalid, try adding Blu-Ray again.\nIf I persist on leaving and you're still sure my judgement is false, you can leave an issue on the GitHub repository: https://github.com/Zayne64/blu-ray\n\nSincerely,\nthe team behind the Blu-Ray bot.")
+                        .WithTitle("High bot density")
+                        .Build());
                     break;
                 }
 
@@ -76,7 +86,7 @@ namespace Bot.Managers
                 return;
             }
 
-            e.Client.DebugLogger.LogMessage(LogLevel.Info, "Guilds", $"Joined guild \"{e.Guild.Name}\" (ID: {e.Guild.Id}).", DateTime.Now);
+            e.Client.DebugLogger.LogMessage(LogLevel.Info, "Guilds", $"Joined guild \"{e.Guild.Name}\" (ID: {e.Guild.Id}). Bot density: {percentage}% ({members.Count} - {botAmount}).", DateTime.Now);
         }
 
         public static Task OnGuildLeave(GuildDeleteEventArgs e)

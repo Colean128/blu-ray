@@ -56,6 +56,9 @@ namespace Bot.Structures
         [JsonProperty("status")]
         public StatusConfiguration Status { get; private set; }
 
+        [JsonProperty("support_id")]
+        public ulong SupportId { get; private set; }
+
         public Configuration() { }
 
         public Configuration(string path)
@@ -73,6 +76,7 @@ namespace Bot.Structures
             Prefixes = config.Prefixes;
             Spotify = config.Spotify;
             Status = config.Status;
+            SupportId = config.SupportId;
         }
     }
 }
