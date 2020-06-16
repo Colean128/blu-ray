@@ -1,4 +1,5 @@
-﻿// Blu-Ray Discord Bot
+// Blu-Ray Discord Bot
+//
 // Copyright(C) 2020 Colean, Apfel
 //
 // This program is free software: you can redistribute it and/or modify
@@ -75,42 +76,44 @@ namespace Bot
                 break;
             }
 
-            status = configuration.Status;
-
             client = new DiscordClient(new DiscordConfiguration
             {
-                AutoReconnect = true,
-                LogLevel = level,
-                Token = configuration.Token,
-                TokenType = TokenType.Bot,
-                ShardCount = shardCount,
-                ShardId = shardId,
-                UseInternalLogHandler = true
+                AutoReconnect           = true,
+                LogLevel                = level,
+                Token                   = configuration.Token,
+                TokenType               = TokenType.Bot,
+                ShardCount              = shardCount,
+                ShardId                 = shardId,
+                UseInternalLogHandler   = true
             });
 
-            client.Ready += OnClientReady;
-            client.Resumed += OnClientReady;
+            Events.supportGuildId = configuration.SupportId;
 
-            client.ClientErrored += OnClientError;
-            client.SocketErrored += OnClientSocketError;
+            client.Ready += async (ReadyEventArgs e) =>
+            {
+                e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);
+                await e.Client.UpdateStatusAsync(new DiscordActivity(configuration.Status.Name, configuration.Status.Type));
+            };
 
-            client.GuildAvailable += OnGuildJoin;
-            client.GuildCreated += OnGuildJoin;
-
-            client.GuildDeleted += OnGuildLeave;
+            client.Resumed          += Events.OnClientResumed;
+            client.ClientErrored    += Events.OnClientError;
+            client.SocketErrored    += Events.OnClientSocketError;
+            client.GuildAvailable   += Events.OnGuildJoin;
+            client.GuildCreated     += Events.OnGuildJoin;
+            client.GuildDeleted     += Events.OnGuildLeave;
 
             commands = client.UseCommandsNext(new CommandsNextConfiguration
             {
-                CaseSensitive = true,
-                EnableDefaultHelp = true,
-                EnableDms = true,
-                EnableMentionPrefix = true,
-                IgnoreExtraArguments = true,
-                StringPrefixes = configuration.Prefixes,
+                CaseSensitive           = true,
+                EnableDefaultHelp       = true,
+                EnableDms               = true,
+                EnableMentionPrefix     = true,
+                IgnoreExtraArguments    = true,
+                StringPrefixes          = configuration.Prefixes,
             });
 
-            commands.CommandExecuted += OnCommandExecute;
-            commands.CommandErrored += OnCommandError;
+            commands.CommandExecuted    += Events.OnCommandExecute;
+            commands.CommandErrored     += Events.OnCommandError;
 
             commands.RegisterCommands<Fun>();
             commands.RegisterCommands<Info>();
@@ -121,58 +124,13 @@ namespace Bot
             interactivity = client.UseInteractivity(new InteractivityConfiguration
             {
                 PaginationBehaviour = PaginationBehaviour.Ignore,
-                PaginationDeletion = PaginationDeletion.DeleteEmojis,
-                PollBehaviour = PollBehaviour.DeleteEmojis
+                PaginationDeletion  = PaginationDeletion.DeleteEmojis,
+                PollBehaviour       = PollBehaviour.DeleteEmojis
             });
 
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await client.ConnectAsync();
             await Task.Delay(-1);
-        }
-
-        private async Task OnClientReady(ReadyEventArgs e)
-        {
-            e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);
-
-            await e.Client.UpdateStatusAsync(new DiscordActivity(status.Name, status.Type));
-        }
-
-        private Task OnClientError(ClientErrorEventArgs e)
-        {
-            e.Client.DebugLogger.LogMessage(LogLevel.Error, "Client", $"The client encountered an error.", DateTime.Now, e.Exception);
-            return Task.CompletedTask;
-        }
-
-        private Task OnClientSocketError(SocketErrorEventArgs e)
-        {
-            e.Client.DebugLogger.LogMessage(LogLevel.Error, "Client", $"The client's connection encountered an error.", DateTime.Now, e.Exception);
-            return Task.CompletedTask;
-        }
-
-        private Task OnGuildJoin(GuildCreateEventArgs e)
-        {
-            e.Client.DebugLogger.LogMessage(LogLevel.Info, "Guilds", $"Joined guild \"{e.Guild.Name}\" (ID: {e.Guild.Id}).", DateTime.Now);
-            return Task.CompletedTask;
-        }
-
-        private Task OnGuildLeave(GuildDeleteEventArgs e)
-        {
-            e.Client.DebugLogger.LogMessage(LogLevel.Info, "Guilds", $"Left guild \"{e.Guild.Name}\" (ID: {e.Guild.Id}).", DateTime.Now);
-            return Task.CompletedTask;
-        }
-
-        private Task OnCommandExecute(CommandExecutionEventArgs e)
-        {
-            e.Context.Client.DebugLogger.LogMessage(LogLevel.Info, "Commands", $"User {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) executed command \"{e.Command.Name}\" in channel \"{e.Context.Channel.Id}\".", DateTime.Now);
-            return Task.CompletedTask;
-        }
-
-        private Task OnCommandError(CommandErrorEventArgs e)
-        {
-            if (e.Command == null) return Task.CompletedTask;
-
-            e.Context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands", $"The command \"{e.Command.Name}\" executed by the user {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) in channel \"{e.Context.Channel.Id}\" encountered an error.", DateTime.Now, e.Exception);
-            return Task.CompletedTask;
         }
     }
 }

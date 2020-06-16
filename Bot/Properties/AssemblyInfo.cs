@@ -1,4 +1,5 @@
-﻿// Blu-Ray Discord Bot
+// Blu-Ray Discord Bot
+//
 // Copyright(C) 2020 Colean, Apfel
 //
 // This program is free software: you can redistribute it and/or modify
@@ -18,10 +19,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Blu-Ray Discord bot")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("The Blu-Ray Discord bot. https://github.com/Zayne64/blu-ray")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Bot")]
+[assembly: AssemblyProduct("Blu-Ray Discord Bot")]
 [assembly: AssemblyCopyright("Copyright © Colean, Apfel 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

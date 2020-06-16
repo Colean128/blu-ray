@@ -1,4 +1,5 @@
-﻿// Blu-Ray Discord Bot
+// Blu-Ray Discord Bot
+//
 // Copyright(C) 2020 Colean, Apfel
 //
 // This program is free software: you can redistribute it and/or modify

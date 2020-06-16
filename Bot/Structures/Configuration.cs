@@ -1,4 +1,5 @@
-﻿// Blu-Ray Discord Bot
+// Blu-Ray Discord Bot
+//
 // Copyright(C) 2020 Colean, Apfel
 //
 // This program is free software: you can redistribute it and/or modify
@@ -55,6 +56,9 @@ namespace Bot.Structures
         [JsonProperty("status")]
         public StatusConfiguration Status { get; private set; }
 
+        [JsonProperty("support_guild")]
+        public ulong SupportId { get; private set; }
+      
         public Configuration() { }
 
         public Configuration(string path)
@@ -72,6 +76,7 @@ namespace Bot.Structures
             Prefixes = config.Prefixes;
             Spotify = config.Spotify;
             Status = config.Status;
+            SupportId = config.SupportId;
         }
     }
 }

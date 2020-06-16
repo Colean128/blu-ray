@@ -45,16 +45,16 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DSharpPlus, Version=4.0.0.705, Culture=neutral, PublicKeyToken=null">
-      <HintPath>../packages/DSharpPlus.4.0.0-nightly-00705/lib/netstandard2.0/DSharpPlus.dll</HintPath>
+    <Reference Include="DSharpPlus, Version=4.0.0.706, Culture=neutral, PublicKeyToken=null">
+      <HintPath>../packages/DSharpPlus.4.0.0-nightly-00706/lib/netstandard2.0/DSharpPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DSharpPlus.CommandsNext, Version=4.0.0.705, Culture=neutral, PublicKeyToken=null">
-      <HintPath>../packages/DSharpPlus.CommandsNext.4.0.0-nightly-00705/lib/netstandard2.0/DSharpPlus.CommandsNext.dll</HintPath>
+    <Reference Include="DSharpPlus.CommandsNext, Version=4.0.0.706, Culture=neutral, PublicKeyToken=null">
+      <HintPath>../packages/DSharpPlus.CommandsNext.4.0.0-nightly-00706/lib/netstandard2.0/DSharpPlus.CommandsNext.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DSharpPlus.Interactivity, Version=4.0.0.705, Culture=neutral, PublicKeyToken=null">
-      <HintPath>../packages/DSharpPlus.Interactivity.4.0.0-nightly-00705/lib/netstandard2.0/DSharpPlus.Interactivity.dll</HintPath>
+    <Reference Include="DSharpPlus.Interactivity, Version=4.0.0.706, Culture=neutral, PublicKeyToken=null">
+      <HintPath>../packages/DSharpPlus.Interactivity.4.0.0-nightly-00706/lib/netstandard2.0/DSharpPlus.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Humanizer, Version=2.8.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e">
@@ -197,6 +197,7 @@
     <Compile Include="Commands\NSFW.cs" />
     <Compile Include="Commands\Owner.cs" />
     <Compile Include="Commands\Search.cs" />
+    <Compile Include="Managers\Events.cs" />
     <Compile Include="Managers\Spotify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structures\Configuration.cs" />

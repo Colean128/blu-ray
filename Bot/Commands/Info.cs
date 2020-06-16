@@ -1,4 +1,5 @@
 // Blu-Ray Discord Bot
+//
 // Copyright(C) 2020 Colean, Apfel
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,16 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Threading.Tasks;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
     public class Info : BaseCommandModule
     {
+        [Command("about"), Description("Shows information about the bot.")]
+        public async Task AboutAsync(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder()
+            .WithAuthor($"{context.Client.CurrentUser.Username}#{context.Client.CurrentUser.Discriminator}", "https://github.com/Zayne64/blu-ray", context.Client.CurrentUser.GetAvatarUrl(ImageFormat.Png))
+            .WithColor(DiscordColor.Gray)
+            .WithDescription("Hello!\nI'm **Blu-Ray**, a general purpose Discord bot.\nI feature variously different commands, with some new ones probably still in work.\nI hope I meet your bot-ly desires.\n\nUseful links:\n")
+            .AddField("GitHub", "**https://github.com/Zayne64/blu-ray")
+            .Build());
+
         [Command("game"), Description("Shows what you're currently playing, or what someone else is playing."), Aliases("rpc", "status"), RequireGuild]
         public async Task GameAsync(CommandContext context, [RemainingText, Description("A member to check for. Can be left empty.")] DiscordMember member = null)
         {
