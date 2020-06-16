@@ -72,16 +72,17 @@ namespace Bot.Managers
 
                 IReadOnlyList<DiscordChannel> channels = await e.Guild.GetChannelsAsync();
                 
-                for (int i = 0; i != members.Count + 1; i++) if (channels[i].Type == ChannelType.Text && channels[i].PermissionsFor(currentMember).HasPermission(Permissions.SendMessages))
+                for (int i = 0; i != channels.Count; i++) if (channels[i].Type == ChannelType.Text && channels[i].PermissionsFor(currentMember).HasPermission(Permissions.SendMessages)) try
                 {
                     await channels[i].SendMessageAsync(embed: new DiscordEmbedBuilder()
                         .WithAuthor($"{e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator}", "https://github.com/Zayne64/Blu-Ray", currentMember.GetAvatarUrl(ImageFormat.Png))
-                        .WithDescription($"Hello everyone!\nWe're sorry to remind you that Blu-Ray has to leave this guild.\n{percentage}% of all members in this server are bots, which is more than the allowed 20% bot density for servers, if they want to use the Blu-Ray Discord bot.\nDue to limited resources, we cannot, and, even if this wouldn't be a problem, we will not support the idea of bot farms.\n\nIf you still want to use Blu-Ray, remove other bots, please.\n\nIf you believe this judgement is invalid, try adding Blu-Ray again.\nIf I persist on leaving and you're still sure my judgement is false, you can leave an issue on the GitHub repository: https://github.com/Zayne64/blu-ray\n\nSincerely,\nthe team behind the Blu-Ray bot.")
+                        .WithDescription($"Hello everyone!\nWe're sorry to remind you that Blu-Ray has to leave this guild.\n{percentage}% of all members in this server are bots, which is more than the allowed 20% bot density for servers, if they want to use the Blu-Ray Discord bot.\nDue to limited resources, we cannot, and, even if this wouldn't be a problem, we will not support the idea of bot farms.\n\nIf you still want to use Blu-Ray, remove other bots, please.\n\nIf you believe this judgement is invalid, try adding Blu-Ray again.\nIf Blu-Ray persists on leaving and you're still sure my judgement is false, you can leave an issue on the GitHub repository: https://github.com/Zayne64/blu-ray\n\nSincerely,\nthe team behind the Blu-Ray bot.")
                         .WithTitle("High bot density")
                         .Build());
 
                     break;
                 }
+                catch (Exception) { continue; }
 
                 await e.Guild.LeaveAsync();
                 return;

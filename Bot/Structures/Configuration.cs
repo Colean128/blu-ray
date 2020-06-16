@@ -56,7 +56,7 @@ namespace Bot.Structures
         [JsonProperty("status")]
         public StatusConfiguration Status { get; private set; }
 
-        [JsonProperty("support_id")]
+        [JsonProperty("support_guild")]
         public ulong SupportId { get; private set; }
 
         public Configuration() { }
