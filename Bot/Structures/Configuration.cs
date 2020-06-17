@@ -61,7 +61,7 @@ namespace Bot.Structures
 
         [JsonProperty("support_guild")]
         public ulong SupportId { get; private set; }
-
+      
         public Configuration() { }
 
         public Configuration(string path)

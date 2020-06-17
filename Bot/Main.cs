@@ -34,6 +34,7 @@ namespace Bot
         private DiscordClient client;
         private CommandsNextExtension commands;
         private InteractivityExtension interactivity;
+        private Configuration.StatusConfiguration status;
         
         public static void Main(string[] args)
         {
@@ -74,7 +75,6 @@ namespace Bot
                 level = LogLevel.Critical;
                 break;
             }
-
 
             client = new DiscordClient(new DiscordConfiguration
             {
