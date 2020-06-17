@@ -32,10 +32,11 @@ namespace Bot.Structures
 
         public static async Task<string> GetAsync()
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(nekosLifeURL);
-            string content = await response.Content.ReadAsStringAsync();
+            HttpClient client               = new HttpClient();
+            HttpResponseMessage response    = await client.GetAsync(nekosLifeURL);
+            string content                  = await response.Content.ReadAsStringAsync();
 
+            response.Dispose();
             client.Dispose();
 
             return JsonConvert.DeserializeObject<NekosLifeWhyQuestion>(content).Question;

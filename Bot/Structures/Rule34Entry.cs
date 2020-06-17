@@ -57,6 +57,7 @@ namespace Bot.Structures
             HttpResponseMessage response = await client.GetAsync("https://r34-json-api.herokuapp.com/posts");
             string content = await response.Content.ReadAsStringAsync();
 
+            response.Dispose();
             client.Dispose();
 
             return JsonConvert.DeserializeObject<Rule34Entry[]>(content);
@@ -68,6 +69,7 @@ namespace Bot.Structures
             HttpResponseMessage response = await client.GetAsync("https://r34-json-api.herokuapp.com/posts?tags=" +query);
             string content = await response.Content.ReadAsStringAsync();
 
+            response.Dispose();
             client.Dispose();
 
             return JsonConvert.DeserializeObject<Rule34Entry[]>(content);

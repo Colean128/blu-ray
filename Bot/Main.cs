@@ -128,6 +128,7 @@ namespace Bot
                 PollBehaviour       = PollBehaviour.DeleteEmojis
             });
 
+            IMDb.apiKey = configuration.OMDb;
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await client.ConnectAsync();
             await Task.Delay(-1);

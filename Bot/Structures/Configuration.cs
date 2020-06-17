@@ -53,6 +53,9 @@ namespace Bot.Structures
         [JsonProperty("spotify")]
         public SpotifyConfiguration Spotify { get; private set; }
 
+        [JsonProperty("omdb")]
+        public string OMDb { get; internal set; }
+
         [JsonProperty("status")]
         public StatusConfiguration Status { get; private set; }
 
@@ -63,7 +66,7 @@ namespace Bot.Structures
 
         public Configuration(string path)
         {
-            FileStream file = File.OpenRead(path);
+            FileStream file     = File.OpenRead(path);
             StreamReader reader = new StreamReader(file);
 
             Configuration config = JsonConvert.DeserializeObject<Configuration>(reader.ReadToEnd());
@@ -71,12 +74,13 @@ namespace Bot.Structures
             reader.Close();
             file.Close();
 
-            Token = config.Token;
-            LogLevel = config.LogLevel;
-            Prefixes = config.Prefixes;
-            Spotify = config.Spotify;
-            Status = config.Status;
-            SupportId = config.SupportId;
+            Token       = config.Token;
+            LogLevel    = config.LogLevel;
+            Prefixes    = config.Prefixes;
+            Spotify     = config.Spotify;
+            OMDb        = config.OMDb;
+            Status      = config.Status;
+            SupportId   = config.SupportId;
         }
     }
 }

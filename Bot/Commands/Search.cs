@@ -16,6 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Bot.Managers;
+using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -63,13 +64,13 @@ namespace Bot.Commands
 
                 await context.RespondAsync(embed: new DiscordEmbedBuilder
                 {
-                    Color = new DiscordColor("1DB954"),
+                    Color       = new DiscordColor("1DB954"),
                     Description = $"**{track.Name}** by {artists}.\nLength: **{string.Format("{0:D2}:{1:D2}", span.Minutes, span.Seconds)}**.",
-                    Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail {
-                        Url = track.Album.Images[0].URL,
+                    Thumbnail   = new DiscordEmbedBuilder.EmbedThumbnail {
+                        Url     = track.Album.Images[0].URL,
                     },                    
-                    Title = "Search result",
-                    Url = track.URL
+                    Title       = "Search result",
+                    Url         = track.URL
                 }.Build());
 
                 return;
@@ -82,15 +83,62 @@ namespace Bot.Commands
 
             await context.RespondAsync(embed: new DiscordEmbedBuilder
             {
-                Color = new DiscordColor("1DB954"),
+                Color       = new DiscordColor("1DB954"),
                 Description = $"Album **{album.Name}** by **{artists}**",
-                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+                Thumbnail   = new DiscordEmbedBuilder.EmbedThumbnail
                 {
-                    Url = album.Images[0].URL,
+                    Url     = album.Images[0].URL,
                 },
-                Title = "Search result",
-                Url = album.URL
+                Title       = "Search result",
+                Url         = album.URL
             }.Build());
+        }
+
+        [Command("imdb"), Description("Searches for a movie, series or episode on IMDb.")]
+        public async Task IMDbAsync(CommandContext context, [RemainingText, Description("Search query to search for.")] string query = null)
+        {
+            if (query == null)
+            {
+                await context.RespondAsync("Provide a query to search for.");
+                return;
+            }
+
+            IMDb response = null;
+            try { response = await IMDb.GetAsync(query); }
+            catch (Exception ex)
+            {
+                context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - IMDb", "Search failed for \"{query}\".", DateTime.Now, ex);
+                await context.RespondAsync("Failed to find anything.");
+                return;
+            }
+
+            string type = "Unknown";
+            switch (response.Entries[0].Type)
+            {
+            case IMDb.EntryType.Movie:
+                type = "Movie";
+                break;
+            
+            case IMDb.EntryType.Series:
+                type = "Series";
+                break;
+
+            case IMDb.EntryType.Episode:
+                type = "Episode";
+                break;
+            }
+
+            await context.RespondAsync(embed: new DiscordEmbedBuilder
+            {
+                Color       = new DiscordColor("F5C518"),
+                Description = $"**{response.Entries[0].Title}**\nYear of release: **{response.Entries[0].Year}**\nType: **{type}**",
+                Thumbnail   = new DiscordEmbedBuilder.EmbedThumbnail
+                {
+                    Url     = response.Entries[0].Poster
+                },
+                Title       = "Search result",
+                Url         = response.Entries[0].URL
+            });
         }
     }
 }
