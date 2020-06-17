@@ -153,15 +153,17 @@ namespace Bot.Managers
                 {
                     await Task.Delay(currentAuth.Expires * 1000);
 
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://accounts.spotify.com/api/token?grant_type=client_credentials");
+                    HttpWebRequest request  = (HttpWebRequest)WebRequest.Create("https://accounts.spotify.com/api/token?grant_type=client_credentials");
                     request.Headers.Add("Authorization", $"Basic {base64Encode(clientID + ":" + clientSecret)}");
-                    request.ContentType = "application/x-www-form-urlencoded";
-                    request.Method = "POST";
-                    request.ContentLength = 0;
+                    request.ContentType     = "application/x-www-form-urlencoded";
+                    request.Method          = "POST";
+                    request.ContentLength   = 0;
 
-                    WebResponse message = await request.GetResponseAsync();
-                    currentAuth = JsonConvert.DeserializeObject<AuthorizationResponse>(await new StreamReader(message.GetResponseStream()).ReadToEndAsync());
+                    WebResponse message     = await request.GetResponseAsync();
+                    currentAuth             = JsonConvert.DeserializeObject<AuthorizationResponse>(await new StreamReader(message.GetResponseStream()).ReadToEndAsync());
                     logger.LogMessage(LogLevel.Debug, "Spotify", "Re-authorized successfully.", DateTime.Now);
+
+                    message.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -181,14 +183,16 @@ namespace Bot.Managers
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://accounts.spotify.com/api/token?grant_type=client_credentials");
+                HttpWebRequest request  = (HttpWebRequest)WebRequest.Create("https://accounts.spotify.com/api/token?grant_type=client_credentials");
                 request.Headers.Add("Authorization", $"Basic {base64Encode(clientID + ":" + clientSecret)}");
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.Method = "POST";
-                request.ContentLength = 0;
+                request.ContentType     = "application/x-www-form-urlencoded";
+                request.Method          = "POST";
+                request.ContentLength   = 0;
 
-                WebResponse message = await request.GetResponseAsync();
-                currentAuth = JsonConvert.DeserializeObject<AuthorizationResponse>(await new System.IO.StreamReader(message.GetResponseStream()).ReadToEndAsync());
+                WebResponse message     = await request.GetResponseAsync();
+                currentAuth             = JsonConvert.DeserializeObject<AuthorizationResponse>(await new System.IO.StreamReader(message.GetResponseStream()).ReadToEndAsync());
+
+                message.Dispose();
             }
             catch (Exception ex)
             {
@@ -201,15 +205,18 @@ namespace Bot.Managers
 
         public static async Task<SearchResponse> SearchAsync(string query)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://api.spotify.com/v1/search?q={HttpUtility.UrlEncode(query)}&type=track,album&limit=1");
+            HttpWebRequest request  = (HttpWebRequest)WebRequest.Create($"https://api.spotify.com/v1/search?q={HttpUtility.UrlEncode(query)}&type=track,album&limit=1");
             request.Headers.Add("Authorization", $"Bearer {currentAuth.AccessToken}");
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.Method = "GET";
-            request.ContentLength = 0;
+            request.ContentType     = "application/x-www-form-urlencoded";
+            request.Method          = "GET";
+            request.ContentLength   = 0;
 
-            WebResponse message = await request.GetResponseAsync();
+            WebResponse message     = await request.GetResponseAsync();
+            SearchResponse response =  JsonConvert.DeserializeObject<SearchResponse>(await new System.IO.StreamReader(message.GetResponseStream()).ReadToEndAsync(), new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-            return JsonConvert.DeserializeObject<SearchResponse>(await new System.IO.StreamReader(message.GetResponseStream()).ReadToEndAsync(), new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            message.Dispose();
+
+            return response;
         }
     }
 }

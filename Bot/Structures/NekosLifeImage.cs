@@ -70,10 +70,11 @@ namespace Bot.Structures
                     break;
             }
 
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(nekosLifeURL + end);
-            string content = await response.Content.ReadAsStringAsync();
+            HttpClient client               = new HttpClient();
+            HttpResponseMessage response    = await client.GetAsync(nekosLifeURL + end);
+            string content                  = await response.Content.ReadAsStringAsync();
 
+            response.Dispose();
             client.Dispose();
 
             return JsonConvert.DeserializeObject<NekosLifeImage>(content).URL;

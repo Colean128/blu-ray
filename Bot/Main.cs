@@ -34,7 +34,6 @@ namespace Bot
         private DiscordClient client;
         private CommandsNextExtension commands;
         private InteractivityExtension interactivity;
-        private Configuration.StatusConfiguration status;
         
         public static void Main(string[] args)
         {
@@ -128,6 +127,7 @@ namespace Bot
                 PollBehaviour       = PollBehaviour.DeleteEmojis
             });
 
+            IMDb.apiKey = configuration.OMDb;
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await client.ConnectAsync();
             await Task.Delay(-1);

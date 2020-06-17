@@ -33,6 +33,9 @@ namespace Bot.Commands
             .WithDescription("Hello!\nI'm **Blu-Ray**, a general purpose Discord bot.\nI feature variously different commands, with some new ones probably still in work.\nI hope I meet your bot-ly desires.\n\nUseful links:\n")
             .AddField("GitHub", "**https://github.com/Zayne64/blu-ray")
             .Build());
+            
+        [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
+        public async Task PingAsync(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
 
         [Command("game"), Description("Shows what you're currently playing, or what someone else is playing."), Aliases("rpc", "status"), RequireGuild]
         public async Task GameAsync(CommandContext context, [RemainingText, Description("A member to check for. Can be left empty.")] DiscordMember member = null)
