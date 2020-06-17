@@ -50,7 +50,7 @@ namespace Bot.Structures
             public string URL { get => "https://www.imdb.com/title/" + ID; }
 
             [JsonProperty("Type")]
-            private string type;
+            private string type { get; set; }
 
             public EntryType Type
             {
@@ -81,12 +81,12 @@ namespace Bot.Structures
         public List<SearchEntry> Entries { get; internal set; }
 
         [JsonProperty("totalResults")]
-        private string results;
+        private string results { get; set; }
 
         public int Results { get => int.Parse(results); }
 
         [JsonProperty("Response")]
-        private string response;
+        private string response { get; set; }
 
         public bool Responded
         {

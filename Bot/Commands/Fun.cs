@@ -73,7 +73,6 @@ namespace Bot.Commands
         public async Task CatAsync(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Here's your cat picture!").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Meow)));
 
         [Command("say"), Description("Make the bot say something funny!")]
-
         public async Task SayAsync(CommandContext context, [Description("Make the bot say something funny!"), RemainingText] string text) => await context.RespondAsync($"{text}");
 
         [Command("dice"), Description("Rolls a dice of a range from 1 to 6."), Aliases("roll")]
@@ -117,9 +116,6 @@ namespace Bot.Commands
 
             await context.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle($"{context.User.Username} pat {member.Username} on their head.").WithImageUrl(await NekosLifeImage.GetAsync(NekosLifeImage.Endpoint.Pat)));
         }
-
-        [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
-        public async Task PingAsync(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
 
         [Command("slap"), Description("Slaps another member."), Aliases("hit"), RequireGuild]
         public async Task SlapAsync(CommandContext context, [RemainingText, Description("Member to slap.")] DiscordMember member = null)

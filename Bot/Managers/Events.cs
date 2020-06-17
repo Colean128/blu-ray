@@ -17,6 +17,7 @@
 
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using System;
@@ -106,10 +107,15 @@ namespace Bot.Managers
         public static async Task OnCommandError(CommandErrorEventArgs e)
         {
             if (e.Command == null) return;
+            else if (e.Exception.GetType() == typeof(ChecksFailedException) && (e.Context.Guild != null && (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0))
+            {
+                await e.Context.RespondAsync("This is not the appropriate channel.");
+                return;
+            }
 
-            e.Context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands", $"The command \"{e.Command.Name}\" executed by the user {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) in channel \"{e.Context.Channel.Id}\" encountered an error.", DateTime.Now, e.Exception);
-            
-            await e.Context.RespondAsync("An error occurred.\nIf this persists, use the `about` command and leave an issue on the GitHub repository.\n");
+            e.Context.Client.DebugLogger.LogMessage(LogLevel.Info, "Commands", $"The command \"{e.Command.Name}\" executed by the user {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) in channel \"{e.Context.Channel.Id}\" encountered an error.", DateTime.Now, e.Exception);
+
+            if (e.Context.Guild != null && (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An error occurred.\nIf this persists, use the `about` command and leave an issue on the GitHub repository.\n");
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Bot.Commands
 {
     public class Owner : BaseCommandModule
     {
-        [Command("eval"), Hidden, RequireOwner, Aliases("evaluate")]
+        [Command("eval"), Aliases("evaluate"), Hidden, RequireOwner]
         public async Task EvaluateAsync(CommandContext context, [RemainingText] string code)
         {
             DiscordMessage message = await context.RespondAsync(embed: new DiscordEmbedBuilder()
