@@ -113,7 +113,7 @@ namespace Bot.Commands
             }
 
             string type = "Unknown";
-            switch (response.Entries[0].Type)
+            switch (response.Entries[0].EntryType)
             {
             case IMDb.EntryType.Movie:
                 type = "Movie";

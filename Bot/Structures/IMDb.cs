@@ -52,7 +52,7 @@ namespace Bot.Structures
             [JsonProperty("Type")]
             private string type { get; set; }
 
-            public EntryType Type
+            public EntryType EntryType
             {
                 get
                 {
