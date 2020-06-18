@@ -197,6 +197,7 @@
     <Compile Include="Commands\NSFW.cs" />
     <Compile Include="Commands\Owner.cs" />
     <Compile Include="Commands\Search.cs" />
+    <Compile Include="Managers\AFK.cs" />
     <Compile Include="Managers\Events.cs" />
     <Compile Include="Managers\Spotify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

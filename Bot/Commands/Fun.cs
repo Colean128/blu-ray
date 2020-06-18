@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Bot.Managers;
 using Bot.Structures;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -62,9 +63,25 @@ namespace Bot.Commands
         };
 
         [Command("8ball"), Description("Ask the magic 8-Ball a question."), Aliases("eightball", "oracle")]
-        public async Task EightballAsync(CommandContext context, [Description("The question to ask the 8-Ball about."), RemainingText] string question) => await context.RespondAsync(embed: new DiscordEmbedBuilder()
-            .WithAuthor($"{context.User.Username}", iconUrl: context.User.AvatarUrl)
-            .WithDescription($"You've asked the magic 8-Ball the following question:\n```\n{question}\n```\nMy Answer is: **{eightballResponses[new Random().Next(0, eightballResponses.Length - 1)]}**."));
+        public async Task EightballAsync(CommandContext context, [Description("The question to ask the 8-Ball about."), RemainingText] string question = null)
+        {
+            if (question == null)
+            {
+                await context.RespondAsync("Please provide a question.");
+                return;
+            }
+
+            await context.RespondAsync(embed: new DiscordEmbedBuilder()
+                .WithAuthor($"{context.User.Username}", iconUrl: context.User.AvatarUrl)
+                .WithDescription($"You've asked the magic 8-Ball the following question:\n```\n{question}\n```\nMy Answer is: **{eightballResponses[new Random().Next(0, eightballResponses.Length - 1)]}**."));
+        }
+
+        [Command("afk"), Description("Sets you as AFK across all servers."), Aliases("away"), RequireGuild]
+        public async Task AFKAsync(CommandContext context, [Description("Optional; Reason to display."), RemainingText] string reason = null)
+        {
+            AFK.AddMember(context.Member.Id, reason);
+            await context.RespondAsync("You're now afk, goodbye.");
+        }
 
         [Command("bruno"), Description("Shows you a random Bruno Powroznik video."), Aliases("powroznik")]
         public async Task BrunoAsync(CommandContext context) => await context.RespondAsync($"Here's a Bruno Powroznik video for you:\n\n{brunoVideos[new Random().Next(0, brunoVideos.Length - 1)]}");
