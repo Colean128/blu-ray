@@ -38,8 +38,6 @@ namespace Bot.Managers
             {
                 DiscordMember member = await e.Guild.GetMemberAsync(e.Author.Id);
                 await member.SendMessageAsync("Welcome back, you're no longer AFK.");
-                Console.WriteLine("stuff12");
-
                 entries.Remove(e.Author.Id);
                 return;
             }
