@@ -63,15 +63,18 @@ namespace Bot.Commands
 
             if (member.Presence.Activity.RichPresence.StartTimestamp != null)
             {
-                DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                TimeSpan span = (TimeSpan)(member.Presence.Activity.RichPresence.StartTimestamp - origin.ToUniversalTime() );
+                TimeSpan span = (TimeSpan)(DateTime.Now.ToUniversalTime() - member.Presence.Activity.RichPresence.StartTimestamp);
                 message += $" for ";
-                if (span.Minutes == 0) message += $"{span.Seconds} seconds.";
-                else message += $"{span.Minutes} minutes.";
+
+                if (span.Minutes == 0) message += $"__{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
+                else
+                {
+                    message += $"__{span.Minutes} minute{(span.Minutes == 1 ? "" : "s")}__";
+                    if (span.Seconds != 0) message += $" and __{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
+                }
             }
-            else message += ".";
             
-            await context.RespondAsync(message, embed: builder.Build());
+            await context.RespondAsync(message + ".", embed: builder.Build());
         }
     }
 }
