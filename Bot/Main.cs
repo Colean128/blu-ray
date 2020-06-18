@@ -100,6 +100,7 @@ namespace Bot
             client.GuildAvailable   += Events.OnGuildJoin;
             client.GuildCreated     += Events.OnGuildJoin;
             client.GuildDeleted     += Events.OnGuildLeave;
+            client.MessageCreated   += AFK.AFKMessageHandler;
 
             commands = client.UseCommandsNext(new CommandsNextConfiguration
             {
