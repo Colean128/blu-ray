@@ -41,7 +41,7 @@ namespace Bot.Managers
                 entries.Remove(e.Author.Id);
                 return;
             }
-    
+
             DiscordUser user = null;
             foreach (string part in e.Message.Content.Split(' '))
             {
@@ -53,7 +53,7 @@ namespace Bot.Managers
                 if (user != null) break;
             }
 
-            if (user == null) return;
+            if (user == null || !entries.ContainsKey(user.Id)) return;
 
             await e.Channel.SendMessageAsync($"**{user.Username}#{user.Discriminator}** is AFK{(entries[user.Id] != null ? $": `{entries[user.Id]}`": "")}.");
         }
