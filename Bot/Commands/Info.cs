@@ -63,7 +63,7 @@ namespace Bot.Commands
 
             if (member.Presence.Activity.RichPresence.StartTimestamp != null)
             {
-                TimeSpan span = (TimeSpan)(DateTime.Now.ToUniversalTime() - member.Presence.Activity.RichPresence.StartTimestamp);
+                TimeSpan span = (TimeSpan)(DateTime.Now - member.Presence.Activity.RichPresence.StartTimestamp);
                 message += $" for ";
 
                 if (span.Minutes == 0) message += $"__{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
