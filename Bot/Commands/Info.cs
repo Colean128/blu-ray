@@ -47,6 +47,11 @@ namespace Bot.Commands
                 await context.RespondAsync("You're not playing any game at the moment.");
                 return;
             }
+            else if (member.Presence.Activity.RichPresence != null && member.Presence.Activity.ActivityType == ActivityType.Custom)
+            {
+                await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: `{member.Presence.Activity.RichPresence.State}`");
+                return;
+            }
 
             string message = $"**{member.Username}#{member.Discriminator}** has been playing **{member.Presence.Activity.Name}**";
             if (member.Presence.Activity.RichPresence == null)
