@@ -1,6 +1,6 @@
 // Blu-Ray Discord Bot
 //
-// Copyright(C) 2020 Colean, Apfel
+// Copyright © 2020, The Blu-Ray authors 
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,15 @@ namespace Bot.Structures
 {
     public class Configuration
     {
+        public class GoogleConfiguration
+        {
+            [JsonProperty("key")]
+            public string Key { get; private set; }
+
+            [JsonProperty("cx")]
+            public string Cx { get; private set; }
+        }
+
         public class SpotifyConfiguration
         {
             [JsonProperty("id")]
@@ -50,18 +59,21 @@ namespace Bot.Structures
         [JsonProperty("prefixes")]
         public string[] Prefixes { get; private set; }
 
-        [JsonProperty("spotify")]
-        public SpotifyConfiguration Spotify { get; private set; }
-
-        [JsonProperty("omdb")]
-        public string OMDb { get; internal set; }
-
         [JsonProperty("status")]
         public StatusConfiguration Status { get; private set; }
 
         [JsonProperty("support_guild")]
         public ulong SupportId { get; private set; }
-      
+
+        [JsonProperty("google")]
+        public GoogleConfiguration Google;
+
+        [JsonProperty("omdb")]
+        public string OMDb { get; internal set; }
+
+        [JsonProperty("spotify")]
+        public SpotifyConfiguration Spotify { get; private set; }
+
         public Configuration() { }
 
         public Configuration(string path)
@@ -77,10 +89,11 @@ namespace Bot.Structures
             Token       = config.Token;
             LogLevel    = config.LogLevel;
             Prefixes    = config.Prefixes;
-            Spotify     = config.Spotify;
-            OMDb        = config.OMDb;
             Status      = config.Status;
             SupportId   = config.SupportId;
+            Google      = config.Google;
+            OMDb        = config.OMDb;
+            Spotify     = config.Spotify;
         }
     }
 }

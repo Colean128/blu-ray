@@ -19,11 +19,5 @@ This **[invite](https://discordapp.com/api/oauth2/authorize?client_id=6993593482
 - Creators of all libraries and APIs used in this project
 
 ## Required libraries
-On my crusade to making this bot as easily usable and installable as possible, I've used as little libraries as I possibly can.
-- DSharpPlus
-- DSharpPlus.CommandsNext
-- DSharpPlus.Interactivty
-- Newtonsoft.Json
-- < All dependencies of the listed libraries. >
-
+On my crusade to making this bot as easily usable and installable as possible, I've used as little libraries as I possibly can.  
 Use NuGet to install the dependencies, a `packages.config` can be found in the appropriate directories.
