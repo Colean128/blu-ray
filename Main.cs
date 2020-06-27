@@ -1,6 +1,6 @@
 // Blu-Ray Discord Bot
 //
-// Copyright(C) 2020 Colean, Apfel
+// Copyright © 2020, The Blu-Ray authors 
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ namespace Bot
     {
         private DiscordClient client;
         private CommandsNextExtension commands;
-        private InteractivityExtension interactivity;
         
         public static void Main(string[] args)
         {
@@ -54,36 +53,40 @@ namespace Bot
             LogLevel level;
             switch (configuration.LogLevel)
             {
-            case "Debug":
-                level = LogLevel.Debug;
-                break;
+                case "Debug":
+                    level = LogLevel.Debug;
+                    break;
 
-            case "Info":
-                level = LogLevel.Info;
-                break;
+                case "Info":
+                    level = LogLevel.Info;
+                    break;
 
-            case "Warning":
-                level = LogLevel.Warning;
-                break;
+                case "Warning":
+                    level = LogLevel.Warning;
+                    break;
 
-            case "Error":
-                level = LogLevel.Error;
-                break;
+                case "Error":
+                    level = LogLevel.Error;
+                    break;
 
-            default:
-                level = LogLevel.Critical;
-                break;
+                case "Critical":
+                    level = LogLevel.Critical;
+                    break;
+
+                default:
+                    level = LogLevel.Info;
+                    break;
             }
 
             client = new DiscordClient(new DiscordConfiguration
             {
-                AutoReconnect           = true,
-                LogLevel                = level,
-                Token                   = configuration.Token,
-                TokenType               = TokenType.Bot,
-                ShardCount              = shardCount,
-                ShardId                 = shardId,
-                UseInternalLogHandler   = true
+                AutoReconnect = true,
+                LogLevel = level,
+                Token = configuration.Token,
+                TokenType = TokenType.Bot,
+                ShardCount = shardCount,
+                ShardId = shardId,
+                UseInternalLogHandler = true
             });
 
             Events.supportGuildId = configuration.SupportId;
@@ -94,26 +97,26 @@ namespace Bot
                 await e.Client.UpdateStatusAsync(new DiscordActivity(configuration.Status.Name, configuration.Status.Type));
             };
 
-            client.Resumed          += Events.OnClientResumed;
-            client.ClientErrored    += Events.OnClientError;
-            client.SocketErrored    += Events.OnClientSocketError;
-            client.GuildAvailable   += Events.OnGuildJoin;
-            client.GuildCreated     += Events.OnGuildJoin;
-            client.GuildDeleted     += Events.OnGuildLeave;
-            client.MessageCreated   += AFK.AFKMessageHandler;
+            client.Resumed += Events.OnClientResumed;
+            client.ClientErrored += Events.OnClientError;
+            client.SocketErrored += Events.OnClientSocketError;
+            client.GuildAvailable += Events.OnGuildJoin;
+            client.GuildCreated += Events.OnGuildJoin;
+            client.GuildDeleted += Events.OnGuildLeave;
+            client.MessageCreated += AFK.AFKMessageHandler;
 
             commands = client.UseCommandsNext(new CommandsNextConfiguration
             {
-                CaseSensitive           = true,
-                EnableDefaultHelp       = true,
-                EnableDms               = true,
-                EnableMentionPrefix     = true,
-                IgnoreExtraArguments    = true,
-                StringPrefixes          = configuration.Prefixes,
+                CaseSensitive = true,
+                EnableDefaultHelp = true,
+                EnableDms = true,
+                EnableMentionPrefix = true,
+                IgnoreExtraArguments = true,
+                StringPrefixes = configuration.Prefixes,
             });
 
-            commands.CommandExecuted    += Events.OnCommandExecute;
-            commands.CommandErrored     += Events.OnCommandError;
+            commands.CommandExecuted += Events.OnCommandExecute;
+            commands.CommandErrored += Events.OnCommandError;
 
             commands.RegisterCommands<Fun>();
             commands.RegisterCommands<Info>();
@@ -121,13 +124,14 @@ namespace Bot
             commands.RegisterCommands<Owner>();
             commands.RegisterCommands<Search>();
 
-            interactivity = client.UseInteractivity(new InteractivityConfiguration
+            client.UseInteractivity(new InteractivityConfiguration
             {
                 PaginationBehaviour = PaginationBehaviour.Ignore,
-                PaginationDeletion  = PaginationDeletion.DeleteEmojis,
-                PollBehaviour       = PollBehaviour.DeleteEmojis
+                PaginationDeletion = PaginationDeletion.DeleteEmojis,
+                PollBehaviour = PollBehaviour.DeleteEmojis
             });
 
+            Managers.Google.InitializeService(configuration.Google.Key, configuration.Google.Cx);
             IMDb.apiKey = configuration.OMDb;
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await client.ConnectAsync();

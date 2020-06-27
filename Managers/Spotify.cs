@@ -1,6 +1,6 @@
 // Blu-Ray Discord Bot
 //
-// Copyright(C) 2020 Colean, Apfel
+// Copyright © 2020, The Blu-Ray authors 
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -212,7 +212,7 @@ namespace Bot.Managers
             request.ContentLength   = 0;
 
             WebResponse message     = await request.GetResponseAsync();
-            SearchResponse response =  JsonConvert.DeserializeObject<SearchResponse>(await new System.IO.StreamReader(message.GetResponseStream()).ReadToEndAsync(), new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            SearchResponse response =  JsonConvert.DeserializeObject<SearchResponse>(await new StreamReader(message.GetResponseStream()).ReadToEndAsync(), new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
             message.Dispose();
 

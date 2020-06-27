@@ -1,6 +1,6 @@
 // Blu-Ray Discord Bot
 //
-// Copyright(C) 2020 Colean, Apfel
+// Copyright � 2020, The Blu-Ray authors 
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,13 +21,89 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using Google.Apis.Customsearch.v1.Data;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
     public class Search : BaseCommandModule
     {
+        [Command("imdb"), Description("Searches for a movie, series or episode on IMDb.")]
+        public async Task IMDbAsync(CommandContext context, [RemainingText, Description("Search query to search for.")] string query = null)
+        {
+            if (query == null)
+            {
+                await context.RespondAsync("Provide a query to search for.");
+                return;
+            }
+
+            IMDb response = null;
+            try { response = await IMDb.GetAsync(query); }
+            catch (Exception ex)
+            {
+                context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - IMDb", "Search failed for \"{query}\".", DateTime.Now, ex);
+                await context.RespondAsync("Failed to find anything.");
+                return;
+            }
+
+            string type = "Unknown";
+            switch (response.Entries[0].EntryType)
+            {
+                case IMDb.EntryType.Movie:
+                    type = "Movie";
+                    break;
+
+                case IMDb.EntryType.Series:
+                    type = "Series";
+                    break;
+
+                case IMDb.EntryType.Episode:
+                    type = "Episode";
+                    break;
+            }
+
+            await context.RespondAsync(embed: new DiscordEmbedBuilder
+            {
+                Color = new DiscordColor("F5C518"),
+                Description = $"**{response.Entries[0].Title}**\nYear of release: **{response.Entries[0].Year}**\nType: **{type}**",
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+                {
+                    Url = response.Entries[0].Poster
+                },
+                Title = "Search result",
+                Url = response.Entries[0].URL
+            });
+        }
+
+        [Command("google"), Description("Searches for something on Google."), Aliases("g")]
+        public async Task GoogleAsync(CommandContext context, [RemainingText, Description("Search query to search for.")] string query = null)
+        {
+            if (query == null)
+            {
+                await context.RespondAsync("Provide a query to search for.");
+                return;
+            }
+
+            Managers.Google.SearchResult response = null;
+            try { response = await Managers.Google.SearchAsync(query); }
+            catch (Exception ex)
+            {
+                context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - Google", "Search failed for \"{query}\".", DateTime.Now, ex);
+                await context.RespondAsync("Failed to find anything.");
+                return;
+            }
+
+            await context.RespondAsync(embed: new DiscordEmbedBuilder()
+            {
+                Color       = new DiscordColor("4285F4"),
+                Description = response.Description,
+                Title       = response.Title,
+                Url         = response.URL
+            }.Build());
+        }
+
         [Command("spotify"), Description("Searches for a track or an album on Spotify.")]
         public async Task SpotifyAsync(CommandContext context, [RemainingText, Description("Search query to search for.")] string query = null)
         {
@@ -92,53 +168,6 @@ namespace Bot.Commands
                 Title       = "Search result",
                 Url         = album.URL
             }.Build());
-        }
-
-        [Command("imdb"), Description("Searches for a movie, series or episode on IMDb.")]
-        public async Task IMDbAsync(CommandContext context, [RemainingText, Description("Search query to search for.")] string query = null)
-        {
-            if (query == null)
-            {
-                await context.RespondAsync("Provide a query to search for.");
-                return;
-            }
-
-            IMDb response = null;
-            try { response = await IMDb.GetAsync(query); }
-            catch (Exception ex)
-            {
-                context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - IMDb", "Search failed for \"{query}\".", DateTime.Now, ex);
-                await context.RespondAsync("Failed to find anything.");
-                return;
-            }
-
-            string type = "Unknown";
-            switch (response.Entries[0].EntryType)
-            {
-            case IMDb.EntryType.Movie:
-                type = "Movie";
-                break;
-            
-            case IMDb.EntryType.Series:
-                type = "Series";
-                break;
-
-            case IMDb.EntryType.Episode:
-                type = "Episode";
-                break;
-            }
-
-            await context.RespondAsync(embed: new DiscordEmbedBuilder
-            {
-                Color       = new DiscordColor("F5C518"),
-                Description = $"**{response.Entries[0].Title}**\nYear of release: **{response.Entries[0].Year}**\nType: **{type}**",
-                Thumbnail   = new DiscordEmbedBuilder.EmbedThumbnail
-                {
-                    Url     = response.Entries[0].Poster
-                },
-                Title       = "Search result",
-                Url         = response.Entries[0].URL
-            });
         }
     }
 }

@@ -1,0 +1,20 @@
+{
+    "token": "token here",
+    "prefixes": [
+      "br/"
+    ],
+    "status": {
+        "name": "movies on a PS3.",
+        "type": "Watching"
+    },
+    "support_guild": 123456789012345678,
+    "google": {
+        "key": "google key here",
+        "cx": "custom search id here"
+    },
+    "omdb": "API key here",
+    "spotify": {
+        "id": "ID here",
+        "secret": "Secret here"
+    }
+}
