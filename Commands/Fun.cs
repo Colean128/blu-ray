@@ -51,7 +51,7 @@ namespace Bot.Commands
             "Very doubtful"
         };
 
-        private readonly string[] titles =
+        private readonly string[] titlesList =
         {
             "Legendary",
             "Forgettable",
@@ -65,7 +65,11 @@ namespace Bot.Commands
             "Great",
             "Idiotic",
             "Town Drunk",
-            "Pillock of the Village"
+            "Pillock of the Village",
+            "Bedroom Coder",
+            "Nerd",
+            "Social Outcast",
+            "Stranded"
         };
 
         private readonly string[] brunoVideos =
@@ -96,7 +100,7 @@ namespace Bot.Commands
         [Command("title"), Description("What is your title?")]
         public async Task TitleAsync(CommandContext context)
         {
-            await context.RespondAsync($"{context.User.Username} test");
+            await context.RespondAsync($"You are: {context.User.Username} the {titlesList[new Random().Next(0, titlesList.Length - 1)]}!");
         }
         [Command("afk"), Description("Sets you as AFK across all servers."), Aliases("away"), RequireGuild]
         public async Task AFKAsync(CommandContext context, [Description("Optional; Reason to display."), RemainingText] string reason = null)
