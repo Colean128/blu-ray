@@ -96,7 +96,7 @@ namespace Bot.Commands
         [Command("title"), Description("What is your title?")]
         public async Task TitleAsync(CommandContext context)
         {
-            await context.RespondAsync("Poggers.");
+            await context.RespondAsync($"{context.User.Username} test");
         }
         [Command("afk"), Description("Sets you as AFK across all servers."), Aliases("away"), RequireGuild]
         public async Task AFKAsync(CommandContext context, [Description("Optional; Reason to display."), RemainingText] string reason = null)
