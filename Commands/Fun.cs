@@ -51,6 +51,23 @@ namespace Bot.Commands
             "Very doubtful"
         };
 
+        private readonly string[] titles =
+        {
+            "Legendary",
+            "Forgettable",
+            "Wise",
+            "Old",
+            "Lone Wolf",
+            "Defense",
+            "Little One",
+            "Big One",
+            "Microscopic",
+            "Great",
+            "Idiotic",
+            "Town Drunk",
+            "Pillock of the Village"
+        };
+
         private readonly string[] brunoVideos =
         {
             "https://www.youtube.com/watch?v=6LvlG2dTQKg",
@@ -76,6 +93,11 @@ namespace Bot.Commands
                 .WithDescription($"You've asked the magic 8-Ball the following question:\n```\n{question}\n```\nMy Answer is: **{eightballResponses[new Random().Next(0, eightballResponses.Length - 1)]}**."));
         }
 
+        [Command("title"), Description("What is your title?")]
+        public async Task TitleAsync(CommandContext context)
+        {
+            await context.RespondAsync("Poggers.");
+        }
         [Command("afk"), Description("Sets you as AFK across all servers."), Aliases("away"), RequireGuild]
         public async Task AFKAsync(CommandContext context, [Description("Optional; Reason to display."), RemainingText] string reason = null)
         {
