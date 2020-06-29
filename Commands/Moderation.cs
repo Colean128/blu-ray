@@ -15,29 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Bot.Managers;
-using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using System;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    class Moderation : BaseCommandModule
+    public class Moderation : BaseCommandModule
     {
-        [Command("ban"), Description("Ban a user."), RequirePermissions(Permissions.BanMembers), RequireGuild]
-        public async Task BRBanAsync(CommandContext context, [Description("Ban a user."), RemainingText] DiscordMember member = null)
+        [Command("ban"), Description("Bans a member."), RequirePermissions(Permissions.BanMembers), RequireGuild]
+        public async Task BanAsync(CommandContext context, [Description("Member to ban.")] DiscordMember member = null, [RemainingText, Description("(Optional) Reason for ban.")] string reason = null)
         {
             if (member == null)
             {
-                await context.RespondAsync("You can't ban nobody!");
+                await context.RespondAsync("Provide a member to ban.");
                 return;
             }
 
-            await context.Guild.BanMemberAsync(member, 0, $"Banned with Blu-Ray by {context.User.Username}.");
+            await context.Guild.BanMemberAsync(member, 0, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
+            await context.RespondAsync($"Banned user `{member.Username}#{member.Discriminator}` successfully.");
         }
     }
 }
