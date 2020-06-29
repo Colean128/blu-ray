@@ -123,6 +123,7 @@ namespace Bot
             commands.RegisterCommands<NSFW>();
             commands.RegisterCommands<Owner>();
             commands.RegisterCommands<Search>();
+            commands.RegisterCommands<Moderation>();
 
             client.UseInteractivity(new InteractivityConfiguration
             {
