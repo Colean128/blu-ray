@@ -40,8 +40,6 @@ namespace Bot.Managers
             public string URL { get; private set; }
         }
 
-
-
         private static CustomsearchService service;
         private static string searchId;
 
