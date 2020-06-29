@@ -19,6 +19,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using System;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
@@ -34,8 +35,48 @@ namespace Bot.Commands
                 return;
             }
 
-            await context.Guild.BanMemberAsync(member, 0, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
+            await member.BanAsync(0, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
             await context.RespondAsync($"Banned user `{member.Username}#{member.Discriminator}` successfully.");
+        }
+
+        [Command("ban")]
+        public async Task BanAsync(CommandContext context, [Description("ID of the member to ban.")] ulong id = 0, [RemainingText, Description("(Optional) Reason for ban.")] string reason = null)
+        {
+            if (id == 0)
+            {
+                await context.RespondAsync("Provide a ID to ban.");
+                return;
+            }
+
+            DiscordUser user;
+            try { user = await context.Client.GetUserAsync(id); }
+            catch (Exception ex)
+            {
+                context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - Ban", $"Failed to find the user for ID \"{id}\".", DateTime.Now, ex);
+                await context.RespondAsync("Invalid ID.");
+                return;
+            }
+
+            if (user == null)
+            {
+                await context.RespondAsync("Invalid ID.");
+                return;
+            }
+
+            await context.Guild.BanMemberAsync(user.Id, 0, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
+            await context.RespondAsync($"Banned user `{user.Username}#{user.Discriminator}` successfully.");
+        }
+
+        [Command("kick"), Description("Kicks a member."), RequirePermissions(Permissions.KickMembers), RequireGuild]
+        public async Task KickAsync(CommandContext context, [Description("Member to kick.")] DiscordMember member = null, [RemainingText, Description("(Optional) Reason for kick.")] string reason = null)
+        {
+            if (member == null)
+            {
+                await context.RespondAsync("Provide a member to kick.");
+                return;
+            }
+
+            await member.RemoveAsync($"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
         }
     }
 }
