@@ -33,9 +33,6 @@ namespace Bot.Commands
             .WithDescription("Hello!\nI'm **Blu-Ray**, a general purpose Discord bot.\nI feature variously different commands, with some new ones probably still in work.\nI hope I meet your bot-ly desires.\n\nUseful links:\n")
             .AddField("GitHub", "**https://github.com/Zayne64/blu-ray")
             .Build());
-            
-        [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
-        public async Task PingAsync(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
 
         [Command("game"), Description("Shows what you're currently playing, or what someone else is playing."), Aliases("rpc", "status"), RequireGuild]
         public async Task GameAsync(CommandContext context, [RemainingText, Description("A member to check for. Can be left empty.")] DiscordMember member = null)
@@ -63,13 +60,13 @@ namespace Bot.Commands
             DiscordEmbedBuilder builder = new DiscordEmbedBuilder()
                 .WithTitle(member.Presence.Activity.Name)
                 .WithDescription($"{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.Details : "")}");
-            
+
             if (member.Presence.Activity.RichPresence.LargeImage != null) builder.WithThumbnail(member.Presence.Activity.RichPresence.LargeImage.Url);
 
             if (member.Presence.Activity.RichPresence.StartTimestamp != null)
             {
                 message += $" for ";
-                
+
                 TimeSpan span = (TimeSpan)(DateTime.Now - member.Presence.Activity.RichPresence.StartTimestamp);
                 if (span.Minutes == 0) message += $"__{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
                 else
@@ -78,8 +75,61 @@ namespace Bot.Commands
                     if (span.Seconds != 0) message += $" and __{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
                 }
             }
-            
+
             await context.RespondAsync(message + ".", embed: builder.Build());
+        }
+
+        [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
+        public async Task PingAsync(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
+
+        [Command("quote"), Description("Quote another user's message."), RequireGuild]
+        public async Task QuoteAsync(CommandContext context, [Description("ID of the message to quote.")] ulong id = 0)
+        {
+            if (id == 0)
+            {
+                await context.RespondAsync("Please provide a message ID.");
+                return;
+            }
+        }
+
+
+        [Command("quote")]
+        public async Task QuoteAsync(CommandContext context, [Description("ID of the message to quote.")] ulong messageId = 0, [Description("ID of the channel that contains the message.")] ulong channelId = 0)
+        {
+            if (messageId == 0)
+            {
+                await context.RespondAsync("Please provide a message ID.");
+                return;
+            }
+            else if (channelId == 0)
+            {
+                await context.RespondAsync("Please provide a channel ID.");
+                return;
+            }
+        }
+
+        [Command("quote")]
+        public async Task QuoteAsync(CommandContext context, [Description("URL towards the message to quote.")] string url = null)
+        {
+            if (url == null)
+            {
+                await context.RespondAsync("Please provide a URL.");
+                return;
+            }
+
+
+            ulong serId = 0, chnId = 0, msgId = 0;
+            try
+            {
+                serId = ulong.Parse(url.Substring(32, 50));
+                chnId = ulong.Parse(url.Substring(51, 69));
+                msgId = ulong.Parse(url.Substring(70, 88));
+            }
+            catch (Exception)
+            {
+                await context.RespondAsync("You provided invalid values.");
+                return;
+            }
         }
     }
 }
