@@ -15,11 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Bot.Managers;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Exceptions;
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -140,8 +143,26 @@ namespace Bot.Commands
                 return;
             }
 
-            var quote = await channel.GetMessageAsync(messageId);
-            await context.RespondAsync(quote.Content);
+            DiscordMessage quote = null;
+            try { quote = await channel.GetMessageAsync(messageId); }
+            catch (NotFoundException)
+            {
+                await context.RespondAsync("Failed to find the message.");
+                return;
+            }
+            catch (UnauthorizedException)
+            {
+                await context.RespondAsync("Cannot access the message.");
+                return;
+            }
+
+            await context.RespondAsync(embed: new DiscordEmbedBuilder()
+                .WithAuthor($"{quote.Author.Username}#{quote.Author.Discriminator}", quote.JumpLink.ToString(), quote.Author.AvatarUrl)
+                .WithColor(ColorDetection.GetMostUsedColor(quote.Author.GetAvatarUrl(ImageFormat.Png)))
+                .WithDescription(quote.Content)
+                .WithFooter("Message created:")
+                .WithTimestamp(quote.CreationTimestamp)
+                .Build());
         }
     }
 }
