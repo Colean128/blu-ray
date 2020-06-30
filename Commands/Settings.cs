@@ -15,27 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Microsoft.Data.Sqlite;
-using System.Threading.Tasks;
+using DSharpPlus.CommandsNext;
 
-namespace Bot.Managers
+namespace Bot.Commands
 {
-    public class Database
+    public class Settings : BaseCommandModule
     {
-        private static SqliteConnection sqlite;
-
-        public static async Task ConnectAsync(string databasePath)
-        {
-            sqlite = new SqliteConnection($"Data Source={databasePath}");
-            await sqlite.OpenAsync();
-        }
-
-        public static void Disconnect()
-        {
-            sqlite.Close();
-            sqlite.Dispose();
-        }
-
-        public static SqliteCommand CreateCommand() => sqlite.CreateCommand();
+        // TODO: add commands
     }
 }

@@ -109,6 +109,7 @@ namespace Bot.Managers
             if (e.Command == null) return;
             else if (e.Exception.GetType() == typeof(ChecksFailedException) && (e.Context.Guild != null && (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0))
             {
+                // TODO: remove this and add appropriate handler across CommandModules
                 await e.Context.RespondAsync("This is not the appropriate channel.");
                 return;
             }

@@ -45,10 +45,10 @@ namespace Bot
                 return;
             }
 
-            new Program().RunAsync(configuration, (args.Length > 1 ? int.Parse(args[1]) : 0), (args.Length > 2 ? int.Parse(args[2]) : 1)).GetAwaiter().GetResult();
+            new Program().RunAsync(configuration, args.Length > 1 ? int.Parse(args[1]) : 0, args.Length > 2 ? int.Parse(args[2]) : 1, args.Length > 3 ? args[3] : "blu-ray.db").GetAwaiter().GetResult();
         }
 
-        internal async Task RunAsync(Configuration configuration, int shardId, int shardCount)
+        internal async Task RunAsync(Configuration configuration, int shardId, int shardCount, string dbPath)
         {
             LogLevel level;
             switch (configuration.LogLevel)
@@ -135,7 +135,7 @@ namespace Bot
             IMDb.apiKey = configuration.OMDb;
             Managers.Google.InitializeService(configuration.Google.Key, configuration.Google.Cx);
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
-            await Database.ConnectAsync();
+            await Database.ConnectAsync(dbPath);
             await client.ConnectAsync();
 
             AppDomain.CurrentDomain.ProcessExit += new EventHandler((s, e) => HandleProcessQuit().GetAwaiter().GetResult());
