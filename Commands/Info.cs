@@ -30,8 +30,8 @@ namespace Bot.Commands
         public async Task AboutAsync(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder()
             .WithAuthor($"{context.Client.CurrentUser.Username}#{context.Client.CurrentUser.Discriminator}", "https://github.com/Zayne64/blu-ray", context.Client.CurrentUser.GetAvatarUrl(ImageFormat.Png))
             .WithColor(DiscordColor.Gray)
-            .WithDescription("Hello!\nI'm **Blu-Ray**, a general purpose Discord bot.\nI feature variously different commands, with some new ones probably still in work.\nI hope I meet your bot-ly desires.\n\nUseful links:\n")
-            .AddField("GitHub", "**https://github.com/Zayne64/blu-ray")
+            .WithDescription("Hello!\nI'm **Blu-Ray**, a general purpose Discord bot.\nI feature variously different commands, with some new ones probably still in work.\nI hope I meet your bot-ly desires.\n\n")
+            .AddField("Useful Links:", "[GitHub](https://github.com/Zayne64/blu-ray)\n[Support Server](https://discord.gg/g2SWnrg)\n[Minimal Invite](https://discord.com/api/oauth2/authorize?client_id=699359348299923517&permissions=0&scope=bot)\n[Full Invite](https://discord.com/api/oauth2/authorize?client_id=699359348299923517&permissions=8198&scope=bot)")
             .Build());
             
         [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
