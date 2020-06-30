@@ -22,8 +22,6 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
 using System;
-using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bot.Commands

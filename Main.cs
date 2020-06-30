@@ -33,6 +33,7 @@ namespace Bot
     {
         private DiscordClient client;
         private CommandsNextExtension commands;
+        private GarbageCollection garbage;
         
         public static void Main(string[] args)
         {
@@ -138,7 +139,9 @@ namespace Bot
             await Database.ConnectAsync(dbPath);
             await client.ConnectAsync();
 
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler((s, e) => HandleProcessQuit().GetAwaiter().GetResult());
+            garbage = new GarbageCollection();
+
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler((s, e) => HandleProcessQuit().GetAwaiter().GetResult());            
 
             await Task.Delay(-1);
         }
@@ -147,6 +150,7 @@ namespace Bot
         {
             await client.DisconnectAsync();
             Database.Disconnect();
+            garbage.Dispose();
         }
     }
 }

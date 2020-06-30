@@ -15,28 +15,30 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-
-using Microsoft.Data.Sqlite;
-using System.Threading.Tasks;
+using System;
+using System.Threading;
 
 namespace Bot.Managers
 {
-    public class Database
+    public class GarbageCollection : IDisposable
     {
-        private static SqliteConnection sqlite;
+        private Thread thread;
 
-        public static async Task ConnectAsync(string databasePath)
+        private void threadFunction()
         {
-            sqlite = new SqliteConnection($"Data Source={databasePath}");
-            await sqlite.OpenAsync();
+            while (true)
+            {
+                GC.Collect();
+                Thread.Sleep(5 * 1000 * 60);
+            }
         }
 
-        public static void Disconnect()
+        public GarbageCollection()
         {
-            sqlite.Close();
-            sqlite.Dispose();
+            thread = new Thread(threadFunction);
+            thread.Start();
         }
 
-        public static SqliteCommand CreateCommand() => sqlite.CreateCommand();
+        public void Dispose() => thread.Abort();
     }
 }

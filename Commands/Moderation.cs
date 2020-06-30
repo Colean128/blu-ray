@@ -20,7 +20,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using System;
-using System.Runtime.Remoting.Messaging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
@@ -82,18 +82,31 @@ namespace Bot.Commands
             await context.RespondAsync($"Softbanned user `{member.Username}#{member.Discriminator}` successfully.");
         }
 
-        [Command("clean"), Description("Deletes an amount of messages before the trigger."), RequirePermissions(Permissions.ManageMessages), RequireGuild]
-        public async Task CleanAsync(CommandContext context, [Description("Amount of messages to clean.")] int amount = 0)
+        [Command("unban"), Description("Unbans a user via their ID."), RequirePermissions(Permissions.BanMembers), RequireGuild]
+        public async Task UnbanAsync(CommandContext context, [Description("User ID to unban.")] ulong id = 0, [RemainingText, Description("(Optional) Reason for unban.")] string reason = null)
         {
-            if (amount == 0)
+            if (id == 0)
             {
-                await context.RespondAsync("Provide an amount of messages to clean.");
+                await context.RespondAsync("Please provide a ID to unban.");
                 return;
             }
 
-            var messages = await context.Channel.GetMessagesBeforeAsync(context.Message.Id, amount);
-            await context.Channel.DeleteMessagesAsync(messages, $"{context.User.Username}#{context.User.Discriminator} cleared {amount} messages!");
-            await context.RespondAsync($"Cleaned last {amount} messages!");
+            DiscordUser user;
+            try { user = await context.Client.GetUserAsync(id); }
+            catch (Exception ex)
+            {
+                context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - Unban", $"Failed to find the user for ID \"{id}\".", DateTime.Now, ex);
+                await context.RespondAsync("Invalid ID.");
+                return;
+            }
+
+            if (user == null)
+            {
+                await context.RespondAsync("Invalid ID.");
+                return;
+            }
+
+            await context.Guild.UnbanMemberAsync(user, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
         }
 
         [Command("kick"), Description("Kicks a member."), RequirePermissions(Permissions.KickMembers), RequireGuild]
@@ -107,6 +120,20 @@ namespace Bot.Commands
 
             await member.RemoveAsync($"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
             await context.RespondAsync($"Kicked user `{member.Username}#{member.Discriminator}` successfully.");
+        }
+
+        [Command("clean"), Description("Deletes a given amount of messages."), RequirePermissions(Permissions.ManageMessages), RequireGuild]
+        public async Task CleanAsync(CommandContext context, [Description("Amount of messages to clean. All messages within that amount before the triggering command will be deleted.")] int amount = 0)
+        {
+            if (amount == 0)
+            {
+                await context.RespondAsync("Provide an amount of messages to clean.");
+                return;
+            }
+
+            IEnumerable<DiscordMessage> messages = await context.Channel.GetMessagesBeforeAsync(context.Message.Id, amount);
+            await context.Channel.DeleteMessagesAsync(messages, $"{context.User.Username}#{context.User.Discriminator}; cleared {amount} messages");
+            await context.RespondAsync($"Cleaned the last {amount} messages.");
         }
     }
 }
