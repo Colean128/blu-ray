@@ -69,7 +69,9 @@ namespace Bot.Commands
             "Bedroom Coder",
             "Nerd",
             "Social Outcast",
-            "Stranded"
+            "Stranded",
+            "Lost One",
+            "Nappy Wearer"
         };
 
         private readonly string[] brunoVideos =
