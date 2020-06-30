@@ -132,11 +132,21 @@ namespace Bot
                 PollBehaviour = PollBehaviour.DeleteEmojis
             });
 
-            Managers.Google.InitializeService(configuration.Google.Key, configuration.Google.Cx);
             IMDb.apiKey = configuration.OMDb;
+            Managers.Google.InitializeService(configuration.Google.Key, configuration.Google.Cx);
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
+            await Database.ConnectAsync();
             await client.ConnectAsync();
+
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler((s, e) => HandleProcessQuit().GetAwaiter().GetResult());
+
             await Task.Delay(-1);
+        }
+
+        internal async Task HandleProcessQuit()
+        {
+            await client.DisconnectAsync();
+            Database.Disconnect();
         }
     }
 }
