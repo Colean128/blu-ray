@@ -20,6 +20,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using System;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
@@ -79,6 +80,20 @@ namespace Bot.Commands
             await context.Guild.BanMemberAsync(member, 7, $"{context.User.Username}#{context.User.Discriminator}: Softban with Blu-Ray.");
             await context.Guild.UnbanMemberAsync(member, $"{context.User.Username}#{context.User.Discriminator}: Softban with Blu-Ray.");
             await context.RespondAsync($"Softbanned user `{member.Username}#{member.Discriminator}` successfully.");
+        }
+
+        [Command("clean"), Description("Deletes an amount of messages before the trigger."), RequirePermissions(Permissions.ManageMessages), RequireGuild]
+        public async Task CleanAsync(CommandContext context, [Description("Amount of messages to clean.")] int amount = 0)
+        {
+            if (amount == 0)
+            {
+                await context.RespondAsync("Provide an amount of messages to clean.");
+                return;
+            }
+
+            var messages = await context.Channel.GetMessagesBeforeAsync(context.Message.Id, amount);
+            await context.Channel.DeleteMessagesAsync(messages, $"{context.User.Username}#{context.User.Discriminator} cleared {amount} messages!");
+            await context.RespondAsync($"Cleaned last {amount} messages!");
         }
 
         [Command("kick"), Description("Kicks a member."), RequirePermissions(Permissions.KickMembers), RequireGuild]
