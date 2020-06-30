@@ -90,22 +90,8 @@ namespace Bot.Commands
                 await context.RespondAsync("Please provide a message ID.");
                 return;
             }
-        }
 
-
-        [Command("quote")]
-        public async Task QuoteAsync(CommandContext context, [Description("ID of the message to quote.")] ulong messageId = 0, [Description("ID of the channel that contains the message.")] ulong channelId = 0)
-        {
-            if (messageId == 0)
-            {
-                await context.RespondAsync("Please provide a message ID.");
-                return;
-            }
-            else if (channelId == 0)
-            {
-                await context.RespondAsync("Please provide a channel ID.");
-                return;
-            }
+            await QuoteAsync(context, id, context.Channel);
         }
 
         [Command("quote")]
@@ -117,7 +103,6 @@ namespace Bot.Commands
                 return;
             }
 
-
             ulong serId = 0, chnId = 0, msgId = 0;
             try
             {
@@ -127,7 +112,35 @@ namespace Bot.Commands
             }
             catch (Exception)
             {
-                await context.RespondAsync("You provided invalid values.");
+                await context.RespondAsync("You provided an invalid URL.");
+                return;
+            }
+
+            if (serId == 0 || chnId == 0 || msgId == 0)
+            {
+                await context.RespondAsync("You provided an invalid URL.");
+                return;
+            }
+            else if (serId != context.Guild.Id)
+            {
+                await context.RespondAsync("The referenced message is not from this server.");
+                return;
+            }
+
+            await QuoteAsync(context, msgId, context.Guild.GetChannel(chnId));
+        }
+
+        [Command("quote")]
+        public async Task QuoteAsync(CommandContext context, [Description("ID of the message to quote.")] ulong messageId = 0, [Description("ID or tag of the channel that contains the message.")] DiscordChannel channel = null)
+        {
+            if (messageId == 0)
+            {
+                await context.RespondAsync("Please provide a message ID.");
+                return;
+            }
+            else if (channel == null)
+            {
+                await context.RespondAsync("Please provide a channel ID.");
                 return;
             }
         }
