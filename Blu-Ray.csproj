@@ -208,6 +208,7 @@
     <Compile Include="Commands\NSFW.cs" />
     <Compile Include="Commands\Owner.cs" />
     <Compile Include="Commands\Search.cs" />
+    <Compile Include="Commands\Settings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Managers\AFK.cs" />
     <Compile Include="Managers\Database.cs" />
