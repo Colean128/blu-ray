@@ -143,6 +143,9 @@ namespace Bot.Commands
                 await context.RespondAsync("Please provide a channel ID.");
                 return;
             }
+
+            var quote = await channel.GetMessageAsync(messageId);
+            await context.RespondAsync(quote.Content);
         }
     }
 }
