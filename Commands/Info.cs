@@ -20,6 +20,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
@@ -103,31 +104,26 @@ namespace Bot.Commands
                 return;
             }
 
-            ulong serId = 0, chnId = 0, msgId = 0;
-            try
+            ulong[] ids = new ulong[3];
+            try { for (int i = 0; i != 3; i++) ids[i] = ulong.Parse(url.Substring(url.LastIndexOf("/") - (19 * i) + 1, 18)); }
+            catch (Exception ex)
             {
-                serId = ulong.Parse(url.Substring(32, 50));
-                chnId = ulong.Parse(url.Substring(51, 69));
-                msgId = ulong.Parse(url.Substring(70, 88));
-            }
-            catch (Exception)
-            {
-                await context.RespondAsync("You provided an invalid URL.");
+                Console.WriteLine($"{ex.GetType().FullName}: \"{ex.Message}\"");
                 return;
             }
 
-            if (serId == 0 || chnId == 0 || msgId == 0)
+            if (ids[0] == 0 || ids[1] == 0 || ids[2]== 0)
             {
                 await context.RespondAsync("You provided an invalid URL.");
                 return;
             }
-            else if (serId != context.Guild.Id)
+            else if (ids[2] != context.Guild.Id)
             {
                 await context.RespondAsync("The referenced message is not from this server.");
                 return;
             }
 
-            await QuoteAsync(context, msgId, context.Guild.GetChannel(chnId));
+            await QuoteAsync(context, ids[0], context.Guild.GetChannel(ids[1]));
         }
 
         [Command("quote")]
