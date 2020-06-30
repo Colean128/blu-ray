@@ -21,9 +21,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using Google.Apis.Customsearch.v1.Data;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bot.Commands

@@ -18,7 +18,6 @@
 using Google.Apis.Customsearch.v1;
 using Google.Apis.Customsearch.v1.Data;
 using Google.Apis.Services;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
