@@ -51,6 +51,11 @@ namespace Bot.Commands
                 await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: `{member.Presence.Activity.RichPresence.State}`");
                 return;
             }
+            else if (member.Presence.Activity.Name == "Spotify")
+            {
+                await GameEmbedAsync(context, member, $"**{member.Username}#{member.Discriminator}** has been listening to music on **{member.Presence.Activity.Name}**");
+                return;
+            }
 
             string message = $"**{member.Username}#{member.Discriminator}** has been playing **{member.Presence.Activity.Name}**";
             if (member.Presence.Activity.RichPresence == null)
