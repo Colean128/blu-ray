@@ -59,6 +59,9 @@ namespace Bot.Commands
                 return;
             }
 
+            await GameEmbedAsync(context, member, message);
+        }
+        public async Task GameEmbedAsync(CommandContext context, DiscordMember member = null, string message = null) {
             DiscordEmbedBuilder builder = new DiscordEmbedBuilder()
                 .WithTitle(member.Presence.Activity.Name)
                 .WithDescription($"{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.Details : "")}");
