@@ -36,57 +36,116 @@ namespace Bot.Commands
             .AddField("Useful Links:", $"- [GitHub](https://github.com/Zayne64/blu-ray)\n- [Support Server](https://discord.gg/g2SWnrg)\n- [Minimal Invite](https://discord.com/api/oauth2/authorize?client_id={context.Client.CurrentApplication.Id}&permissions=0&scope=bot)\n- [Full Invite](https://discord.com/api/oauth2/authorize?client_id={context.Client.CurrentApplication.Id}&permissions={(int)(Permissions.AccessChannels | Permissions.AddReactions | Permissions.AttachFiles | Permissions.BanMembers | Permissions.ChangeNickname | Permissions.EmbedLinks | Permissions.KickMembers | Permissions.ManageEmojis | Permissions.ManageGuild | Permissions.ManageMessages | Permissions.ReadMessageHistory | Permissions.SendMessages | Permissions.Speak | Permissions.UseExternalEmojis | Permissions.UseVoice)}&scope=bot)")
             .Build());
 
-        [Command("game"), Description("Shows what you're currently playing, or what someone else is playing."), Aliases("rpc", "status"), RequireGuild]
-        public async Task GameAsync(CommandContext context, [RemainingText, Description("A member to check for. Can be left empty.")] DiscordMember member = null)
+        [Command("status"), Description("Present your or someone else's status."), Aliases("rpc", "game"), RequireGuild]
+        public async Task GameAsync(CommandContext context, [RemainingText, Description("The member to take the status from. Leave this empty if you're presenting your own status.")] DiscordMember member = null)
         {
             if (member == null) member = context.Member;
 
             if (member.Presence.Activity.Name == null)
             {
-                await context.RespondAsync("You're not playing any game at the moment.");
-                return;
-            }
-            else if (member.Presence.Activity.RichPresence != null && member.Presence.Activity.ActivityType == ActivityType.Custom)
-            {
-                await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: `{member.Presence.Activity.RichPresence.State}`");
-                return;
-            }
-            else if (member.Presence.Activity.Name == "Spotify")
-            {
-                await GameEmbedAsync(context, member, $"**{member.Username}#{member.Discriminator}** has been listening to music on **{member.Presence.Activity.Name}**");
+                await context.RespondAsync($"{(member != context.Member ? $"{member.Username}#{member.Discriminator} isn't" : "You're not")} doing anything at the moment.");
                 return;
             }
 
-            string message = $"**{member.Username}#{member.Discriminator}** has been playing **{member.Presence.Activity.Name}**";
-            if (member.Presence.Activity.RichPresence == null)
+            DiscordEmbedBuilder builder = new DiscordEmbedBuilder();
+            if (member.Presence.Activities.Count == 1)
             {
-                await context.RespondAsync(message + ".");
-                return;
-            }
-
-            await GameEmbedAsync(context, member, message);
-        }
-        public async Task GameEmbedAsync(CommandContext context, DiscordMember member = null, string message = null) {
-            DiscordEmbedBuilder builder = new DiscordEmbedBuilder()
-                .WithTitle(member.Presence.Activity.Name)
-                .WithDescription($"{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.Details : "")}");
-
-            if (member.Presence.Activity.RichPresence.LargeImage != null) builder.WithThumbnail(member.Presence.Activity.RichPresence.LargeImage.Url);
-
-            if (member.Presence.Activity.RichPresence.StartTimestamp != null)
-            {
-                message += $" for ";
-
-                TimeSpan span = (TimeSpan)(DateTime.Now - member.Presence.Activity.RichPresence.StartTimestamp);
-                if (span.Minutes == 0) message += $"__{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
-                else
+                if (member.Presence.Activity.ActivityType == ActivityType.Custom)
                 {
-                    message += $"__{span.Minutes} minute{(span.Minutes == 1 ? "" : "s")}__";
-                    if (span.Seconds != 0) message += $" and __{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
+                    await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: {(member.Presence.Activity.CustomStatus.Emoji != null ? member.Presence.Activity.CustomStatus.Emoji.ToString() + " ": "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : "")}");
+                    return;
                 }
+
+                string type = "playing";
+                switch (member.Presence.Activity.ActivityType)
+                {
+                    case ActivityType.ListeningTo:
+                        type = "listening to";
+                        break;
+
+                    case ActivityType.Streaming:
+                        type = "streaming";
+                        break;
+
+                    case ActivityType.Watching:
+                        type = "watching";
+                        break;
+                }
+
+                string message = $"**{member.Username}#{member.Discriminator}** has been {type} **{member.Presence.Activity.Name}**";
+                if (member.Presence.Activity.RichPresence.Application == null)
+                {
+                    await context.RespondAsync(message + ".");
+                    return;
+                }
+
+                builder.WithTitle(member.Presence.Activity.Name)
+                    .WithDescription($"{(member.Presence.Activity.RichPresence.Details != null ? member.Presence.Activity.RichPresence.Details + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State : "")}");
+
+                if (member.Presence.Activity.RichPresence.LargeImage != null) builder.WithThumbnail(member.Presence.Activity.RichPresence.LargeImage.Url);
+
+                if (member.Presence.Activity.RichPresence.StartTimestamp != null)
+                {
+                    message += $" for ";
+
+                    TimeSpan span = (TimeSpan)(DateTime.Now - member.Presence.Activity.RichPresence.StartTimestamp);
+                    if (span.Minutes == 0) message += $"__{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
+                    else
+                    {
+                        message += $"__{span.Minutes} minute{(span.Minutes == 1 ? "" : "s")}__";
+                        if (span.Seconds != 0) message += $" and __{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
+                    }
+                }
+
+                await context.RespondAsync(message + ".", embed: builder.Build());
+                return;
             }
 
-            await context.RespondAsync(message + ".", embed: builder.Build());
+
+            foreach (DiscordActivity activity in member.Presence.Activities)
+            {
+                if (activity.ActivityType == ActivityType.Custom)
+                {
+                    builder.AddField("Custom Status", $"{(member.Presence.Activity.CustomStatus.Emoji != null ? member.Presence.Activity.CustomStatus.Emoji.ToString() + " " : "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : "")}", builder.Fields.Count % 2 == 0);
+                    continue;
+                }
+
+                string type = "Playing";
+                switch (member.Presence.Activity.ActivityType)
+                {
+                    case ActivityType.ListeningTo:
+                        type = "Listening to";
+                        break;
+
+                    case ActivityType.Streaming:
+                        type = "Streaming";
+                        break;
+
+                    case ActivityType.Watching:
+                        type = "Watching";
+                        break;
+                }
+
+                string time = null;
+                if (member.Presence.Activity.RichPresence.StartTimestamp != null)
+                {
+                    time += "For ";
+
+                    TimeSpan span = (TimeSpan)(DateTime.Now - member.Presence.Activity.RichPresence.StartTimestamp);
+                    if (span.Minutes == 0) time += $"__{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
+                    else
+                    {
+                        time += $"__{span.Minutes} minute{(span.Minutes == 1 ? "" : "s")}__";
+                        if (span.Seconds != 0) time += $" and __{span.Seconds} second{(span.Seconds == 1 ? "" : "s")}__";
+                    }
+
+                    time += ".";
+                }
+
+                builder.AddField($"{type} {activity.Name}", $"{(member.Presence.Activity.RichPresence.Details != null ? member.Presence.Activity.RichPresence.Details + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State + "\n" : "")}{(time != null ? time : "")}", builder.Fields.Count % 2 == 0);
+            }
+
+            await context.RespondAsync($"**{member.Username}#{member.Discriminator}** is doing various things at the moment.", embed: builder.Build());
         }
 
         [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
