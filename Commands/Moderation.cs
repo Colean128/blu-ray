@@ -122,7 +122,7 @@ namespace Bot.Commands
             await context.RespondAsync($"Kicked user `{member.Username}#{member.Discriminator}` successfully.");
         }
 
-        [Command("clean"), Description("Deletes a given amount of messages."), RequirePermissions(Permissions.ManageMessages), RequireGuild]
+        [Command("clean"), Description("Deletes a given amount of messages."), RequirePermissions(Permissions.ManageMessages), RequireGuild, Aliases("clear", "empty")]
         public async Task CleanAsync(CommandContext context, [Description("Amount of messages to clean. All messages within that amount before the triggering command will be deleted.")] int amount = 0)
         {
             if (amount == 0)
