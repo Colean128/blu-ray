@@ -224,6 +224,7 @@
     <Compile Include="Managers\GarbageCollection.cs" />
     <Compile Include="Managers\Google.cs" />
     <Compile Include="Managers\Spotify.cs" />
+    <Compile Include="Managers\Starboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structures\Configuration.cs" />
     <Compile Include="Structures\IMDb.cs" />

@@ -1,4 +1,5 @@
 .DS_Store
+blu-ray.db
 config.json
 
 *.suo

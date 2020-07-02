@@ -15,7 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using DSharpPlus;
 using Microsoft.Data.Sqlite;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Bot.Managers
@@ -24,10 +27,43 @@ namespace Bot.Managers
     {
         private static SqliteConnection sqlite;
 
-        public static async Task ConnectAsync(string databasePath)
+        public static async Task ConnectAsync(string databasePath, DebugLogger logger)
         {
+            bool prepare = !File.Exists(databasePath);
             sqlite = new SqliteConnection($"Data Source={databasePath}");
+
+            sqlite.StateChange += (s, e) => logger.LogMessage(LogLevel.Info, "Database", $"State change: {e.OriginalState} -> {e.CurrentState}.", DateTime.Now);
+
             await sqlite.OpenAsync();
+            if (prepare) await initializeAsync();
+        }
+
+        public static SqliteCommand CreateCommand() => sqlite.CreateCommand();
+
+        internal static async Task initializeAsync()
+        {
+            SqliteCommand command = CreateCommand();
+
+            command.CommandText =   "create table starboardChannels ("                      +
+                                    "   guildId     bigint(18) not null unique,"            +
+                                    "   channelId   bigint(18) not null unique,"            +
+                                    "   emojiId     bigint(18) not null unique"             +
+                                    ");"                                                    +
+                                    " "                                                     +
+                                    "create table starboardMessages ("                      +
+                                    "   guildId             bigint(18) not null unique,"    +
+                                    "   channelId           bigint(18) not null unique,"    +
+                                    "   messageId           bigint(18) not null unique,"    +
+                                    "   starboardMessageId  bigint(18) not null unique"     +
+                                    ");"                                                    +
+                                    " "                                                     +
+                                    "create table tags ("                                   +
+                                    "   guildId bigint(18)      not null unique,"           +
+                                    "   userId  bigint(18)      not null unique,"           +
+                                    "   content varchar(2000)   not null"                   +
+                                    ");";
+
+            await command.ExecuteNonQueryAsync();
         }
 
         public static void Disconnect()
@@ -35,7 +71,5 @@ namespace Bot.Managers
             sqlite.Close();
             sqlite.Dispose();
         }
-
-        public static SqliteCommand CreateCommand() => sqlite.CreateCommand();
     }
 }
