@@ -38,16 +38,18 @@ namespace Bot.Managers
             if (prepare) await initializeAsync();
         }
 
-        public static SqliteCommand CreateCommand() => sqlite.CreateCommand();
+        public static SqliteTransaction CreateTransaction() => sqlite.BeginTransaction();
+        public static SqliteCommand CreateCommand()         => sqlite.CreateCommand();
 
         internal static async Task initializeAsync()
         {
-            SqliteCommand command = CreateCommand();
+            SqliteTransaction transaction   = CreateTransaction();
+            SqliteCommand command           = CreateCommand();
 
             command.CommandText =   "create table starboardChannels ("                      +
-                                    "   guildId     bigint(18) not null unique,"            +
-                                    "   channelId   bigint(18) not null unique,"            +
-                                    "   emojiId     bigint(18) not null unique"             +
+                                    "   guildId     bigint(18)      not null unique,"       +
+                                    "   channelId   bigint(18)      not null unique,"       +
+                                    "   emoji       varchar(100)    not null"               +
                                     ");"                                                    +
                                     " "                                                     +
                                     "create table starboardMessages ("                      +
@@ -64,6 +66,7 @@ namespace Bot.Managers
                                     ");";
 
             await command.ExecuteNonQueryAsync();
+            transaction.Commit();
         }
 
         public static void Disconnect()

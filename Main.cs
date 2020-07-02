@@ -133,10 +133,11 @@ namespace Bot
 
             commands.RegisterCommands<Fun>();
             commands.RegisterCommands<Info>();
+            commands.RegisterCommands<Moderation>();
             commands.RegisterCommands<NSFW>();
             commands.RegisterCommands<Owner>();
             commands.RegisterCommands<Search>();
-            commands.RegisterCommands<Moderation>();
+            commands.RegisterCommands<Settings>();
 
             client.UseInteractivity(new InteractivityConfiguration
             {
