@@ -75,7 +75,7 @@ namespace Bot.Commands
             else builder.WithImageUrl(entry.URL);
 
             if (entries.Length >= 100) builder.WithFooter("Found 100 or more results for this query.");
-            else builder.WithFooter($"Found ${entries.Length} results.");
+            else builder.WithFooter($"Found {entries.Length} results.");
 
 
             await context.RespondAsync(embed: builder.Build());

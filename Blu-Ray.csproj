@@ -223,6 +223,7 @@
     <Compile Include="Managers\Events.cs" />
     <Compile Include="Managers\GarbageCollection.cs" />
     <Compile Include="Managers\Google.cs" />
+    <Compile Include="Managers\PermissionStringify.cs" />
     <Compile Include="Managers\Spotify.cs" />
     <Compile Include="Managers\Starboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
