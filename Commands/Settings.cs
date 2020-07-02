@@ -50,7 +50,7 @@ namespace Bot.Commands
             SqliteTransaction transaction   = Database.CreateTransaction();
             SqliteCommand command           = Database.CreateCommand();
 
-            command.CommandText = "insert or replace into starboardChannels (guildId, channelId, emoji) values ($gid, $chn, $emj)";
+            command.CommandText = "insert or replace into starboardChannels (guildId, channelId, emoji) values ($gid, $chn, $emj, $amt)";
 
             command.Parameters.Add(new SqliteParameter
             {
@@ -68,6 +68,12 @@ namespace Bot.Commands
             {
                 ParameterName   = "$emj",
                 Value           = emoji.Id != 0 ? $"{emoji.Name}:{emoji.Id}" : emoji.Name
+            });
+
+            command.Parameters.Add(new SqliteParameter
+            {
+                ParameterName   = "amt",
+                Value           = amount
             });
 
             command.ExecuteNonQuery();

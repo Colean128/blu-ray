@@ -49,7 +49,8 @@ namespace Bot.Managers
             command.CommandText =   "create table starboardChannels ("                      +
                                     "   guildId     bigint(18)      not null unique,"       +
                                     "   channelId   bigint(18)      not null,"              +
-                                    "   emoji       varchar(100)    not null"               +
+                                    "   emoji       varchar(100)    not null,"              +
+                                    "   amount      int             not null"               +
                                     ");"                                                    +
                                     " "                                                     +
                                     "create table starboardMessages ("                      +
