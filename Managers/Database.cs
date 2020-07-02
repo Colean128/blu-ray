@@ -48,20 +48,20 @@ namespace Bot.Managers
 
             command.CommandText =   "create table starboardChannels ("                      +
                                     "   guildId     bigint(18)      not null unique,"       +
-                                    "   channelId   bigint(18)      not null unique,"       +
+                                    "   channelId   bigint(18)      not null,"              +
                                     "   emoji       varchar(100)    not null"               +
                                     ");"                                                    +
                                     " "                                                     +
                                     "create table starboardMessages ("                      +
                                     "   guildId             bigint(18) not null unique,"    +
-                                    "   channelId           bigint(18) not null unique,"    +
-                                    "   messageId           bigint(18) not null unique,"    +
-                                    "   starboardMessageId  bigint(18) not null unique"     +
+                                    "   channelId           bigint(18) not null,"           +
+                                    "   messageId           bigint(18) not null,"           +
+                                    "   starboardMessageId  bigint(18) not null"            +
                                     ");"                                                    +
                                     " "                                                     +
                                     "create table tags ("                                   +
                                     "   guildId bigint(18)      not null unique,"           +
-                                    "   userId  bigint(18)      not null unique,"           +
+                                    "   userId  bigint(18)      not null,"                  +
                                     "   content varchar(2000)   not null"                   +
                                     ");";
 
