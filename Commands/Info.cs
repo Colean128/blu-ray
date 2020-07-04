@@ -151,6 +151,15 @@ namespace Bot.Commands
 
         [Command("ping"), Description("Shows the ping of the bot."), Aliases("pong")]
         public async Task PingAsync(CommandContext context) => await context.RespondAsync($"{DiscordEmoji.FromName(context.Client, ":ping_pong:")} Pong! Ping: **{context.Client.Ping}ms**.");
+        
+        [Command("avatar"), Description("Replies with the user's avatar."), Aliases("ava", "pfp"), RequireGuild]
+        public async Task AvatarAsync(CommandContext context, [RemainingText, Description("The member whose avatar you want.")] DiscordMember member = null)
+        {
+            if (member == null) member = context.Member;
+            DiscordEmbedBuilder builder = new DiscordEmbedBuilder();
+            builder.WithTitle($"{member.Username}#{member.Discriminator}'s avatar.") .WithImageUrl(member.AvatarUrl);
+            await context.RespondAsync(embed: builder.Build());
+        }
 
         [Command("quote"), Description("Quote another user's message."), RequireGuild]
         public async Task QuoteAsync(CommandContext context, [Description("ID of the message to quote.")] ulong id = 0)
