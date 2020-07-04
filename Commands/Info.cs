@@ -22,6 +22,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
@@ -194,6 +195,35 @@ namespace Bot.Commands
             await QuoteAsync(context, ids[0], context.Guild.GetChannel(ids[1]));
         }
 
+        [Command("serverinfo"), Description("Get information about the current guild."), RequireGuild]
+        public async Task ServerInfoAsync(CommandContext context)
+        {
+            DiscordGuild guild = context.Guild;
+            DiscordEmbedBuilder builder = new DiscordEmbedBuilder();
+            IReadOnlyCollection<DiscordMember> members = await guild.GetAllMembersAsync();
+            IReadOnlyCollection<DiscordChannel> channels = await guild.GetChannelsAsync();
+            DateTimeOffset creationTimestamp = guild.CreationTimestamp;
+            DiscordMember owner = context.Guild.Owner;
+            VerificationLevel verification = context.Guild.VerificationLevel;
+            string region = context.Guild.VoiceRegion.Name;
+            string features = "";
+            string SplashUrl = context.Guild.SplashUrl;
+            foreach (string x in guild.Features) features += $"{x} ";
+            if(string.IsNullOrEmpty(features)){ features += "None "; }
+
+            if (string.IsNullOrEmpty(SplashUrl)) {
+                builder.WithTitle($"Information about {guild.Name}")
+                        .AddField("Information", $"- Server ID: **{guild.Id}**\n- Owner: **{owner.Username}#{owner.Discriminator} ({owner.Id})**\n- Features: **{features}**\n- Member Count: **{members.Count}**\n- Channel Count: **{channels.Count}**\n- Voice Region: **{region}**\n- Verification: **{verification}**\n- Creation Timestamp: **{creationTimestamp}**");
+            }
+            else
+            {
+                builder.WithTitle($"Information about {guild.Name}")
+                    .WithImageUrl(SplashUrl)
+                    .AddField("Information", $"- Server ID: **{guild.Id}**\n- Owner: **{owner.Username}#{owner.Discriminator} ({owner.Id})**\n- Features: **{features}**\n- Member Count: **{members.Count}**\n- Channel Count: **{channels.Count}**\n- Voice Region: **{region}**\n- Verification: **{verification}**\n- Creation Timestamp: **{creationTimestamp}**\n- Invite Splash:");
+            }
+
+            await context.RespondAsync(embed: builder.Build());
+        }
         [Command("quote")]
         public async Task QuoteAsync(CommandContext context, [Description("ID of the message to quote.")] ulong messageId = 0, [Description("ID or tag of the channel that contains the message.")] DiscordChannel channel = null)
         {
