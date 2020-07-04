@@ -218,12 +218,13 @@
     <Compile Include="Commands\Settings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Managers\AFK.cs" />
-    <Compile Include="Managers\ColorDetection.cs" />
+    <Compile Include="Structures\Emojis.cs" />
+    <Compile Include="Structures\ColorDetection.cs" />
     <Compile Include="Managers\Database.cs" />
     <Compile Include="Managers\Events.cs" />
     <Compile Include="Managers\GarbageCollection.cs" />
     <Compile Include="Managers\Google.cs" />
-    <Compile Include="Managers\PermissionStringify.cs" />
+    <Compile Include="Structures\Stringify.cs" />
     <Compile Include="Managers\Spotify.cs" />
     <Compile Include="Managers\Starboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

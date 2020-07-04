@@ -17,12 +17,30 @@
 
 using DSharpPlus;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Bot.Managers
+namespace Bot.Structures
 {
-    public class PermissionStringify
+    public class Stringify
     {
-        public static List<string> ConvertToString(Permissions permissions)
+        public static List<string> GuildFeatures(IReadOnlyCollection<string> features)
+        {
+            List<string> featureList = new List<string>();
+
+            if (features.Contains("INVITE_SPLASH")) featureList.Add("Invite splash");
+            if (features.Contains("VIP_REGIONS"))   featureList.Add("VIP Voice servers");
+            if (features.Contains("VANITY_URL"))    featureList.Add("Customizable invites");
+            if (features.Contains("COMMERCE"))      featureList.Add("Store channels");
+            if (features.Contains("NEWS"))          featureList.Add("News channels");
+            if (features.Contains("ANIMATED_ICON")) featureList.Add("Animated server icon");
+            if (features.Contains("BANNER"))        featureList.Add("Server banner");
+            if (features.Contains("MORE_EMOJI"))    featureList.Add("More Emojis");
+
+            featureList.Sort();
+            return featureList;
+        }
+
+        public static List<string> RolePermissions(Permissions permissions)
         {
             List<string> permissionList = new List<string>();
 

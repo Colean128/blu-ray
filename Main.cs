@@ -101,6 +101,7 @@ namespace Bot
             client.Ready += async (ReadyEventArgs e) =>
             {
                 e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);
+
                 await e.Client.UpdateStatusAsync(new DiscordActivity(configuration.Status.Name, configuration.Status.Type));
             };
 
@@ -120,12 +121,12 @@ namespace Bot
 
             commands = client.UseCommandsNext(new CommandsNextConfiguration
             {
-                CaseSensitive = true,
-                EnableDefaultHelp = true,
-                EnableDms = true,
-                EnableMentionPrefix = true,
-                IgnoreExtraArguments = true,
-                StringPrefixes = configuration.Prefixes,
+                CaseSensitive           = true,
+                EnableDefaultHelp       = true,
+                EnableDms               = true,
+                EnableMentionPrefix     = true,
+                IgnoreExtraArguments    = true,
+                StringPrefixes          = configuration.Prefixes,
             });
 
             commands.CommandExecuted    += Events.OnCommandExecute;
@@ -142,19 +143,30 @@ namespace Bot
             client.UseInteractivity(new InteractivityConfiguration
             {
                 PaginationBehaviour = PaginationBehaviour.Ignore,
-                PaginationDeletion = PaginationDeletion.DeleteEmojis,
-                PollBehaviour = PollBehaviour.DeleteEmojis
+                PaginationDeletion  = PaginationDeletion.DeleteEmojis,
+                PollBehaviour       = PollBehaviour.DeleteEmojis
             });
 
-            IMDb.apiKey = configuration.OMDb;
+            IMDb.InitializeWithKey(configuration.OMDb);
             Managers.Google.InitializeService(configuration.Google.Key, configuration.Google.Cx);
+            Steam.InitializeWithKey(configuration.Steam);
+
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await Database.ConnectAsync(dbPath, client.DebugLogger);
-            await client.ConnectAsync();
 
             garbage = new GarbageCollection();
 
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler((s, e) => HandleProcessQuit().GetAwaiter().GetResult());            
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler((s, e) => HandleProcessQuit().GetAwaiter().GetResult());
+
+            Emojis.Initialize(configuration.Emojis.Success,
+                    configuration.Emojis.Warning,
+                    configuration.Emojis.Error,
+                    configuration.Emojis.Online,
+                    configuration.Emojis.Idle,
+                    configuration.Emojis.DoNotDisturb,
+                    configuration.Emojis.Offline);
+
+            await client.ConnectAsync();
             await Task.Delay(-1);
         }
 

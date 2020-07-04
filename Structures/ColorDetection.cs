@@ -23,7 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 
-namespace Bot.Managers
+namespace Bot.Structures
 {
     public class ColorDetection
     {

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -116,7 +117,7 @@ namespace Bot.Managers
                 {
                     case RequirePermissionsAttribute attr:
                         string perms = null;
-                        PermissionStringify.ConvertToString(attr.Permissions).ForEach((x) => perms += $"- **{x}**\n");
+                        Stringify.RolePermissions(attr.Permissions).ForEach((x) => perms += $"- **{x}**\n");
 
                         await e.Context.RespondAsync($"The command \"`{e.Command.Name}`\" requires elevated permissions.", embed: new DiscordEmbedBuilder()
                             .WithDescription(perms)

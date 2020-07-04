@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -34,7 +35,7 @@ namespace Bot.Structures
         }
 
         private const string omdbURL = "http://www.omdbapi.com";
-        internal static string apiKey;
+        private static string apiKey;
 
         public class SearchEntry
         {
@@ -98,6 +99,8 @@ namespace Bot.Structures
         }
 
         public IMDb() { }
+
+        public static void InitializeWithKey(string key) => apiKey = key;
 
         public static async Task<IMDb> GetAsync(string query)
         {

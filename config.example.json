@@ -1,12 +1,22 @@
 {
     "token": "token here",
     "prefixes": [
-      "br/"
+        "br/",
+        "br!"
     ],
     "loglevel": "info",
     "status": {
         "name": "movies on a PS3.",
         "type": "Watching"
+    },
+    "emojis": {
+        "success": 0,
+        "warning": 0,
+        "error": 0,
+        "online": 0,
+        "idle": 0,
+        "dnd": 0,
+        "offline": 0
     },
     "support_guild": 123456789012345678,
     "google": {
@@ -15,7 +25,8 @@
     },
     "omdb": "API key here",
     "spotify": {
-        "id": "ID here",
-        "secret": "Secret here"
-    }
+      "id": "ID here",
+      "secret": "Secret here"
+    },
+    "steam": "Steam web API key here"
 }
