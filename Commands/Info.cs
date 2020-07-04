@@ -195,7 +195,7 @@ namespace Bot.Commands
             await QuoteAsync(context, ids[0], context.Guild.GetChannel(ids[1]));
         }
 
-        [Command("serverinfo"), Description("Get information about the current guild."), RequireGuild]
+        [Command("serverinfo"), Description("Get information about the current guild."), RequireGuild, Aliases("server")]
         public async Task ServerInfoAsync(CommandContext context)
         {
             DiscordGuild guild = context.Guild;
