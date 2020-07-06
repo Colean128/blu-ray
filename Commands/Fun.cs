@@ -108,7 +108,7 @@ namespace Bot.Commands
         public async Task AFKAsync(CommandContext context, [Description("Optional; Reason to display."), RemainingText] string reason = null)
         {
             AFK.AddMember(context.Member.Id, reason);
-            await context.RespondAsync("You're now afk, goodbye.");
+            await context.RespondAsync("You're now AFK, goodbye.");
         }
 
         [Command("bruno"), Description("Shows you a random Bruno Powroznik video."), Aliases("powroznik")]
@@ -178,7 +178,7 @@ namespace Bot.Commands
         public async Task WhyAsync(CommandContext context)
         {
             string question = await NekosLifeWhyQuestion.GetAsync();
-            await context.RespondAsync($"Here's a question for you:\n\n{char.ToUpper(question[0]) + question.Substring(1)}");
+            await context.RespondAsync($"Here's a question for you: **{char.ToUpper(question[0]) + question.Substring(1)}**");
         }
     }
 }

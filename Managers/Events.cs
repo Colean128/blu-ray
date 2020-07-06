@@ -22,12 +22,10 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using DSharpPlus.Exceptions;
 using Sentry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 
 namespace Bot.Managers
@@ -188,9 +186,7 @@ namespace Bot.Managers
 #if DEBUG
             e.Context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands", $"The command \"{e.Command.Name}\" executed by the user {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) in channel \"{e.Context.Channel.Id}\" encountered an error.", DateTime.Now, e.Exception);
             if (e.Context.Guild == null || (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An error occurred.");
-            return;
-#endif
-
+#else
             SentrySdk.CaptureEvent(new SentryEvent(e.Exception)
             {
                 Message = $"Command \"{e.Command.Name}\" encountered an issue.",
@@ -198,7 +194,7 @@ namespace Bot.Managers
             });
 
             if (e.Context.Guild == null || (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An unexpected error has occurred.\nThe current error has been reported.");
-
+#endif
         }
     }
 }
