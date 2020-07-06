@@ -1,6 +1,6 @@
 // Blu-Ray Discord Bot
 //
-// Copyright � 2020, The Blu-Ray authors 
+// Copyright © 2020, The Blu-Ray authors 
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -17,19 +17,20 @@
 
 using Bot.Managers;
 using Bot.Structures;
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using Google.Apis.Customsearch.v1.Data;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    public class Search : BaseCommandModule
+    public class Search : CommandModule
     {
+        public Search() => Name = "Search";
+
         [Command("imdb"), Description("Searches for a movie, series or episode on IMDb.")]
         public async Task IMDbAsync(CommandContext context, [RemainingText, Description("Search query to search for.")] string query = null)
         {

@@ -9,7 +9,7 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -23,55 +23,85 @@ namespace Bot.Structures
 {
     public class Configuration
     {
+        public class EmojiConfiguration
+        {
+            [JsonProperty("success", NullValueHandling = NullValueHandling.Include)]
+            public ulong Success { get; private set; }
+
+            [JsonProperty("warning", NullValueHandling = NullValueHandling.Include)]
+            public ulong Warning { get; private set; }
+
+            [JsonProperty("error", NullValueHandling = NullValueHandling.Include)]
+            public ulong Error { get; private set; }
+
+            [JsonProperty("online", NullValueHandling = NullValueHandling.Include)]
+            public ulong Online { get; private set; }
+
+            [JsonProperty("idle", NullValueHandling = NullValueHandling.Include)]
+            public ulong Idle { get; private set; }
+
+            [JsonProperty("dnd", NullValueHandling = NullValueHandling.Include)]
+            public ulong DoNotDisturb { get; private set; }
+
+            [JsonProperty("offline", NullValueHandling = NullValueHandling.Include)]
+            public ulong Offline { get; private set; }
+        }
+
         public class GoogleConfiguration
         {
-            [JsonProperty("key")]
+            [JsonProperty("key", NullValueHandling = NullValueHandling.Include)]
             public string Key { get; private set; }
 
-            [JsonProperty("cx")]
+            [JsonProperty("cx", NullValueHandling = NullValueHandling.Include)]
             public string Cx { get; private set; }
         }
 
         public class SpotifyConfiguration
         {
-            [JsonProperty("id")]
+            [JsonProperty("id", NullValueHandling = NullValueHandling.Include)]
             public string ID { get; private set; }
 
-            [JsonProperty("secret")]
+            [JsonProperty("secret", NullValueHandling = NullValueHandling.Include)]
             public string Secret { get; private set; }
         }
 
         public class StatusConfiguration
         {
-            [JsonProperty("name")]
+            [JsonProperty("name", NullValueHandling = NullValueHandling.Include)]
             public string Name { get; private set; }
 
-            [JsonProperty("Type")]
+            [JsonProperty("Type", NullValueHandling = NullValueHandling.Include)]
             public ActivityType Type { get; private set; }
         }
 
-        [JsonProperty("token")]
+        [JsonProperty("token", NullValueHandling = NullValueHandling.Include)]
         public string Token { get; private set; }
 
-        [JsonProperty("loglevel")]
+        [JsonProperty("loglevel", NullValueHandling = NullValueHandling.Include)]
         public string LogLevel { get; private set; }
 
-        [JsonProperty("prefixes")]
+        [JsonProperty("prefixes", NullValueHandling = NullValueHandling.Include)]
         public string[] Prefixes { get; private set; }
 
-        [JsonProperty("status")]
+        [JsonProperty("status", NullValueHandling = NullValueHandling.Include)]
         public StatusConfiguration Status { get; private set; }
 
-        [JsonProperty("support_guild")]
+        [JsonProperty("emojis", NullValueHandling = NullValueHandling.Ignore)]
+        public EmojiConfiguration Emojis { get; private set; }
+
+        [JsonProperty("support_guild", NullValueHandling = NullValueHandling.Include)]
         public ulong SupportId { get; private set; }
 
-        [JsonProperty("google")]
-        public GoogleConfiguration Google;
+        [JsonProperty("google", NullValueHandling = NullValueHandling.Include)]
+        public GoogleConfiguration Google { get; private set; }
 
-        [JsonProperty("omdb")]
+        [JsonProperty("omdb", NullValueHandling = NullValueHandling.Include)]
         public string OMDb { get; internal set; }
 
-        [JsonProperty("spotify")]
+        [JsonProperty("sentry", NullValueHandling = NullValueHandling.Include)]
+        public string Sentry { get; private set; }
+
+        [JsonProperty("spotify", NullValueHandling = NullValueHandling.Include)]
         public SpotifyConfiguration Spotify { get; private set; }
 
         public Configuration() { }
@@ -89,10 +119,12 @@ namespace Bot.Structures
             Token       = config.Token;
             LogLevel    = config.LogLevel;
             Prefixes    = config.Prefixes;
+            Emojis      = config.Emojis;
             Status      = config.Status;
             SupportId   = config.SupportId;
             Google      = config.Google;
             OMDb        = config.OMDb;
+            Sentry      = config.Sentry;
             Spotify     = config.Spotify;
         }
     }

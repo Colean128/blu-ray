@@ -9,7 +9,7 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -17,6 +17,7 @@
 
 using Bot.Managers;
 using Bot.Structures;
+using Bot.Types;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -25,8 +26,10 @@ using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    public class Fun : BaseCommandModule
+    public class Fun : CommandModule
     {
+        public Fun() => Name = "Fun";
+
         private readonly string[] eightballResponses =
         {
             "It is certain",
@@ -49,6 +52,29 @@ namespace Bot.Commands
             "My sources say no",
             "Outlook not so good",
             "Very doubtful"
+        };
+
+        private readonly string[] titlesList =
+        {
+            "Legendary",
+            "Forgettable",
+            "Wise",
+            "Old",
+            "Lone Wolf",
+            "Defense",
+            "Little One",
+            "Big One",
+            "Microscopic",
+            "Great",
+            "Idiotic",
+            "Town Drunk",
+            "Pillock of the Village",
+            "Bedroom Coder",
+            "Nerd",
+            "Social Outcast",
+            "Stranded",
+            "Lost One",
+            "Nappy Wearer"
         };
 
         private readonly string[] brunoVideos =
@@ -76,11 +102,16 @@ namespace Bot.Commands
                 .WithDescription($"You've asked the magic 8-Ball the following question:\n```\n{question}\n```\nMy Answer is: **{eightballResponses[new Random().Next(0, eightballResponses.Length - 1)]}**."));
         }
 
+        [Command("title"), Description("What is your title?")]
+        public async Task TitleAsync(CommandContext context)
+        {
+            await context.RespondAsync($"You are: {context.User.Username} the {titlesList[new Random().Next(0, titlesList.Length - 1)]}!");
+        }
         [Command("afk"), Description("Sets you as AFK across all servers."), Aliases("away"), RequireGuild]
         public async Task AFKAsync(CommandContext context, [Description("Optional; Reason to display."), RemainingText] string reason = null)
         {
             AFK.AddMember(context.Member.Id, reason);
-            await context.RespondAsync("You're now afk, goodbye.");
+            await context.RespondAsync("You're now AFK, goodbye.");
         }
 
         [Command("bruno"), Description("Shows you a random Bruno Powroznik video."), Aliases("powroznik")]
@@ -150,7 +181,7 @@ namespace Bot.Commands
         public async Task WhyAsync(CommandContext context)
         {
             string question = await NekosLifeWhyQuestion.GetAsync();
-            await context.RespondAsync($"Here's a question for you:\n\n{char.ToUpper(question[0]) + question.Substring(1)}");
+            await context.RespondAsync($"Here's a question for you: **{char.ToUpper(question[0]) + question.Substring(1)}**");
         }
     }
 }

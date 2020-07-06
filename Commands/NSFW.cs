@@ -9,7 +9,7 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -18,14 +18,17 @@
 using System;
 using System.Threading.Tasks;
 using Bot.Structures;
+using Bot.Types;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
 namespace Bot.Commands
 {
-    public class NSFW : BaseCommandModule
+    public class NSFW : CommandModule
     {
+        public NSFW() => Name = "NSFW";
+
         [Command("rule34"), Description("Searches for content on Rule34."), Aliases("r34"), RequireNsfw]
         public async Task Rule34Async(CommandContext context, [RemainingText, Description("Search query.")] string query = null)
         {
@@ -75,7 +78,7 @@ namespace Bot.Commands
             else builder.WithImageUrl(entry.URL);
 
             if (entries.Length >= 100) builder.WithFooter("Found 100 or more results for this query.");
-            else builder.WithFooter($"Found ${entries.Length} results.");
+            else builder.WithFooter($"Found {entries.Length} results.");
 
 
             await context.RespondAsync(embed: builder.Build());

@@ -9,7 +9,7 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -21,10 +21,12 @@ using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
+using Newtonsoft.Json;
+using Sentry;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Bot
@@ -33,43 +35,59 @@ namespace Bot
     {
         private DiscordClient client;
         private CommandsNextExtension commands;
+        private GarbageCollection garbage;
         
         public static void Main(string[] args)
         {
-            Configuration configuration;
+            Console.Title = $"Blu-Ray {typeof(Program).Assembly.GetName().Version}";
 
-            try { configuration = new Configuration(args.Length > 0 ? args[0] : "config.json"); }
+            string defaultConfigPath = "config.json", defaultDatabasePath = "blu-ray.db";
+#if DEBUG
+            Console.Title += " - Debug";
+
+            defaultConfigPath    = "../../config.json";
+            defaultDatabasePath  = "../../blu-ray.db";
+#endif
+
+            Configuration configuration;
+            try { configuration = new Configuration(args.Length > 0 ? args[0] : defaultConfigPath); }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Failed to find the configuration.");
+                return;
+            }
+            catch (JsonSerializationException)
+            {
+                Console.WriteLine("The configuration is invalid.");
+                return;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error of type \"{ex.GetType().Name}\" occurred: \"{ex.Message}\".");
                 return;
             }
 
-            new Program().RunAsync(configuration, (args.Length > 1 ? int.Parse(args[1]) : 0), (args.Length > 2 ? int.Parse(args[2]) : 1)).GetAwaiter().GetResult();
+            new Program().RunAsync(configuration, args.Length > 1 ? int.Parse(args[1]) : 0, args.Length > 2 ? int.Parse(args[2]) : 1, args.Length > 3 ? args[3] : defaultDatabasePath).GetAwaiter().GetResult();
         }
 
-        internal async Task RunAsync(Configuration configuration, int shardId, int shardCount)
+        internal async Task RunAsync(Configuration configuration, int shardId, int shardCount, string dbPath)
         {
             LogLevel level;
-            switch (configuration.LogLevel)
+            switch (configuration.LogLevel.ToLower())
             {
-                case "Debug":
+                case "debug":
                     level = LogLevel.Debug;
                     break;
 
-                case "Info":
-                    level = LogLevel.Info;
-                    break;
-
-                case "Warning":
+                case "warning":
                     level = LogLevel.Warning;
                     break;
 
-                case "Error":
+                case "error":
                     level = LogLevel.Error;
                     break;
 
-                case "Critical":
+                case "critical":
                     level = LogLevel.Critical;
                     break;
 
@@ -77,6 +95,9 @@ namespace Bot
                     level = LogLevel.Info;
                     break;
             }
+#if !DEBUG
+            SentrySdk.Init(configuration.Sentry);
+#endif
 
             client = new DiscordClient(new DiscordConfiguration
             {
@@ -91,51 +112,78 @@ namespace Bot
 
             Events.supportGuildId = configuration.SupportId;
 
-            client.Ready += async (ReadyEventArgs e) =>
-            {
-                e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);
-                await e.Client.UpdateStatusAsync(new DiscordActivity(configuration.Status.Name, configuration.Status.Type));
-            };
+            client.Ready                        += Events.OnClientReady;
+            client.Resumed                      += Events.OnClientResumed;
+            client.ClientErrored                += Events.OnClientError;
+            client.SocketErrored                += Events.OnClientSocketError;
+            client.GuildAvailable               += Events.OnGuildJoin;
+            client.GuildCreated                 += Events.OnGuildJoin;
+            client.GuildDeleted                 += Events.OnGuildLeave;
 
-            client.Resumed += Events.OnClientResumed;
-            client.ClientErrored += Events.OnClientError;
-            client.SocketErrored += Events.OnClientSocketError;
-            client.GuildAvailable += Events.OnGuildJoin;
-            client.GuildCreated += Events.OnGuildJoin;
-            client.GuildDeleted += Events.OnGuildLeave;
-            client.MessageCreated += AFK.AFKMessageHandler;
+            client.MessageCreated               += AFK.AFKMessageHandler;
+
+            client.MessageReactionAdded         += Starboard.ReactionAddHandler;
+            client.MessageReactionRemoved       += Starboard.ReactionRemoveHandler;
+            client.MessageReactionRemovedEmoji  += Starboard.ReactionRemoveEmojiHandler;
+            client.MessageReactionsCleared      += Starboard.ReactionRemoveAllHandler;
 
             commands = client.UseCommandsNext(new CommandsNextConfiguration
             {
-                CaseSensitive = true,
-                EnableDefaultHelp = true,
-                EnableDms = true,
-                EnableMentionPrefix = true,
-                IgnoreExtraArguments = true,
-                StringPrefixes = configuration.Prefixes,
+                CaseSensitive           = true,
+                EnableDefaultHelp       = true,
+                EnableDms               = true,
+                EnableMentionPrefix     = true,
+                IgnoreExtraArguments    = true,
+                StringPrefixes          = configuration.Prefixes,
             });
 
-            commands.CommandExecuted += Events.OnCommandExecute;
-            commands.CommandErrored += Events.OnCommandError;
+            commands.SetHelpFormatter<Help>();
+
+            commands.CommandExecuted    += Events.OnCommandExecute;
+            commands.CommandErrored     += Events.OnCommandError;
 
             commands.RegisterCommands<Fun>();
             commands.RegisterCommands<Info>();
+            commands.RegisterCommands<Moderation>();
             commands.RegisterCommands<NSFW>();
             commands.RegisterCommands<Owner>();
             commands.RegisterCommands<Search>();
+            //commands.RegisterCommands<Settings>();
 
             client.UseInteractivity(new InteractivityConfiguration
             {
                 PaginationBehaviour = PaginationBehaviour.Ignore,
-                PaginationDeletion = PaginationDeletion.DeleteEmojis,
-                PollBehaviour = PollBehaviour.DeleteEmojis
+                PaginationDeletion  = PaginationDeletion.DeleteEmojis,
+                PollBehaviour       = PollBehaviour.DeleteEmojis
             });
 
+            IMDb.InitializeWithKey(configuration.OMDb);
             Managers.Google.InitializeService(configuration.Google.Key, configuration.Google.Cx);
-            IMDb.apiKey = configuration.OMDb;
+
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
-            await client.ConnectAsync();
+            await Database.ConnectAsync(dbPath, client.DebugLogger);
+
+            garbage = new GarbageCollection();
+
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler((s, e) => HandleProcessQuit().GetAwaiter().GetResult());
+
+            Emojis.Initialize(configuration.Emojis.Success,
+                    configuration.Emojis.Warning,
+                    configuration.Emojis.Error,
+                    configuration.Emojis.Online,
+                    configuration.Emojis.Idle,
+                    configuration.Emojis.DoNotDisturb,
+                    configuration.Emojis.Offline);
+
+            await client.ConnectAsync(new DiscordActivity(configuration.Status.Name, configuration.Status.Type));
             await Task.Delay(-1);
+        }
+
+        internal async Task HandleProcessQuit()
+        {
+            await client.DisconnectAsync();
+            Database.Disconnect();
+            garbage.Dispose();
         }
     }
 }

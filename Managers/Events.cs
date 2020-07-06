@@ -9,19 +9,23 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using Sentry;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bot.Managers
@@ -30,6 +34,12 @@ namespace Bot.Managers
     {
         internal static ulong supportGuildId;
         
+        public static Task OnClientReady(ReadyEventArgs e)
+        {
+            e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);
+            return Task.CompletedTask;
+        }
+
         public static Task OnClientResumed(ReadyEventArgs e)
         {
             e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", "Resumed session.", DateTime.Now);
@@ -38,13 +48,30 @@ namespace Bot.Managers
 
         public static Task OnClientError(ClientErrorEventArgs e)
         {
+#if DEBUG
             e.Client.DebugLogger.LogMessage(LogLevel.Error, "Client", $"The client encountered an error.", DateTime.Now, e.Exception);
+#else
+            SentrySdk.CaptureEvent(new SentryEvent(e.Exception)
+            {
+                Message = "The client encountered an error.",
+                Level = Sentry.Protocol.SentryLevel.Error
+            });
+#endif
+
             return Task.CompletedTask;
         }
 
         public static Task OnClientSocketError(SocketErrorEventArgs e)
         {
+#if DEBUG
             e.Client.DebugLogger.LogMessage(LogLevel.Error, "Client", $"The client's connection encountered an error.", DateTime.Now, e.Exception);
+#else
+            SentrySdk.CaptureEvent(new SentryEvent(e.Exception)
+            {
+                Message = "The client encountered a connection error.",
+                Level = Sentry.Protocol.SentryLevel.Error
+            });
+#endif
             return Task.CompletedTask;
         }
 
@@ -77,7 +104,7 @@ namespace Bot.Managers
                 {
                     await channels[i].SendMessageAsync(embed: new DiscordEmbedBuilder()
                         .WithAuthor($"{e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator}", "https://github.com/Zayne64/Blu-Ray", currentMember.GetAvatarUrl(ImageFormat.Png))
-                        .WithDescription($"Hello everyone!\nWe're sorry to remind you that Blu-Ray has to leave this guild.\n{percentage}% of all members in this server are bots, which is more than the allowed 20% bot density for servers, if they want to use the Blu-Ray Discord bot.\nDue to limited resources, we cannot, and, even if this wouldn't be a problem, we will not support the idea of bot farms.\n\nIf you still want to use Blu-Ray, remove other bots, please.\n\nIf you believe this judgement is invalid, try adding Blu-Ray again.\nIf Blu-Ray persists on leaving and you're still sure my judgement is false, you can leave an issue on the GitHub repository: https://github.com/Zayne64/blu-ray\n\nSincerely,\nthe team behind the Blu-Ray bot.")
+                        .WithDescription($"Hello everyone!\nWe're sorry to remind you that Blu-Ray has to leave this guild.\n{percentage}% of all members in this server are bots, which is more than the allowed 20% bot density for servers, if they want to use the Blu-Ray Discord bot.\nDue to limited resources, we cannot, and, even if this wouldn't be a problem, we will not support the idea of bot farms.\n\nIf you still want to use Blu-Ray, remove other bots, please.\n\nIf you believe this judgment is invalid, try adding Blu-Ray again.\nIf Blu-Ray persists on leaving and you're still sure my judgment is false, you can leave an issue on the GitHub repository: https://github.com/Zayne64/blu-ray\n\nSincerely,\nthe team behind the Blu-Ray bot.")
                         .WithTitle("High bot density")
                         .Build());
 
@@ -107,15 +134,67 @@ namespace Bot.Managers
         public static async Task OnCommandError(CommandErrorEventArgs e)
         {
             if (e.Command == null) return;
-            else if (e.Exception.GetType() == typeof(ChecksFailedException) && (e.Context.Guild != null && (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0))
+
+            if (e.Context.Guild == null || (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0)
             {
-                await e.Context.RespondAsync("This is not the appropriate channel.");
-                return;
+                switch (e.Exception)
+                {
+                    case ArgumentException _:
+                        await e.Context.RespondAsync($"{Emojis.ErrorEmoji} Invalid input.");
+                        return;
+
+                    case ChecksFailedException checks:
+                        switch (checks.FailedChecks.FirstOrDefault())
+                        {
+                            case RequirePermissionsAttribute attr:
+                                string perms = null;
+                                Stringify.RolePermissions(attr.Permissions).ForEach((x) => perms += $"- **{x}**\n");
+
+                                await e.Context.RespondAsync($"{Emojis.ErrorEmoji} The command \"`{e.Command.Name}`\" requires elevated permissions.", embed: new DiscordEmbedBuilder()
+                                    .WithDescription(perms)
+                                    .WithTitle("Required permissions")
+                                    .Build());
+                                break;
+
+                            case RequireDirectMessageAttribute _:
+                                await e.Context.RespondAsync($"{Emojis.ErrorEmoji} The command \"`{e.Command.Name}`\" is restricted to direct messages only.");
+                                break;
+
+                            case RequireGuildAttribute _:
+                                await e.Context.RespondAsync($"{Emojis.ErrorEmoji} The command \"`{e.Command.Name}`\" is restricted to servers only.");
+                                break;
+
+                            case RequireNsfwAttribute _:
+                                await e.Context.RespondAsync($"{Emojis.ErrorEmoji} The command \"`{e.Command.Name}`\" cannot be executed outside of a channel set as NSFW one.");
+                                break;
+
+                            case RequireRolesAttribute attr:
+                                await e.Context.RespondAsync($"{Emojis.ErrorEmoji} The command \"`{e.Command.Name}`\" requires you to possess {(attr.RoleNames.Count == 1 ? "a " : "")}certain role{(attr.RoleNames.Count > 1 ? "s" : "")}: {attr.RoleNames.Aggregate((a, b) => a + ", " + b)}");
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                        return;
+
+                    default:
+                        break;
+                }
             }
 
-            e.Context.Client.DebugLogger.LogMessage(LogLevel.Info, "Commands", $"The command \"{e.Command.Name}\" executed by the user {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) in channel \"{e.Context.Channel.Id}\" encountered an error.", DateTime.Now, e.Exception);
+#if DEBUG
+            e.Context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands", $"The command \"{e.Command.Name}\" executed by the user {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) in channel \"{e.Context.Channel.Id}\" encountered an error.", DateTime.Now, e.Exception);
+            if (e.Context.Guild == null || (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An error occurred.");
+#else
+            SentrySdk.CaptureEvent(new SentryEvent(e.Exception)
+            {
+                Message = $"Command \"{e.Command.Name}\" encountered an issue.",
+                Level = Sentry.Protocol.SentryLevel.Error
+            });
 
-            if (e.Context.Guild != null && (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An error occurred.\nIf this persists, use the `about` command and leave an issue on the GitHub repository.\n");
+            if (e.Context.Guild == null || (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An unexpected error has occurred.\nThe current error has been reported.");
+#endif
         }
     }
 }

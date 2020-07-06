@@ -9,15 +9,18 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -28,8 +31,10 @@ using Microsoft.CodeAnalysis.Scripting;
 
 namespace Bot.Commands
 {
-    public class Owner : BaseCommandModule
+    public class Owner : CommandModule
     {
+        public Owner() => Name = "Owner";
+
         [Command("eval"), Aliases("evaluate"), Hidden, RequireOwner]
         public async Task EvaluateAsync(CommandContext context, [RemainingText] string code)
         {
@@ -41,11 +46,12 @@ namespace Bot.Commands
 
             try
             {
+                List<string> output = new List<string>();
+                foreach (Assembly ass in AppDomain.CurrentDomain.GetAssemblies().Distinct()) try { foreach (Type type in ass.GetTypes().Distinct()) output.Add(type.Namespace); } catch (ReflectionTypeLoadException) { continue; }
+
                 ScriptOptions options = ScriptOptions.Default
-                .WithImports("System", "System.Collections.Generic", "System.IO", "System.Linq", "System.Text", "System.Threading.Tasks",
-                "DSharpPlus", "DSharpPlus.CommandsNext", "DSharpPlus.Entities", "DSharpPlus.Interactivity", "DSharpPlus.Net",
-                "Bot", "Bot.Commands", "Bot.Managers")
-                .WithReferences(AppDomain.CurrentDomain.GetAssemblies().Where(xa => !xa.IsDynamic && !string.IsNullOrWhiteSpace(xa.Location)));
+                    .WithImports(output.Distinct().Where(x => x != null && x.Length > 0).ToArray())
+                    .WithReferences(AppDomain.CurrentDomain.GetAssemblies().Distinct().Where(x => !x.IsDynamic && !string.IsNullOrWhiteSpace(x.Location)));
 
                 Script script = CSharpScript.Create(code, options, typeof(EvaluationContent));
                 script.Compile();
@@ -67,7 +73,7 @@ namespace Bot.Commands
                     await message.ModifyAsync(embed: new DiscordEmbedBuilder()
                         .WithTitle("Evaluation")
                         .WithColor(DiscordColor.Green)
-                        .WithDescription($"Success.\n```\n{result.ReturnValue.ToString()}\n```")
+                        .WithDescription($"Success.\n```\n{result.ReturnValue}\n```")
                         .Build());
                     return;
                 }

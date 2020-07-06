@@ -9,7 +9,7 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -18,7 +18,6 @@
 using Google.Apis.Customsearch.v1;
 using Google.Apis.Customsearch.v1.Data;
 using Google.Apis.Services;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -39,8 +38,6 @@ namespace Bot.Managers
             public string Title { get; private set; }
             public string URL { get; private set; }
         }
-
-
 
         private static CustomsearchService service;
         private static string searchId;
