@@ -22,24 +22,24 @@ namespace Bot.Managers
 {
     public class Starboard
     {
-        public static async Task ReactionAddHandler(MessageReactionAddEventArgs e)
+        public static Task ReactionAddHandler(MessageReactionAddEventArgs e)
         {
-
+            return Task.CompletedTask;
         }
 
-        public static async Task ReactionRemoveHandler(MessageReactionRemoveEventArgs e)
+        public static Task ReactionRemoveHandler(MessageReactionRemoveEventArgs e)
         {
-
+            return Task.CompletedTask;
         }
 
-        public static async Task ReactionRemoveEmojiHandler(MessageReactionRemoveEmojiEventArgs e)
+        public static Task ReactionRemoveEmojiHandler(MessageReactionRemoveEmojiEventArgs e)
         {
-
+            return Task.CompletedTask;
         }
 
-        public static async Task ReactionRemoveAllHandler(MessageReactionsClearEventArgs e)
+        public static Task ReactionRemoveAllHandler(MessageReactionsClearEventArgs e)
         {
-
+            return Task.CompletedTask;
         }
     }
 }

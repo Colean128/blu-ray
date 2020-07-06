@@ -148,7 +148,7 @@ namespace Bot
             commands.RegisterCommands<NSFW>();
             commands.RegisterCommands<Owner>();
             commands.RegisterCommands<Search>();
-            commands.RegisterCommands<Settings>();
+            //commands.RegisterCommands<Settings>();
 
             client.UseInteractivity(new InteractivityConfiguration
             {
