@@ -16,6 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Bot.Managers;
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -26,8 +27,10 @@ using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    public class Settings : BaseCommandModule
+    public class Settings : CommandModule
     {
+        public Settings() => Name = "Settings";
+
         [Command("starboard"), Description("Sets the starboard for this server."), RequireGuild, RequirePermissions(Permissions.ManageChannels)]
         public async Task StarboardAsync(CommandContext context, [Description("Starboard channel to use; accepts either its ID or its tag.")] DiscordChannel channel = null, [Description("Emoji to use. Star emoji by default.")] DiscordEmoji emoji = null, [Description("Minimal amount of emojis required to make it onto the starboard, defaults to 2.")] int amount = 2)
         {

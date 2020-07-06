@@ -17,6 +17,7 @@
 
 using Bot.Managers;
 using Bot.Structures;
+using Bot.Types;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -25,8 +26,10 @@ using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    public class Fun : BaseCommandModule
+    public class Fun : CommandModule
     {
+        public Fun() => Name = "Fun";
+
         private readonly string[] eightballResponses =
         {
             "It is certain",

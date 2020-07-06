@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -30,8 +31,10 @@ using Microsoft.CodeAnalysis.Scripting;
 
 namespace Bot.Commands
 {
-    public class Owner : BaseCommandModule
+    public class Owner : CommandModule
     {
+        public Owner() => Name = "Owner";
+
         [Command("eval"), Aliases("evaluate"), Hidden, RequireOwner]
         public async Task EvaluateAsync(CommandContext context, [RemainingText] string code)
         {

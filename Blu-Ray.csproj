@@ -246,6 +246,7 @@
     <Compile Include="Structures\NekosLifeImage.cs" />
     <Compile Include="Structures\NekosLifeWhyQuestion.cs" />
     <Compile Include="Structures\Rule34Entry.cs" />
+    <Compile Include="Types\CommandModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -270,6 +271,7 @@
   <ItemGroup>
     <Content Include="icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -16,19 +16,21 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Bot.Structures;
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    public class Moderation : BaseCommandModule
+    public class Moderation : CommandModule
     {
+        public Moderation() => Name = "Moderation";
+
         [Command("ban"), Description("Bans a member."), RequirePermissions(Permissions.BanMembers), RequireGuild]
         public async Task BanAsync(CommandContext context, [Description("Member to ban.")] DiscordMember member = null, [RemainingText, Description("(Optional) Reason for ban.")] string reason = null)
         {

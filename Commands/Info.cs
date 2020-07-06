@@ -16,6 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Bot.Structures;
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -27,8 +28,10 @@ using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    public class Info : BaseCommandModule
+    public class Info : CommandModule
     {
+        public Info() => Name = "Info";
+
         [Command("about"), Description("Shows information about the bot.")]
         public async Task AboutAsync(CommandContext context) => await context.RespondAsync(embed: new DiscordEmbedBuilder()
             .WithAuthor($"{context.Client.CurrentUser.Username}#{context.Client.CurrentUser.Discriminator}", "https://github.com/Zayne64/blu-ray", context.Client.CurrentUser.GetAvatarUrl(ImageFormat.Png))

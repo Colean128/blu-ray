@@ -17,6 +17,7 @@
 
 using Bot.Managers;
 using Bot.Structures;
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -26,8 +27,10 @@ using System.Threading.Tasks;
 
 namespace Bot.Commands
 {
-    public class Search : BaseCommandModule
+    public class Search : CommandModule
     {
+        public Search() => Name = "Search";
+
         [Command("imdb"), Description("Searches for a movie, series or episode on IMDb.")]
         public async Task IMDbAsync(CommandContext context, [RemainingText, Description("Search query to search for.")] string query = null)
         {

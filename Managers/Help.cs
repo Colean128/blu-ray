@@ -15,11 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Bot.Types;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.CommandsNext.Entities;
 using DSharpPlus.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,6 +31,8 @@ namespace Bot.Managers
     {
         private DiscordEmbedBuilder builder;
         private string iconUrl;
+
+        private CommandModule castModule(BaseCommandModule mod) => mod as CommandModule;
 
         public Help(CommandContext context) : base(context)
         {
@@ -41,6 +45,14 @@ namespace Bot.Managers
         public override BaseHelpFormatter WithCommand(Command command)
         {
             builder.Description += $"- Command **{command.Name}** -\nDescription: **{command.Description}**";
+
+            if (command.Aliases.Count > 0)
+            {
+                builder.Description += "\nAliases:";
+                command.Aliases.ToList().ForEach(x => builder.Description += $" `{x}`,");
+                builder.Description.Substring(0, builder.Description.LastIndexOf(','));
+            }
+
             if (command.Overloads.Count > 1 || command.Overloads.Count == 1 && command.Overloads[0].Arguments.Count > 0)
             {
                 builder.Description += "\nArguments:";
@@ -58,12 +70,24 @@ namespace Bot.Managers
 
         public override BaseHelpFormatter WithSubcommands(IEnumerable<Command> subcommands)
         {
-            builder.Description += "- Commands list -\n";
-            subcommands.ToList().ForEach(x => builder.Description += $"- **{x.Name}**: `{x.Description}`\n");
+            List<Command> commands = new List<Command>();
+            foreach (Command cmd in subcommands) if (cmd.Name != "help") commands.Add(cmd);
 
-            builder.Footer = new DiscordEmbedBuilder.EmbedFooter
+            Dictionary<string, string> commandList = new Dictionary<string, string>();
+            foreach (Command command in commands.OrderBy(c => castModule(c.Module.GetInstance(null)).Name))
             {
-                Text    = $"There are {subcommands.ToList().Count} commands.",
+                CommandModule module = castModule(command.Module.GetInstance(null));
+                if (!commandList.ContainsKey(module.Name)) commandList.Add(module.Name, "");
+
+                commandList[module.Name] += $"- **{command.Name}**: `{command.Description}`\n";
+            }
+
+            foreach (string mod in commandList.Keys) builder.AddField(mod, commandList[mod]);
+
+            builder.Description = "**Commands list**";
+            builder.Footer      = new DiscordEmbedBuilder.EmbedFooter
+            {
+                Text    = $"There are {subcommands.ToList().Count} commands across {commandList.Keys.Count} modules, making an average of {Math.Truncate(Math.Round((double)subcommands.ToList().Count) / (double)commandList.Keys.Count)} commands per module.",
                 IconUrl = iconUrl
             };
 
