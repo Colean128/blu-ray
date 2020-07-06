@@ -98,9 +98,6 @@ namespace Bot.Structures
         [JsonProperty("omdb", NullValueHandling = NullValueHandling.Include)]
         public string OMDb { get; internal set; }
 
-        [JsonProperty("sentry", NullValueHandling = NullValueHandling.Include)]
-        public string Sentry { get; private set; }
-
         [JsonProperty("spotify", NullValueHandling = NullValueHandling.Include)]
         public SpotifyConfiguration Spotify { get; private set; }
 
@@ -124,7 +121,6 @@ namespace Bot.Structures
             SupportId   = config.SupportId;
             Google      = config.Google;
             OMDb        = config.OMDb;
-            Sentry      = config.Sentry;
             Spotify     = config.Spotify;
         }
     }
