@@ -22,7 +22,6 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using Sentry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,30 +47,13 @@ namespace Bot.Managers
 
         public static Task OnClientError(ClientErrorEventArgs e)
         {
-#if DEBUG
             e.Client.DebugLogger.LogMessage(LogLevel.Error, "Client", $"The client encountered an error.", DateTime.Now, e.Exception);
-#else
-            SentrySdk.CaptureEvent(new SentryEvent(e.Exception)
-            {
-                Message = "The client encountered an error.",
-                Level = Sentry.Protocol.SentryLevel.Error
-            });
-#endif
-
             return Task.CompletedTask;
         }
 
         public static Task OnClientSocketError(SocketErrorEventArgs e)
         {
-#if DEBUG
             e.Client.DebugLogger.LogMessage(LogLevel.Error, "Client", $"The client's connection encountered an error.", DateTime.Now, e.Exception);
-#else
-            SentrySdk.CaptureEvent(new SentryEvent(e.Exception)
-            {
-                Message = "The client encountered a connection error.",
-                Level = Sentry.Protocol.SentryLevel.Error
-            });
-#endif
             return Task.CompletedTask;
         }
 
@@ -183,18 +165,8 @@ namespace Bot.Managers
                 }
             }
 
-#if DEBUG
             e.Context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands", $"The command \"{e.Command.Name}\" executed by the user {e.Context.User.Username}#{e.Context.User.Discriminator} (ID: {e.Context.User.Id}) in channel \"{e.Context.Channel.Id}\" encountered an error.", DateTime.Now, e.Exception);
             if (e.Context.Guild == null || (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An error occurred.");
-#else
-            SentrySdk.CaptureEvent(new SentryEvent(e.Exception)
-            {
-                Message = $"Command \"{e.Command.Name}\" encountered an issue.",
-                Level = Sentry.Protocol.SentryLevel.Error
-            });
-
-            if (e.Context.Guild == null || (e.Context.Channel.PermissionsFor(e.Context.Member) & Permissions.SendMessages) != 0) await e.Context.RespondAsync("An unexpected error has occurred.\nThe current error has been reported.");
-#endif
         }
     }
 }

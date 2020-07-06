@@ -24,7 +24,6 @@ using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using Newtonsoft.Json;
-using Sentry;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -95,9 +94,6 @@ namespace Bot
                     level = LogLevel.Info;
                     break;
             }
-#if !DEBUG
-            SentrySdk.Init(configuration.Sentry);
-#endif
 
             client = new DiscordClient(new DiscordConfiguration
             {
