@@ -42,10 +42,11 @@ namespace Bot.Commands
         {
             if (member == null) member = context.Member;
 
+            string imageUrl = member.GetAvatarUrl(member.AvatarHash.StartsWith("a_") ? ImageFormat.Gif : ImageFormat.Png);
             await context.RespondAsync(embed: new DiscordEmbedBuilder()
-                .WithAuthor($"{member.Username}#{member.Discriminator}", member.GetAvatarUrl(ImageFormat.Gif))
-                .WithColor(ColorDetection.GetMostUsedColor(member.GetAvatarUrl(ImageFormat.Png)))
-                .WithImageUrl(member.GetAvatarUrl(ImageFormat.Gif))
+                .WithAuthor($"{member.Username}#{member.Discriminator}", imageUrl)
+                .WithColor(ColorDetection.GetMostUsedColor(imageUrl))
+                .WithImageUrl(imageUrl)
                 .Build());
         }
 

@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Metadata", "Metadata", "{A1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{92076D40-1105-4A3A-B96F-EE8C0B7516CC}"
 	ProjectSection(SolutionItems) = preProject
+		Assets\avatar-testing.png = Assets\avatar-testing.png
+		Assets\avatar.png = Assets\avatar.png
 		Assets\dnd.png = Assets\dnd.png
 		Assets\error.png = Assets\error.png
 		Assets\idle.png = Assets\idle.png

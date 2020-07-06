@@ -1,12 +1,14 @@
 {
-    "token": "token here",
+    "token": "Token here",
     "prefixes": [
         "br/",
-        "br!"
+        "br!",
+        "Br/",
+        "Br!",
     ],
     "loglevel": "info",
     "status": {
-        "name": "movies on a PS3.",
+        "name": "stuff on Blu-ray discs. | br/help",
         "type": "Watching"
     },
     "emojis": {
@@ -20,13 +22,13 @@
     },
     "support_guild": 123456789012345678,
     "google": {
-        "key": "google key here",
-        "cx": "custom search id here"
+        "key": "Google key here",
+        "cx": "Custom Search ID here"
     },
     "omdb": "API key here",
+    "sentry": "Sentry DSN here",
     "spotify": {
-      "id": "ID here",
-      "secret": "Secret here"
-    },
-    "steam": "Steam web API key here"
+        "id": "ID here",
+        "secret": "Secret here"
+    }
 }

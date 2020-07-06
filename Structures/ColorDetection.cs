@@ -34,9 +34,18 @@ namespace Bot.Structures
             Bitmap bmp          = new Bitmap(Image.FromStream(stream));
 
             List<int> colors = new List<int>();
-            for (int row = 0; row < bmp.Size.Width; row++) for (int col = 0; col < bmp.Size.Height; col++) colors.Add(bmp.GetPixel(row, col).ToArgb());
+            for (int row = 0; row < bmp.Size.Width; row++) for (int col = 0; col < bmp.Size.Height; col++)
+            {
+                Color c = bmp.GetPixel(row, col);
+                if (c.R == 0 && c.G == 0 && c.B == 0 && c.A == 0) continue;
 
-            Color color = Color.FromArgb(Convert.ToInt32(colors.Average()));
+                colors.Add(c.ToArgb());
+            }
+
+            Dictionary<int, int> values = new Dictionary<int, int>();
+            foreach (int x in colors) if (values.ContainsKey(x)) values[x]++; else values.Add(x, 1);
+
+            Color color = Color.FromArgb(Convert.ToInt32(values.Where(x => x.Value == values.Values.Max()).FirstOrDefault().Key));
 
             bmp.Dispose();
             stream.Close();

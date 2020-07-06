@@ -21,10 +21,12 @@ using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
+using Newtonsoft.Json;
+using Sentry;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Bot
@@ -37,19 +39,28 @@ namespace Bot
         
         public static void Main(string[] args)
         {
-            Configuration configuration;
+            Console.Title = $"Blu-Ray {typeof(Program).Assembly.GetName().Version}";
 
-            string defaultConfigPath, defaultDatabasePath;
-
+            string defaultConfigPath = "config.json", defaultDatabasePath = "blu-ray.db";
 #if DEBUG
+            Console.Title += " - Debug";
+
             defaultConfigPath    = "../../config.json";
             defaultDatabasePath  = "../../blu-ray.db";
-#else
-            defaultConfigPath   = "config.json";
-            defaultDatabasePath = "blu-ray.db";
 #endif
 
+            Configuration configuration;
             try { configuration = new Configuration(args.Length > 0 ? args[0] : defaultConfigPath); }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Failed to find the configuration.");
+                return;
+            }
+            catch (JsonSerializationException)
+            {
+                Console.WriteLine("The configuration is invalid.");
+                return;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error of type \"{ex.GetType().Name}\" occurred: \"{ex.Message}\".");
@@ -84,6 +95,9 @@ namespace Bot
                     level = LogLevel.Info;
                     break;
             }
+#if !DEBUG
+            SentrySdk.Init(configuration.Sentry);
+#endif
 
             client = new DiscordClient(new DiscordConfiguration
             {
@@ -98,13 +112,7 @@ namespace Bot
 
             Events.supportGuildId = configuration.SupportId;
 
-            client.Ready += async (ReadyEventArgs e) =>
-            {
-                e.Client.DebugLogger.LogMessage(LogLevel.Info, "Client", $"The client is now ready. Connected as {e.Client.CurrentUser.Username}#{e.Client.CurrentUser.Discriminator} (ID: {e.Client.CurrentUser.Id}).", DateTime.Now);
-
-                await e.Client.UpdateStatusAsync(new DiscordActivity(configuration.Status.Name, configuration.Status.Type));
-            };
-
+            client.Ready                        += Events.OnClientReady;
             client.Resumed                      += Events.OnClientResumed;
             client.ClientErrored                += Events.OnClientError;
             client.SocketErrored                += Events.OnClientSocketError;
@@ -129,6 +137,8 @@ namespace Bot
                 StringPrefixes          = configuration.Prefixes,
             });
 
+            commands.SetHelpFormatter<Help>();
+
             commands.CommandExecuted    += Events.OnCommandExecute;
             commands.CommandErrored     += Events.OnCommandError;
 
@@ -149,7 +159,6 @@ namespace Bot
 
             IMDb.InitializeWithKey(configuration.OMDb);
             Managers.Google.InitializeService(configuration.Google.Key, configuration.Google.Cx);
-            Steam.InitializeWithKey(configuration.Steam);
 
             await Spotify.AuthorizeAsync(configuration.Spotify.ID, configuration.Spotify.Secret, client.DebugLogger);
             await Database.ConnectAsync(dbPath, client.DebugLogger);
@@ -166,7 +175,7 @@ namespace Bot
                     configuration.Emojis.DoNotDisturb,
                     configuration.Emojis.Offline);
 
-            await client.ConnectAsync();
+            await client.ConnectAsync(new DiscordActivity(configuration.Status.Name, configuration.Status.Type));
             await Task.Delay(-1);
         }
 

@@ -35,7 +35,10 @@ namespace Bot.Commands
         {
             if (channel == null)
             {
-                await context.RespondAsync("Please provide a channel.");
+                await context.RespondAsync(embed: new DiscordEmbedBuilder()
+                    .WithDescription($"Channel: **{channel.Mention}**\nEmoji: {(emoji.Id != 0 ? $"<:{emoji.Name}:{emoji.Id}>" : emoji.Name)}\nAmount of reactions necessary: **{amount}**")
+                    .WithTitle("Starboard properties")
+                    .Build());
                 return;
             }
 
@@ -50,7 +53,7 @@ namespace Bot.Commands
             SqliteTransaction transaction   = Database.CreateTransaction();
             SqliteCommand command           = Database.CreateCommand();
 
-            command.CommandText = "insert or replace into starboardChannels (guildId, channelId, emoji) values ($gid, $chn, $emj, $amt)";
+            command.CommandText = "insert or replace into starboardChannels (guildId, channelId, emoji, amount) values ($gid, $chn, $emj, $amt)";
 
             command.Parameters.Add(new SqliteParameter
             {
@@ -72,11 +75,11 @@ namespace Bot.Commands
 
             command.Parameters.Add(new SqliteParameter
             {
-                ParameterName   = "amt",
+                ParameterName   = "$amt",
                 Value           = amount
             });
 
-            command.ExecuteNonQuery();
+            await command.ExecuteNonQueryAsync();
             transaction.Commit();
 
             await context.RespondAsync("Your new starboard has been set.", embed: new DiscordEmbedBuilder()

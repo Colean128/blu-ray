@@ -15,10 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Bot.Structures;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,12 +34,12 @@ namespace Bot.Commands
         {
             if (member == null)
             {
-                await context.RespondAsync("Provide a member to ban.");
+                await context.RespondAsync($"{Emojis.WarningEmoji} Provide a member to ban.");
                 return;
             }
 
             await member.BanAsync(0, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
-            await context.RespondAsync($"Banned user `{member.Username}#{member.Discriminator}` successfully.");
+            await context.RespondAsync($"{Emojis.SuccessEmoji} Banned user `{member.Username}#{member.Discriminator}` successfully.");
         }
 
         [Command("ban")]
@@ -45,7 +47,7 @@ namespace Bot.Commands
         {
             if (id == 0)
             {
-                await context.RespondAsync("Provide a ID to ban.");
+                await context.RespondAsync($"{Emojis.WarningEmoji} Provide a ID to ban.");
                 return;
             }
 
@@ -54,32 +56,32 @@ namespace Bot.Commands
             catch (Exception ex)
             {
                 context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - Ban", $"Failed to find the user for ID \"{id}\".", DateTime.Now, ex);
-                await context.RespondAsync("Invalid ID.");
+                await context.RespondAsync($"{Emojis.ErrorEmoji} Invalid ID.");
                 return;
             }
 
             if (user == null)
             {
-                await context.RespondAsync("Invalid ID.");
+                await context.RespondAsync($"{Emojis.ErrorEmoji} Invalid ID.");
                 return;
             }
 
             await context.Guild.BanMemberAsync(user.Id, 0, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
-            await context.RespondAsync($"Banned user `{user.Username}#{user.Discriminator}` successfully.");
+            await context.RespondAsync($"{Emojis.SuccessEmoji} Banned user `{user.Username}#{user.Discriminator}` successfully.");
         }
 
-        [Command("softban"), Description("Bans and immediately unbans a member to clear messages."), RequirePermissions(Permissions.BanMembers), RequireGuild]
-        public async Task SoftbanAsync(CommandContext context, [Description("Member to softban.")] DiscordMember member = null)
+        [Command("softban"), Description("Bans and immediately unbans the given member. This clears their messages, but behaves like a kick."), RequirePermissions(Permissions.BanMembers), RequireGuild]
+        public async Task SoftbanAsync(CommandContext context, [Description("Member to softban.")] DiscordMember member = null, [RemainingText, Description("(Optional) Reason for unban.")] string reason = null)
         {
             if (member == null)
             {
-                await context.RespondAsync("Provide a member to softban.");
+                await context.RespondAsync($"{Emojis.WarningEmoji} Provide a member to softban.");
                 return;
             }
 
-            await context.Guild.BanMemberAsync(member, 7, $"{context.User.Username}#{context.User.Discriminator}: Softban with Blu-Ray.");
-            await context.Guild.UnbanMemberAsync(member, $"{context.User.Username}#{context.User.Discriminator}: Softban with Blu-Ray.");
-            await context.RespondAsync($"Softbanned user `{member.Username}#{member.Discriminator}` successfully.");
+            await context.Guild.BanMemberAsync(member, 7, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")} (softban 1/2)");
+            await context.Guild.UnbanMemberAsync(member, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")} (softban 2/2)");
+            await context.RespondAsync($"{Emojis.SuccessEmoji} Softbanned user **{member.Username}#{member.Discriminator}** successfully.");
         }
 
         [Command("unban"), Description("Unbans a user via their ID."), RequirePermissions(Permissions.BanMembers), RequireGuild]
@@ -87,26 +89,26 @@ namespace Bot.Commands
         {
             if (id == 0)
             {
-                await context.RespondAsync("Please provide a ID to unban.");
+                await context.RespondAsync($"{Emojis.WarningEmoji} Provide a user ID to unban.");
                 return;
             }
 
             DiscordUser user;
             try { user = await context.Client.GetUserAsync(id); }
-            catch (Exception ex)
+            catch (NotFoundException)
             {
-                context.Client.DebugLogger.LogMessage(LogLevel.Error, "Commands - Unban", $"Failed to find the user for ID \"{id}\".", DateTime.Now, ex);
-                await context.RespondAsync("Invalid ID.");
+                await context.RespondAsync($"{Emojis.ErrorEmoji} Invalid user ID.");
                 return;
             }
 
             if (user == null)
             {
-                await context.RespondAsync("Invalid ID.");
+                await context.RespondAsync($"{Emojis.ErrorEmoji} Invalid user ID.");
                 return;
             }
 
             await context.Guild.UnbanMemberAsync(user, $"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
+            await context.RespondAsync($"{Emojis.SuccessEmoji} Unbanned **{user.Username}#{user.Discriminator}** successfully.");
         }
 
         [Command("kick"), Description("Kicks a member."), RequirePermissions(Permissions.KickMembers), RequireGuild]
@@ -114,12 +116,12 @@ namespace Bot.Commands
         {
             if (member == null)
             {
-                await context.RespondAsync("Provide a member to kick.");
+                await context.RespondAsync($"{Emojis.WarningEmoji} Provide a member to kick.");
                 return;
             }
 
             await member.RemoveAsync($"{context.User.Username}#{context.User.Discriminator}{(reason != null ? $": {reason}" : "")}");
-            await context.RespondAsync($"Kicked user `{member.Username}#{member.Discriminator}` successfully.");
+            await context.RespondAsync($"{Emojis.SuccessEmoji} Kicked user `{member.Username}#{member.Discriminator}` successfully.");
         }
 
         [Command("clean"), Description("Deletes a given amount of messages."), Aliases("clear"), RequirePermissions(Permissions.ManageMessages), RequireGuild]
@@ -127,13 +129,17 @@ namespace Bot.Commands
         {
             if (amount == 0)
             {
-                await context.RespondAsync("Provide an amount of messages to clean.");
+                await context.RespondAsync($"{Emojis.WarningEmoji} Provide an amount of messages to clean.");
+                return;
+            }
+            if (amount > 100)
+            {
+                await context.RespondAsync($"{Emojis.ErrorEmoji} The amount must be in between 1 and 100.");
                 return;
             }
 
-            IEnumerable<DiscordMessage> messages = await context.Channel.GetMessagesBeforeAsync(context.Message.Id, amount);
-            await context.Channel.DeleteMessagesAsync(messages, $"{context.User.Username}#{context.User.Discriminator}; cleared {amount} messages");
-            await context.RespondAsync($"Cleaned the last {amount} messages.");
+            await context.Channel.DeleteMessagesAsync(await context.Channel.GetMessagesBeforeAsync(context.Message.Id, amount), $"{context.User.Username}#{context.User.Discriminator}; cleared {amount} messages");
+            await context.RespondAsync($"{Emojis.SuccessEmoji} Cleaned the last **{amount}** messages.");
         }
     }
 }

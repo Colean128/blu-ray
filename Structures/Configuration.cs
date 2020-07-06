@@ -87,22 +87,22 @@ namespace Bot.Structures
         public StatusConfiguration Status { get; private set; }
 
         [JsonProperty("emojis", NullValueHandling = NullValueHandling.Ignore)]
-        public EmojiConfiguration Emojis;
+        public EmojiConfiguration Emojis { get; private set; }
 
         [JsonProperty("support_guild", NullValueHandling = NullValueHandling.Include)]
         public ulong SupportId { get; private set; }
 
         [JsonProperty("google", NullValueHandling = NullValueHandling.Include)]
-        public GoogleConfiguration Google;
+        public GoogleConfiguration Google { get; private set; }
 
         [JsonProperty("omdb", NullValueHandling = NullValueHandling.Include)]
         public string OMDb { get; internal set; }
 
+        [JsonProperty("sentry", NullValueHandling = NullValueHandling.Include)]
+        public string Sentry { get; private set; }
+
         [JsonProperty("spotify", NullValueHandling = NullValueHandling.Include)]
         public SpotifyConfiguration Spotify { get; private set; }
-
-        [JsonProperty("steam", NullValueHandling = NullValueHandling.Include)]
-        public string Steam { get; private set; }
 
         public Configuration() { }
 
@@ -124,8 +124,8 @@ namespace Bot.Structures
             SupportId   = config.SupportId;
             Google      = config.Google;
             OMDb        = config.OMDb;
+            Sentry      = config.Sentry;
             Spotify     = config.Spotify;
-            Steam       = config.Steam;
         }
     }
 }
