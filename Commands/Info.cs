@@ -234,7 +234,7 @@ namespace Bot.Commands
             {
                 if (member.Presence.Activity.ActivityType == ActivityType.Custom)
                 {
-                    await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: {(member.Presence.Activity.CustomStatus.Emoji != null ? (member.Presence.Activity.CustomStatus.Emoji.Id != 0 ? $"<:{member.Presence.Activity.CustomStatus.Emoji.Name}:{member.Presence.Activity.CustomStatus.Emoji.Id}>" : member.Presence.Activity.CustomStatus.Emoji.Name) + " ": "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : member.Presence.Activity.CustomStatus.Name)}");
+                    await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: {(member.Presence.Activity.CustomStatus.Emoji != null ? (member.Presence.Activity.CustomStatus.Emoji.Id != 0 ? $"<:{member.Presence.Activity.CustomStatus.Emoji.Name}:{member.Presence.Activity.CustomStatus.Emoji.Id}>" : member.Presence.Activity.CustomStatus.Emoji.Name) + " " : "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : member.Presence.Activity.CustomStatus.Name)}");
                     return;
                 }
 
@@ -324,11 +324,23 @@ namespace Bot.Commands
 
                     time += ".";
                 }
-                
+
                 builder.AddField($"{type} {activity.Name}", $"{(member.Presence.Activity.RichPresence.Details != null ? member.Presence.Activity.RichPresence.Details + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State + "\n" : "")}{(time != null ? time : "")}", builder.Fields.Count % 2 == 0);
             }
 
             await context.RespondAsync($"**{member.Username}#{member.Discriminator}** is doing various things at the moment.", embed: builder.Build());
+        }
+
+        [Command("user"), Description("Shows information about a given user."), RequireDirectMessage]
+        public async Task UserAsync(CommandContext context, [RemainingText, Description("The user, either in Name#Tag, @Name#Tag or ID format, to look for. Leave this empty to check yourself.")] DiscordUser user = null)
+        {
+
+        }
+
+        [Command("user"), Description("Shows information about a given member of the current guild."), Aliases("member"), RequireGuild]
+        public async Task UserAsync(CommandContext context, [RemainingText, Description("The member, either in Name#Tag, @Name#Tag or ID format, to look for. Leave this empty to check yourself.")] DiscordMember user = null)
+        {
+
         }
     }
 }
