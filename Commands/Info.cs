@@ -234,7 +234,7 @@ namespace Bot.Commands
             {
                 if (member.Presence.Activity.ActivityType == ActivityType.Custom)
                 {
-                    await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: {(member.Presence.Activity.CustomStatus.Emoji != null ? member.Presence.Activity.CustomStatus.Emoji.ToString() + " ": "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : "")}");
+                    await context.RespondAsync($"**{member.Username}#{member.Discriminator}** set a custom status: {(member.Presence.Activity.CustomStatus.Emoji != null ? (member.Presence.Activity.CustomStatus.Emoji.Id != 0 ? $"<:{member.Presence.Activity.CustomStatus.Emoji.Name}:{member.Presence.Activity.CustomStatus.Emoji.Id}>" : member.Presence.Activity.CustomStatus.Emoji.Name) + " ": "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : member.Presence.Activity.CustomStatus.Name)}");
                     return;
                 }
 
@@ -255,7 +255,7 @@ namespace Bot.Commands
                 }
 
                 string message = $"**{member.Username}#{member.Discriminator}** has been {type} **{member.Presence.Activity.Name}**";
-                if (member.Presence.Activity.RichPresence.Application == null)
+                if (member.Presence.Activity.RichPresence == null || member.Presence.Activity.RichPresence.Application == null && (member.Presence.Activity.RichPresence.LargeImage != null && member.Presence.Activity.RichPresence.LargeImage.GetType() != typeof(DiscordSpotifyAsset)))
                 {
                     await context.RespondAsync(message + ".");
                     return;
@@ -287,7 +287,7 @@ namespace Bot.Commands
             {
                 if (activity.ActivityType == ActivityType.Custom)
                 {
-                    builder.AddField("Custom Status", $"{(member.Presence.Activity.CustomStatus.Emoji != null ? member.Presence.Activity.CustomStatus.Emoji.ToString() + " " : "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : "")}", builder.Fields.Count % 2 == 0);
+                    builder.AddField("Custom Status", $"{(member.Presence.Activity.CustomStatus.Emoji != null ? (member.Presence.Activity.CustomStatus.Emoji.Id != 0 ? $"<:{member.Presence.Activity.CustomStatus.Emoji.Name}:{member.Presence.Activity.CustomStatus.Emoji.Id}>" : member.Presence.Activity.CustomStatus.Emoji.Name) + " " : "")}{(member.Presence.Activities[0].CustomStatus.Name != null ? member.Presence.Activity.CustomStatus.Name : member.Presence.Activity.CustomStatus.Name)}", builder.Fields.Count % 2 == 0);
                     continue;
                 }
 
@@ -307,6 +307,8 @@ namespace Bot.Commands
                         break;
                 }
 
+                if (member.Presence.Activity.RichPresence == null || member.Presence.Activity.RichPresence.Application == null && (member.Presence.Activity.RichPresence.LargeImage != null && member.Presence.Activity.RichPresence.LargeImage.GetType() != typeof(DiscordSpotifyAsset))) continue;
+
                 string time = null;
                 if (member.Presence.Activity.RichPresence.StartTimestamp != null)
                 {
@@ -322,7 +324,7 @@ namespace Bot.Commands
 
                     time += ".";
                 }
-
+                
                 builder.AddField($"{type} {activity.Name}", $"{(member.Presence.Activity.RichPresence.Details != null ? member.Presence.Activity.RichPresence.Details + "\n" : "")}{(member.Presence.Activity.RichPresence.State != null ? member.Presence.Activity.RichPresence.State + "\n" : "")}{(time != null ? time : "")}", builder.Fields.Count % 2 == 0);
             }
 
