@@ -331,15 +331,11 @@ namespace Bot.Commands
             await context.RespondAsync($"**{member.Username}#{member.Discriminator}** is doing various things at the moment.", embed: builder.Build());
         }
 
-        [Command("user"), Description("Shows information about a given user."), RequireDirectMessage]
-        public async Task UserAsync(CommandContext context, [RemainingText, Description("The user, either in Name#Tag, @Name#Tag or ID format, to look for. Leave this empty to check yourself.")] DiscordUser user = null)
+        [Command("user"), Description("Shows information about a given user."), Aliases("member")]
+        public async Task UserAsync(CommandContext context, [RemainingText, Description("The user, either in Name#Tag, @Name#Tag or ID format, to look for. Leave this empty to check yourself.s")] DiscordUser user = null)
         {
+            if (user == null) user = context.User;
 
-        }
-
-        [Command("user"), Description("Shows information about a given member of the current guild."), Aliases("member"), RequireGuild]
-        public async Task UserAsync(CommandContext context, [RemainingText, Description("The member, either in Name#Tag, @Name#Tag or ID format, to look for. Leave this empty to check yourself.")] DiscordMember user = null)
-        {
 
         }
     }
