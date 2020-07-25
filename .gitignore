@@ -121,3 +121,8 @@ paket-files/
 .fake/
 .idea/
 *.sln.iml
+
+
+#Added by cargo
+
+/target
