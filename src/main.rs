@@ -1,5 +1,4 @@
 use serenity::client::Client;
-use serde_json::{Result, Value};
 use serenity::model::channel::Message;
 use serenity::prelude::{EventHandler, Context};
 use serenity::framework::standard::{
