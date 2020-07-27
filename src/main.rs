@@ -22,10 +22,10 @@ struct Handler;
 impl EventHandler for Handler {}
 
 fn main() {
-    let config = fs::read_to_string(config.json)
-        .expect("Config not found.");
-    let config: Value = serde_json::from_str(config)
-    let mut client = Client::new(config["token"].expect("token"), Handler)
+    let config = fs::read_to_string("config.json").unwrap();
+    let v: Value = serde_json::from_str(config);
+    let clienttoken = v["token"];
+    let mut client = Client::new(clienttoken.expect("token"), Handler)
         .expect("Error creating client");
     client.with_framework(StandardFramework::new()
         .configure(|c| c.prefix("tbr/"))
