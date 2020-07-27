@@ -4,7 +4,6 @@ version = "0.1.0"
 authors = ["Zayne64 <11258171+Zayne64@users.noreply.github.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 serenity = "0.8"
+anyhow = "1.0.32"
