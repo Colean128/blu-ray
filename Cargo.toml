@@ -5,4 +5,10 @@ authors = ["Zayne64 <11258171+Zayne64@users.noreply.github.com>"]
 edition = "2018"
 
 [dependencies]
-serenity = "0.8"
+env_logger = "0.6"
+kankyo = "0.2"
+log = "0.4"
+
+[dependencies.serenity]
+features = ["cache", "framework", "standard_framework", "rustls_backend"]
+version = "0.8.6"
