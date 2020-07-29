@@ -6,4 +6,3 @@ edition = "2018"
 
 [dependencies]
 serenity = "0.8"
-anyhow = "1.0.32"
