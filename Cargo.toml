@@ -12,4 +12,3 @@ tokio = { version = "0.2", features = ["macros"] }
 
 [dependencies.serenity]
 features = ["cache", "framework", "standard_framework", "rustls_backend"]
-path = "../../"
