@@ -9,20 +9,15 @@ struct Handler;
 impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
         if msg.content == ("br/ping") {
-           sendmsg(&self, ctx, msg, "Pong!").await
+           if let Err(why) = msg.channel_id.say(&ctx.http, "Ping").await {
+              println!("Error sending message: {:?}", why);
+              return;
+          }
         }
     }
     async fn ready(&self, _: Context, ready: Ready) {
        println!("Connected to Discord as {}#{}.", ready.user.name, ready.user.discriminator)
     }
-}
-
-async fn sendmsg(&self, ctx: Context, msg: Message, n: String)
-     if let Err(why) = msg.channel_id.say(&ctx.http, "{}", n).await {
-          println!("Error sending message: {:?}", why);
-          return;
-     }
-     return;
 }
 
 async fn main() {
@@ -37,3 +32,4 @@ async fn main() {
      if let Err(why) = client.start().await {
        println!("Client error: {:?}", why);
      }
+}
