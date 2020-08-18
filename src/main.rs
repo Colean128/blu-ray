@@ -19,9 +19,7 @@ use serenity::{
 use log::{error, info};
 
 use commands::{
-    math::*,
-    meta::*,
-    owner::*,
+    info::*,
 };
 
 struct ShardManagerContainer;
@@ -44,7 +42,7 @@ impl EventHandler for Handler {
 }
 
 #[group]
-#[commands(multiply, ping, quit)]
+#[commands(ping)]
 struct General;
 
 #[tokio::main]
