@@ -4,14 +4,11 @@ use serenity::{
     prelude::*,
 };
 
-let prefix = "br/";
-let token = "SNOWFLAKE HERE";
-
 struct Handler;
 #[async_trait]
 impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
-        if msg.content == ("{}ping", prefix) {
+        if msg.content == ("br/ping") {
            sendmsg(&self, ctx, msg, "Pong!").await
         }
     }
@@ -29,10 +26,14 @@ async fn sendmsg(&self, ctx: Context, msg: Message, n: String)
 }
 
 async fn main() {
+     let token = env::var("DISCORD_TOKEN")
+        .expect("Expected a token in the environment");
+     
      let mut client = Client::new(&token)
          .event_handler(Handler)
          .await
          .expect("Client creation error.");
+    
      if let Err(why) = client.start().await {
        println!("Client error: {:?}", why);
      }
