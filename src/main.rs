@@ -1,35 +1,85 @@
+mod commands;
+
+use std::{
+    collections::HashSet,
+    env,
+    sync::Arc,
+};
 use serenity::{
     async_trait,
-    model::{channel::Message, gateway::Ready},
+    client::bridge::gateway::ShardManager,
+    framework::{
+        StandardFramework,
+        standard::macros::group,
+    },
+    http::Http,
+    model::{event::ResumedEvent, gateway::Ready},
     prelude::*,
 };
+use log::{error, info};
+
+use commands::{
+    math::*,
+    meta::*,
+    owner::*,
+};
+
+struct ShardManagerContainer;
+
+impl TypeMapKey for ShardManagerContainer {
+    type Value = Arc<Mutex<ShardManager>>;
+}
 
 struct Handler;
+
 #[async_trait]
 impl EventHandler for Handler {
-    async fn message(&self, ctx: Context, msg: Message) {
-        if msg.content == ("br/ping") {
-           if let Err(why) = msg.channel_id.say(&ctx.http, "Ping").await {
-              println!("Error sending message: {:?}", why);
-              return;
-          }
-        }
-    }
     async fn ready(&self, _: Context, ready: Ready) {
-       println!("Connected to Discord as {}#{}.", ready.user.name, ready.user.discriminator)
+        info!("Connected as {}", ready.user.name);
+    }
+
+    async fn resume(&self, _: Context, _: ResumedEvent) {
+        info!("Resumed");
     }
 }
 
+#[group]
+#[commands(multiply, ping, quit)]
+struct General;
+
+#[tokio::main]
 async fn main() {
-     let token = env::var("DISCORD_TOKEN")
+    kankyo::load().expect("Failed to load .env file");
+    env_logger::init();
+
+    let token = env::var("DISCORD_TOKEN")
         .expect("Expected a token in the environment");
-     
-     let mut client = Client::new(&token)
-         .event_handler(Handler)
-         .await
-         .expect("Client creation error.");
-    
-     if let Err(why) = client.start().await {
-       println!("Client error: {:?}", why);
-     }
+
+    let http = Http::new_with_token(&token);
+
+    let (owners, _bot_id) = match http.get_current_application_info().await {
+        Ok(info) => {
+            let mut owners = HashSet::new();
+            owners.insert(info.owner.id);
+
+            (owners, info.id)
+        },
+        Err(why) => panic!("Could not access application info: {:?}", why),
+    };
+
+    let framework = StandardFramework::new()
+        .configure(|c| c
+                   .owners(owners)
+                   .prefix("~"))
+        .group(&GENERAL_GROUP);
+
+    let mut client = Client::new(&token)
+        .framework(framework)
+        .event_handler(Handler)
+        .await
+        .expect("Err creating client");
+
+    if let Err(why) = client.start().await {
+        error!("Client error: {:?}", why);
+    }
 }
